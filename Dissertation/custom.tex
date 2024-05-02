@@ -4,7 +4,10 @@
 \usepackage{suffix}
 
 % Выводы по главе
-\newcommand{\chapterconclusion}{\section*{Выводы по главе~\thechapter}\addcontentsline{toc}{section}{Выводы по главе~\thechapter}}
+\newcommand{\chapterconclusion}{%
+    \section*{Выводы по главе~\thechapter}%
+    \addcontentsline{toc}{section}{Выводы по главе~\thechapter}%
+}
 
 %% Hyphenation penalty
 \hyphenpenalty=500 % Default is 50
