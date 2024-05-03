@@ -17,8 +17,27 @@ jobs:
         with:
           root_file: main.tex
 
-      - name: Upload PDFs
+      - name: Upload PDFs as artifact
         uses: actions/upload-artifact@v4
         with:
           name: output
           path: "*.pdf"
+
+      - name: Upload PDFs as release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: Current state
+          name: Latest PDF
+          tag_name: current
+          files: "*.pdf"
+
+      - name: Prepare files for gh-pages
+        run: |
+          mkdir -p public
+          mv *.pdf public/
+
+      - name: Publish PDFs to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
