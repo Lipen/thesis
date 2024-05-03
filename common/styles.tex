@@ -145,6 +145,7 @@
 \fi
 
 \hypersetup{
+	bookmarksnumbered,
     linktocpage=true,       % ссылки с номера страницы в оглавлении, списке таблиц и списке рисунков
     linktoc=all,            % both the section and page part are links
     plainpages=false,       % Forces page anchors to be named by the Arabic form  of the page number, rather than the formatted form
@@ -160,8 +161,6 @@
     % pdfproducer={Производитель},       % Производитель, Производитель PDF
     pdfkeywords={computer science},    % Ключевые слова
     pdflang={ru},
-	bookmarks,
-	bookmarksnumbered,
 }
 \ifnumequal{\value{draft}}{1}{% Черновик
     \hypersetup{
