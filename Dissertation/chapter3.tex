@@ -47,8 +47,9 @@ ICCAD/SAT/IEEE article
 где $C_{f \glue h}$ является шаблонной КНФ для функции~\eqref{eq:f-glue-h}.
 
 \begin{figure}
-    \centering
-    \subfile{tex/tikz-schemas}
+    \begin{adjustbox}{max width=\linewidth}
+        \subfile{tex/tikz-schemas}%
+    \end{adjustbox}
     \caption{Склеенная схема $S_{f \glue h}$, построенная с использованием одного и того же набора входов для двух схем $S_f$ и $S_h$}
     \label{fig:glued}
 \end{figure}
@@ -71,10 +72,10 @@ ICCAD/SAT/IEEE article
     Множество~$\Pi$ всех $2^{\lceil n/k \rceil}$ возможных формул вида $\phi^1 \land \dots \land \phi^{\lceil n/k \rceil}$ формирует SAT-разбиение формулы~\eqref{eq:miter-cnf}.
 \end{theorem}
 
-\begin{proofsketch}
+\begin{proof}[Набросок]
     В доказательстве мы можем использовать \cref{lem1}, чтобы показать, что любое присваивание, удовлетворяющее $C_{f \Delta h}$, также удовлетворяет ровно одной формуле вида $G_i \land C_{f \Delta h}$, где $G_i$, $i\in \{1,\dots,2^{\lceil n/k \rceil} \}$, является конкретным примером формулы $\phi^1 \land \dots \land \phi^{\lceil n/k \rceil}$ для определенных $\phi_l^j$, $l \in \{1,2\}$, $j \in \{1, \dots, 2^{\lceil n/k \rceil}\}$.
     Таким образом, формулы $C_{f \glue h} \land C(\mathcal{M})$ и $C_{f \glue h} \land C(\mathcal{M}) \land (G_1 \lor \dots \lor G_{2^{\lceil n/k \rceil}})$ равновыполнимы.
-\end{proofsketch}
+\end{proof}
 
 Важным вопросом является выбор функций $\lambda^j$ и $\neg\lambda^j$ таким образом, чтобы гарантировать малую дисперсию $\fun{Var}(\xi_\Pi)$ для SAT-разбиения $\Pi$ описанного выше типа.
 Здравый смысл подсказывает, что \emph{сбалансированная} булева функция, которая принимает значение 1 на $2^{l-1}$ входных словах, должна использоваться в качестве функции $\lambda \colon \{0,1\}^l \to \{0,1\}$.

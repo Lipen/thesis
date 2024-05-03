@@ -22,11 +22,10 @@
 
 %%% Математические пакеты %%%
 \usepackage{amsmath,amsthm}
-% \usepackage{amscd}
-\usepackage{amsfonts,amssymb}       % Математические дополнения от AMS
-\usepackage{mathtools}              % Добавляет окружение multlined
+\usepackage{amsfonts,amssymb}
+\usepackage{mathtools}
 \usepackage{thmtools}
-\usepackage{xfrac}                  % Красивые дроби
+\usepackage{xfrac}
 \usepackage[
     locale = DE,
     list-separator       = {;\,},
@@ -38,8 +37,12 @@
     % quotient-mode        = fraction, % красивые дроби могут не соответствовать ГОСТ
     fraction-function    = \sfrac,
     separate-uncertainty,
-    ]{siunitx}[=v2]                 % Размерности SI
+]{siunitx}[=v2]                 % Размерности SI
 \sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{lemma}{Лемма}
+\newtheorem{construction}{Конструкция}
 
 % Кириллица в нумерации subequations
 % Для правильной работы требуется выполнение сразу после загрузки пакетов
