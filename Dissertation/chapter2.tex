@@ -62,7 +62,7 @@ $b \in \Bool$ \--- текущее значение выходной переме
     \iff
     \TransitionFiring{q,k,e,u}
     \land
-    \biglandnolim_{1 \leq k' < k}
+    \biglandclap{1 \leq k' < k}
     (\neg\TransitionFiring{q,k',e,u}) .
 \]
 Более эффективный способ кодирования заключается в определении специальной переменной $\TransitionNotFired{q,k,e,u} \in \Bool$ для кодирования того факта, что все переходы с~1 по~$k$-й не выполняются.
