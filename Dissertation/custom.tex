@@ -5,8 +5,39 @@
 \usepackage[shortcuts,shortemdash,wordspacearound]{extdash}
 \usepackage{subfiles}
 
+\usepackage{tikz}
+\usetikzlibrary{
+    arrows.meta,
+    automata,
+    calc,
+    decorations.pathreplacing,
+    fit,
+    positioning,
+}
+
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \SetAlgoInsideSkip{smallskip}
+
+\makeatletter
+\newcommand{\onlyinpreamble}[1]{% {<text>}
+    \ifx\@onlypreamble\@notprerr% after \begin{document}
+    \else% before \begin{document}
+        #1
+    \fi}
+\def\input@path{{../}}
+\makeatother
+
+%% Usage:
+%%   place "\enabletikzpreview%"
+%%   after "\documentclass[../main.tex]{subfiles}%"
+%%   in your "tikz-something.tex" subfile.
+\newcommand{\enabletikzpreview}{%
+    \onlyinpreamble{%
+        \usepackage[active,tightpage]{preview}
+        \PreviewBorder=2pt
+        \PreviewEnvironment{tikzpicture}
+        \PreviewEnvironment{forest}
+    }}
 
 \newtheorem{construction}{Construction}
 \newtheorem{lemma}{Lemma}
@@ -485,3 +516,8 @@
 \newcommand{\glue}{\mathbin{\triangle}}
 
 \newenvironment{proofsketch}{\begin{proof}[Proof sketch]}{\end{proof}}
+
+\colorlet{myr}{red!12}
+\colorlet{myg}{green!12}
+\colorlet{myb}{blue!10}
+\colorlet{myy}{yellow!15}

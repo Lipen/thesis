@@ -1,0 +1,67 @@
+\documentclass[../main.tex]{subfiles}%
+\enabletikzpreview%
+\begin{document}%
+\begin{tikzpicture}[
+    >={Stealth[length=12pt,width=8pt]},
+    shorten >=1pt,
+    auto,
+    every state/.style={
+        rectangle,
+        rounded corners,
+        inner sep=6pt,
+        minimum height=8mm,
+        % minimum width=20mm,
+        align=center,
+    },
+]
+    \def\VGap{32mm}
+    \colorlet{good-text}{green!60!black}
+    \colorlet{bad-text}{red!70!black}
+    \colorlet{sat-arrow}{green!70!black}
+    \colorlet{unsat-arrow}{red!80!black}
+    
+    \node[state, fill=myg, minimum height=12mm, thick]
+        (infer) at (0,0)
+        {\Large Синтез};
+    \node[state, fill=myb, minimum height=12mm, thick]
+        (verify) [below=\VGap of infer]
+        {\Large Верификация};
+    \node[state, fill=myg]
+        (input) [left=1cm of infer]
+        {Параметры автомата ($C, P, T, N$) \\ Позитивные сценарии $\SetPositiveScenarios$};
+    \node[state, fill=myb]
+        (spec) [left=1.5cm of verify]
+        {LTL-спецификация $\LTLSpec$};
+    \node[text=bad-text]
+        (nosolution) [right=2.5cm of infer]
+        {Нет решения};
+    \node[text=good-text, align=left]
+        (solution) [right=1.5cm of verify]
+        {Автомат $\Automaton$, \\ удовлетворяющий \\ LTL-спецификации $\LTLSpec$};
+
+    \path[->]
+        (input) edge (infer)
+        (spec) edge (verify)
+        (infer)
+            edge [bend right, draw=sat-arrow, ultra thick]
+            node [left]
+            {SAT $\implies$ Автомат $\Automaton$}
+            (verify)
+        (verify)
+            edge [bend right, right]
+            node [align=left]
+            {LTL-свойство не выполняется \\ $\implies$ Получены контрпримеры \\ $\implies$ Негативные сценарии}
+            (infer)
+        (infer)
+            edge [shorten >=0pt, draw=unsat-arrow, ultra thick]
+            node [above, pos=0.4]
+            {UNSAT}
+            (nosolution)
+        (verify)
+            edge [shorten >=0pt]
+            node [above, pos=0.4]
+            {OK}
+            (solution)
+    ;
+\end{tikzpicture}%
+\end{document}
