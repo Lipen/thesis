@@ -511,17 +511,6 @@
     langid = {english},
 }
 
-@InBook{ tseitin,
-    author = {Tseytin, G. S.},
-    title = {On the Complexity of Derivation in Propositional Calculus},
-    booktitle = {Automation of Reasoning: 2: Classical Papers on Computational Logic 1967--1970},
-    year = {1983},
-    publisher = {Springer Berlin Heidelberg},
-    pages = {466--483},
-    doi = {10.1007/978-3-642-81955-1_28},
-    langid = {english},
-}
-
 @Online{ sat-competition,
     title = {{SAT} Competitions},
     url = {http://www.satcompetition.org/},
@@ -647,7 +636,6 @@
   date = {2021},
   pages = {18},
   doi = {10.4230/LIPIcs.CP.2021.47},
-  abstract = {Propositional satisfiability (SAT) solvers are deemed to be among the most efficient reasoners, which have been successfully used in a wide range of practical applications. As this contrasts the well-known NP-completeness of SAT, a number of attempts have been made in the recent past to assess the hardness of propositional formulas in conjunctive normal form (CNF). The present paper proposes a CNF formula hardness measure which is close in conceptual meaning to the one based on Backdoor set notion: in both cases some subset B of variables in a CNF formula is used to define the hardness of the formula w.r.t. this set. In contrast to the backdoor measure, the new measure does not demand the polynomial decidability of CNF formulas obtained when substituting assignments of variables from B to the original formula. To estimate this measure the paper suggests an adaptive ({$\varepsilon$}, {$\delta$})-approximation probabilistic algorithm. The problem of looking for the subset of variables which provides the minimal hardness value is reduced to optimization of a pseudo-Boolean black-box function. We apply evolutionary algorithms to this problem and demonstrate applicability of proposed notions and techniques to tests from several families of unsatisfiable CNF formulas.},
   eventtitle = {27th {{International Conference}} on {{Principles}} and {{Practice}} of {{Constraint Programming}}},
   langid = {english}
 }
@@ -661,19 +649,18 @@
   pages = {222--228},
   publisher = {{AAAI Press}},
   location = {{Chicago, Illinois}},
-  abstract = {The search of a precise measure of what hardness of SAT instances means for state-of-the-art solvers is a relevant research question. Among others, the space complexity of treelike resolution (also called hardness), the minimal size of strong backdoors and of cycle-cutsets, and the treewidth can be used for this purpose. We propose the use of the tree-like space complexity as a solid candidate to be the best measure for solvers based on DPLL. To support this thesis we provide a comparison with the other mentioned measures. We also conduct an experimental investigation to show how the proposed measure characterizes the hardness of random and industrial instances.},
   isbn = {978-1-57735-368-3}
 }
 
 @thesis{hyvarinen2011,
   type = {phdthesis},
-  title = {Grid {{Based Propositional Satisfiability Solving}}},
+  title = {Grid Based Propositional Satisfiability Solving},
   author = {Hyv\"arinen, Antti},
   date = {2011},
   institution = {{Aalto University}},
   location = {{School of Science}},
   url = {http://lib.tkk.fi/Diss/2011/isbn9789526043685/isbn9789526043685.pdf},
-  abstract = {This work studies how grid and cloud computing can be applied to efficiently solving propositional satisfiability problem (SAT) instances. Propositional logic provides a convenient language for expressing real-world originated problems such as AI planning, automated test pattern generation, bounded model checking and cryptanalysis. The interest in SAT solving has increased mainly due to improvements in the solving algorithms, which recently have increasingly focused on using parallelism offered by multi-CPU computers. Partly orthogonally to these improvements this work studies several novel approaches to parallel solving of SAT instances in a grid of widely distributed "virtual" computers instead of workstations or supercomputers.},
+  urldate = {2024-05-03},
   langid = {english},
   pagetotal = {107}
 }
@@ -683,6 +670,55 @@
   author = {Wegener, I.},
   date = {1987},
   doi = {10.1007/3-540-27477-4_16},
-  abstract = {This chapter discusses Circuits and other Non-Uniform Computation Methods vs. Turing Machines and other Uniform Computation Models, and the Design of Efficient Circuits for Some Fundamental Functions. Introduction to the Theory of Boolean Functions and Circuits. The Minimimization of Boolean Functions. The Design of Efficient Circuits for Some Fundamental Functions. Asymptotic Results and Universal Circuits. Lower Bounds on Circuit Complexity. Monotone Circuits. Relations between Circuit Size, Formula Size and Depth. Formula Size. Circuits and other Non-Uniform Computation Methods vs. Turing Machines and other Uniform Computation Models. Hierarchies, Mass Production, and Reductions. Bounded-Depth Circuits. Synchronous, Planar, and Probabilistic Circuits. PRAMs and WRAMs: Parallel Random Access Machines. Branching Programs. References. Index.},
   langid = {english}
+}
+
+@article{szeider2006,
+  title = {Backdoor Sets for {{DLL}} Subsolvers},
+  author = {Szeider, Stefan},
+  date = {2006-10-05},
+  journaltitle = {Journal of Automated Reasoning},
+  volume = {35},
+  number = {1-3},
+  pages = {73--88},
+  issn = {0168-7433, 1573-0670},
+  doi = {10.1007/s10817-005-9007-9},
+  urldate = {2024-05-03},
+  langid = {english},
+}
+
+@inproceedings{bessiere2009,
+  title = {Circuit Complexity and Decompositions of Global Constraints},
+  booktitle = {{{IJCAI}}'09: 21st {{International Joint Conference}} on {{Artificial Intelligence}}},
+  author = {Bessière, Christian and Katsirelos, George and Narodytska, Nina and Walsh, Toby},
+  date = {2009-07},
+  series = {Constraints, {{Satisfiability}}, and {{Search}}},
+  pages = {412--418},
+  location = {Pasadena, CA, United States},
+  url = {https://hal-lirmm.ccsd.cnrs.fr/lirmm-00382608},
+  urldate = {2024-05-03},
+  langid = {english},
+}
+
+@incollection{drechsler2009,
+  title = {Non-Clausal {{SAT}} and {{ATPG}}},
+  booktitle = {Handbook of {{Satisfiability}}},
+  author = {Drechsler, R. and Junttila, Tommi A. and Niemelä, I.},
+  date = {2009},
+  edition = {1},
+  pages = {655--693},
+  doi = {10.3233/978-1-58603-929-5-655},
+  langid = {english}
+}
+
+@inproceedings{tseitin1970,
+  title = {On the Complexity of Derivation in Propositional Calculus},
+  booktitle = {Studies in {{Constructive Mathematics}} and {{Mathematical Logic}}, {{Part II}}},
+  author = {Tseitin, Gregory S.},
+  editor = {Slisenko, A.O.},
+  date = {1970},
+  series = {Seminars in {{Mathematics}}},
+  pages = {115--125},
+  location = {Steklov Mathematical Institute},
+  langid = {english},
 }
