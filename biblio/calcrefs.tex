@@ -1,3 +1,5 @@
+\ActivateWarningFilters[emptybib]
+
 % count all your papers (keyword=own)
 \begin{refsection}[biblio/own.bib]
     \nocite{*}
@@ -42,3 +44,5 @@
     % https://tex.stackexchange.com/a/404319
     \setbox0\vbox{\printbibliography[keyword=conf]}
 \end{refsection}
+
+\DeactivateWarningFilters[emptybib]

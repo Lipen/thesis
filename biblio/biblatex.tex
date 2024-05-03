@@ -1,7 +1,5 @@
 %%% Реализация библиографии пакетами biblatex и biblatex-gost с использованием движка biber %%%
 
-\usepackage{csquotes} % biblatex рекомендует его подключать
-
 \usepackage[%
     backend=biber,
     bibencoding=utf8,
@@ -14,6 +12,7 @@
     sortcites=true,
     doi=false,
     isbn=false,
+    block=space,
 ]{biblatex}
 
 \addbibresource{biblio/references.bib}
@@ -23,6 +22,8 @@
 \newtotcounter{citenum}
 \AtEveryBibitem{\stepcounter{citenum}}
 
+% Non-breaking space between name parts
+\renewcommand*\bibnamedelimd{\addnbspace}
 
 
 % https://tex.stackexchange.com/a/373241

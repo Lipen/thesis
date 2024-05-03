@@ -234,6 +234,9 @@
 %%% Прикладные пакеты %%%
 %\usepackage{calc}               % Пакет для расчётов параметров, например длины
 
+%%% Кавычки %%%
+\usepackage{csquotes}
+
 %%% Для добавления Стр. над номерами страниц в оглавлении
 %%% http://tex.stackexchange.com/a/306950
 \usepackage{afterpage}
@@ -295,3 +298,6 @@
 		\renewcommand{\gitMarkFormat}{\rmfamily\color{Gray}\small\bfseries}
 	}{}
 }{}
+
+\usepackage{silence}
+\WarningFilter[emptybib]{latex}{Empty bibliography}
