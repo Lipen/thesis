@@ -15,7 +15,7 @@ ICCAD/SAT/IEEE article
 Рассмотрим произвольную КНФ-формулу~$C$ над множеством булевых переменных~$X$ и множество $\Pi = \{G_1, \dots, G_s\}$, где $G_i$, $i \in\nobreak \{1, \dots, s\}$, представляют собой некоторые булевы формулы над~$X$.
 Пусть $\Pi$ задает \textit{разбиение SAT~$C$}, если выполняются следующие условия:
 \begin{enumerate}
-    \item формулы $C$ и $C \land (G_1 \lor \dots \lor G_s)$ равноправны по удовлетворимости;
+    \item формулы $C$ и $C \land (G_1 \lor \dots \lor G_s)$ равновыполнимы (\textit{equisatisfiable});
     \item для всех $i \neg j \in \{1, \dots, s\}$ формула $C \land G_i \land G_j$ выполнима.
 \end{enumerate}
 
