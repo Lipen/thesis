@@ -1,0 +1,6 @@
+= PhD thesis
+
+"Decomposition methods for Boolean satisfiability problem in application to synthesis and verification of discrete control models"
+-- by Konstantin Chukharev
+
+image:https://img.shields.io/badge/PDF-PhD Thesis-blue?style=social&logo=gitbook["Thesis", link="https://lipen.github.io/thesis/main.pdf"]
