@@ -640,3 +640,27 @@
   year = {1990},
   langid = {english},
 }
+
+@inproceedings{semenov2021,
+  title = {Evaluating the Hardness of {{SAT}} Instances Using Evolutionary Optimization Algorithms},
+  author = {Semenov, Alexander and Chivilikhin, Daniil and Pavlenko, Artem and Otpuschennikov, Ilya and Ulyantsev, Vladimir and Ignatiev, Alexey},
+  date = {2021},
+  pages = {18},
+  doi = {10.4230/LIPIcs.CP.2021.47},
+  abstract = {Propositional satisfiability (SAT) solvers are deemed to be among the most efficient reasoners, which have been successfully used in a wide range of practical applications. As this contrasts the well-known NP-completeness of SAT, a number of attempts have been made in the recent past to assess the hardness of propositional formulas in conjunctive normal form (CNF). The present paper proposes a CNF formula hardness measure which is close in conceptual meaning to the one based on Backdoor set notion: in both cases some subset B of variables in a CNF formula is used to define the hardness of the formula w.r.t. this set. In contrast to the backdoor measure, the new measure does not demand the polynomial decidability of CNF formulas obtained when substituting assignments of variables from B to the original formula. To estimate this measure the paper suggests an adaptive ({$\varepsilon$}, {$\delta$})-approximation probabilistic algorithm. The problem of looking for the subset of variables which provides the minimal hardness value is reduced to optimization of a pseudo-Boolean black-box function. We apply evolutionary algorithms to this problem and demonstrate applicability of proposed notions and techniques to tests from several families of unsatisfiable CNF formulas.},
+  eventtitle = {27th {{International Conference}} on {{Principles}} and {{Practice}} of {{Constraint Programming}}},
+  langid = {english}
+}
+
+@inproceedings{ansotegui2008,
+  title = {Measuring the Hardness of {{SAT}} Instances},
+  booktitle = {Proceedings of the 23rd National Conference on {{Artificial}} Intelligence - {{Volume}} 1},
+  author = {Ans\'otegui, Carlos and Bonet, Mar\'ia Luisa and Levy, Jordi and Many\`a, Felip},
+  date = {2008-07-13},
+  series = {{{AAAI}}'08},
+  pages = {222--228},
+  publisher = {{AAAI Press}},
+  location = {{Chicago, Illinois}},
+  abstract = {The search of a precise measure of what hardness of SAT instances means for state-of-the-art solvers is a relevant research question. Among others, the space complexity of treelike resolution (also called hardness), the minimal size of strong backdoors and of cycle-cutsets, and the treewidth can be used for this purpose. We propose the use of the tree-like space complexity as a solid candidate to be the best measure for solvers based on DPLL. To support this thesis we provide a comparison with the other mentioned measures. We also conduct an experimental investigation to show how the proposed measure characterizes the hardness of random and industrial instances.},
+  isbn = {978-1-57735-368-3}
+}
