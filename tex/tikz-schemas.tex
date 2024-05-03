@@ -1,0 +1,86 @@
+\documentclass[../main.tex]{subfiles}%
+\enabletikzpreview%
+\begin{document}%
+\begin{tikzpicture}[
+    % scale=0.5, transform shape,
+    % framed,
+    auto,
+    on grid,
+    >={Stealth[]},
+    dot/.style={
+        draw,
+        fill,
+        circle,
+        minimum size=4pt,
+        inner sep=0pt,
+    },
+    smalldot/.style={
+        draw,
+        fill,
+        circle,
+        minimum size=2pt,
+        inner sep=0pt,
+    },
+]
+    \def\HPosF{2.2}
+    \def\VPosF{1.5}
+    \def\VGapIO{0.3}
+
+    \node[dot]      (X1) at (  -1, 0) {};
+    \node[smalldot] (X2) at (-0.5, 0) {};
+    \node[smalldot] (X3) at (   0, 0) {};
+    \node[smalldot] (X4) at ( 0.5, 0) {};
+    \node[dot]      (X5) at (   1, 0) {};
+
+    % \node at (0,.4) {$n$ inputs};
+    \draw [decorate, decoration={brace,raise=6pt,amplitude=6pt}] (-1,0) -- (1,0) node[pos=0.5,above=10pt] {$n$ inputs};
+
+    \node[draw] (F1) at (-\HPosF,-\VPosF) {$S_f : \{0,1\}^n \to \{0,1\}^m$};
+    \node[draw] (F2) at ( \HPosF,-\VPosF) {$S_h : \{0,1\}^n \to \{0,1\}^m$};
+
+    \foreach \k in {1,2} {
+        % Coordinates: Inputs
+        \coordinate (F\k i1) at ([xshift=.5\pgflinewidth]F\k.north west);
+        \coordinate (F\k i5) at ([xshift=-.5\pgflinewidth]F\k.north east);
+        \coordinate (F\k i3) at (F\k.north);
+        \coordinate (F\k i2) at ($(F\k i1)!0.5!(F\k i3)$);
+        \coordinate (F\k i4) at ($(F\k i3)!0.5!(F\k i5)$);
+
+        % Coordinates: Outputs
+        \coordinate (F\k o1) at ([xshift=.5\pgflinewidth]F\k.south west);
+        \coordinate (F\k o5) at ([xshift=-.5\pgflinewidth]F\k.south east);
+        \coordinate (F\k o3) at (F\k.south);
+        \coordinate (F\k o2) at ($(F\k o1)!0.5!(F\k o3)$);
+        \coordinate (F\k o4) at ($(F\k o3)!0.5!(F\k o5)$);
+
+        % Coordinates: External inputs/outputs
+        \foreach \i in {1,...,5} {
+            \node[dot,fill=white] [above=\VGapIO of F\k i\i] (F\k I\i) {};
+            \node[dot,fill=white] [below=\VGapIO of F\k o\i] (F\k O\i) {};
+        }
+    }
+
+    % Draw: External inputs/outputs
+    \foreach \k in {1,2} {
+        \foreach \i in {1,...,5} {
+            \foreach \t/\T in {i/I,o/O} {
+                \draw (F\k\t\i) -- (F\k\T\i);
+            }
+        }
+    }
+
+    % Draw: connect inputs
+    \draw (X1) -- (F1I1);
+    \draw (X1) -- (F2I1);
+    \draw (X5) -- (F1I5);
+    \draw (X5) -- (F2I5);
+    \foreach \k in {1,2} {
+        \foreach \i in {2,...,4} {
+            \draw[dashed,gray] (X\i) -- (F\k I\i);
+        }
+    }
+
+    \draw [decorate, decoration={brace,mirror,raise=6pt,amplitude=6pt}] (F1O1) -- (F2O5) node[pos=0.5,below=10pt] {$2m$ outputs};
+
+\end{tikzpicture}%
+\end{document}
