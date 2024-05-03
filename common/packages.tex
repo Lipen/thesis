@@ -21,9 +21,11 @@
 \usepackage{geometry}   % Для последующего задания полей
 
 %%% Математические пакеты %%%
-\usepackage{amsthm,amsmath,amscd}   % Математические дополнения от AMS
+\usepackage{amsmath,amsthm}
+% \usepackage{amscd}
 \usepackage{amsfonts,amssymb}       % Математические дополнения от AMS
 \usepackage{mathtools}              % Добавляет окружение multlined
+\usepackage{thmtools}
 \usepackage{xfrac}                  % Красивые дроби
 \usepackage[
     locale = DE,
@@ -150,10 +152,11 @@
 %% Векторная графика
 
 \usepackage{tikz}                   % Продвинутый пакет векторной графики
-\usetikzlibrary{chains}             % Для примера tikz рисунка
-\usetikzlibrary{shapes.geometric}   % Для примера tikz рисунка
-\usetikzlibrary{shapes.symbols}     % Для примера tikz рисунка
-\usetikzlibrary{arrows}             % Для примера tikz рисунка
+\usetikzlibrary{
+    arrows.meta,
+    calc,
+    positioning,
+}
 
 %%% Гиперссылки %%%
 \ifxetexorluatex

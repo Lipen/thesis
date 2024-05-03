@@ -1,0 +1,54 @@
+\documentclass[../access.tex]{subfiles}%
+\enabletikzpreview%
+\begin{document}%
+\begin{tikzpicture}[
+    % scale=0.5, transform shape,
+    % framed,
+    auto,
+    on grid,
+    >={Stealth[]},
+    gate/.style={
+        draw,
+        circle,
+        minimum size=6mm,
+    },
+]
+    \newcounter{mynode}
+    \newcommand{\nextnode}{%
+        \stepcounter{mynode}%
+        \arabic{mynode}%
+    }
+
+    % $(g1-1)!0.5!(g1-2)$
+
+    %% Inputs
+    \node[gate, label=center:$i_1$] (i1) {};
+    \node[gate, label=center:$i_2$] (i2) [right=of i1] {};
+    \node[gate, label=center:$i_3$] (i3) [right=of i2] {};
+    %% Layer 1
+    \node[gate, label=center:$\neg$] (g1-1) [below=of i1] {};
+    \node[gate, label=center:$\land$] (g1-2) [below=of i2] {};
+    \node[gate, label=center:$\xor$] (g1-3) [below=of i3] {};
+    %% Layer 2
+    \node[gate, label=center:$\lor$] (g2-2) [below=of g1-2] {};
+    \node[gate, label=center:$\land$] (g2-3) [below=of g1-3] {};
+    %% Layer 3
+    \node[gate, label=center:$\land$] (g3-1) [below=of $(g1-1 |- g2-2)!0.5!(g2-2)$,anchor=center] {};
+    \node[gate, label=center:$\land$] (g3-2) [below=of $(g2-2)!0.5!(g2-3)$,anchor=center] {};
+    %% Outputs
+    \node[gate, label=center:$\xor$] (o1) [below=of $(g3-1)!0.5!(g3-2)$,anchor=center] {};
+
+    %% Wires
+    \draw[<-]
+        (o1) edge (g3-1) edge (g3-2)
+        (g3-1) edge (g1-1) edge (g2-2)
+        (g3-2) edge (g2-2) edge (g2-3)
+        (g2-2) edge (g1-2) edge (g1-3)
+        (g2-3) edge (g1-2) edge (g1-3)
+        (g1-1) edge (i1)
+        (g1-2) edge (i1) edge (i2)
+        (g1-3) edge (i2) edge (i3)
+    ;
+
+\end{tikzpicture}%
+\end{document}

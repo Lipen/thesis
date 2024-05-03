@@ -3,6 +3,11 @@
 \usepackage{bm}
 \usepackage{suffix}
 \usepackage[shortcuts,shortemdash,wordspacearound]{extdash}
+\usepackage{subfiles}
+
+\newtheorem{construction}{Construction}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
 
 % Выводы по главе
 \newcommand{\chapterconclusion}{%
@@ -35,6 +40,16 @@
 \newbigop{sum}{\sum}
 \newbigop{prod}{\prod}
 \newbigop{xor}{\bigoplus}
+
+%% Some sets
+\newcommand\Bool{\mathbb{B}}
+\newcommand\Natural{\mathbb{N}}
+\newcommand\NaturalPlus{\Natural^{+}}
+\newcommand\NaturalZero{\Natural_{0}}
+\newcommand\Integer{\mathbb{Z}}
+\newcommand\PositiveInteger{\Integer^{+}}
+\newcommand\Rational{\mathbb{Q}}
+\newcommand\Real{\mathbb{R}}
 
 %% Set declaration syntax (from mathtools manual)
 \providecommand\given{}
@@ -98,9 +113,6 @@
 % Note: outer braces ensure non-breakable range
 \newcommand{\Range}[2]{% {<low>}{<high>}
     {[#1 \dd #2]}}
-
-%% Boolean space (B = {True, False})
-\newcommand{\Bool}{\mathbb{B}}
 
 %% Boolean vector
 \newcommand{\boolvec}[1]{\Bool^{\card{#1}}}
@@ -460,3 +472,8 @@
 }
 \newcommand{\PropertiesConst}{\Prop{1}\text{\==}\Prop{7}}
 \newcommand{\PropertiesVar}{\PropWP{1}\text{\==}\PropWP{3}}
+
+\newcommand{\Vin}{V^\text{in}}
+\newcommand{\Vout}{V^\text{out}}
+\newcommand{\Xin}{X^{\text{in}}}
+\newcommand{\Xout}{X^{\text{out}}}
