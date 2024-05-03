@@ -217,7 +217,7 @@ $b \in \Bool$ \--- текущее значение выходной переме
 Здесь и далее будут использованы следующие обозначения, если не указано иное: $p \in \Range{1}{P}$, $x \in \SetInputVariables$, $u \in \SetTreeInputs$.
 
 Переменная $\NodeType{q,k,p} \in \Set{\NodeTypeTerminal, \NodeTypeAnd, \NodeTypeOr, \NodeTypeNot, \NodeTypeNone}$ кодирует тип вершины дерева разбора~$p$, где \enquote{$\NodeTypeTerminal$} обозначает терминальные вершины, \enquote{$\NodeTypeAnd$}, \enquote{$\NodeTypeOr$}, \enquote{$\NodeTypeNot$} \--- логические операторы, а \enquote{$\NodeTypeNone$} \--- нетипизированные вершины.
-Без потери общности можно задать ограничение на то, что нетипизированные вершины имеют наибольшие номера в дереве: $(\NodeType{q,k,p} = \NodeTypeNone) \implies (\NodeType{q,k,p+1} = \NodeTypeNone)$.
+Без потери общности можно задать ограничение на то, что нетипизированные вершины имеют наибольшие номера в дереве: $(\NodeType{q,k,p} =\nobreak \NodeTypeNone) \implies (\NodeType{q,k,p+1} =\nobreak \NodeTypeNone)$.
 Переменная $\NodeInputVariable{q,k,p} \in\nobreak \SetInputVariables \union\nobreak \Set{0}$ кодирует входную переменную (или ее отсутствие: $\NodeInputVariable{q,k,p} = 0$), ассоциированную с терминальной вершиной $p$.
 Только терминальные вершины могут иметь ассоциированные входные переменные: $(\NodeType{q,k,p} = \NodeTypeTerminal) \iff (\NodeInputVariable{q,k,p} \neq 0)$.
 
