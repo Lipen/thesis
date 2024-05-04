@@ -4,6 +4,7 @@
 \usepackage{suffix}
 \usepackage[shortcuts,shortemdash,wordspacearound]{extdash}
 \usepackage{subfiles}
+\usepackage[np]{numprint}
 
 \usepackage{tikz}
 \usetikzlibrary{
@@ -510,6 +511,24 @@
 \newcommand{\fun}[1]{\funcname{#1}}
 \newcommand{\E}[1][\PackageError{mypackage}{E macro must have non-empty optional argument}{use square braces}]{\mathbb{E}\left[#1\right]}
 \newcommand{\glue}{\mathbin{\triangle}}
+
+%% Instance
+\newcommand{\Instance}[1]{% {<name>}
+    \ensuremath{\mathtt{#1}}}
+\newcommand{\instance}[2]{% {<name>}{<params>}
+    \ensuremath{\Instance{#1}_{#2}}}
+
+%% Auto-switch mathtt to texttt for dashes
+\usepackage{xstring}
+\newcommand{\autott}[1]{%
+    \noexpandarg%
+    \ensuremath{\mathtt{\protect\StrSubstitute{#1}{-}{\texttt{-}}}}%
+}
+
+%% Partitioning
+\newcommand{\Part}[1]{% {<partitioning-type>}
+    % \texttt{#1}}
+    \autott{#1}}
 
 \colorlet{myr}{red!12}
 \colorlet{myg}{green!12}
