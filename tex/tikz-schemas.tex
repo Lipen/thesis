@@ -22,18 +22,17 @@
         inner sep=0pt,
     },
 ]
-    \def\HPosF{4}
-    \def\VPosF{2}
+    \def\HPosF{3.5}
+    \def\VPosF{2.5}
     \def\VGapIO{0.5}
 
-    \node[dot]      (X1) at (  -1, 0) {};
-    \node[smalldot] (X2) at (-0.5, 0) {};
-    \node[smalldot] (X3) at (   0, 0) {};
-    \node[smalldot] (X4) at ( 0.5, 0) {};
-    \node[dot]      (X5) at (   1, 0) {};
+    \node[dot]      (X1) at (-2, 0) {};
+    \node[smalldot] (X2) at (-1, 0) {};
+    \node[smalldot] (X3) at ( 0, 0) {};
+    \node[smalldot] (X4) at ( 1, 0) {};
+    \node[dot]      (X5) at ( 2, 0) {};
 
-    % \node at (0,.4) {$n$ inputs};
-    \draw [decorate, decoration={brace,raise=6pt,amplitude=6pt}] (-1,0) -- (1,0) node[pos=0.5,above=10pt] {$n$ inputs};
+    \draw [decorate, decoration={brace,raise=6pt,amplitude=6pt}] (X1) -- (X5) node[pos=0.5,above=10pt] {$n$ inputs};
 
     \node[draw] (F1) at (-\HPosF,-\VPosF) {$S_f : \{0,1\}^n \to \{0,1\}^m$};
     \node[draw] (F2) at ( \HPosF,-\VPosF) {$S_h : \{0,1\}^n \to \{0,1\}^m$};
