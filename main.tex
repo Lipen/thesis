@@ -38,64 +38,83 @@
 
 
 \begin{document}
+\selectlanguage{russian}
 
-\input{biblio/calcrefs} % calculate your papers
-
-%%% Переопределение именований типовых разделов
-% https://tex.stackexchange.com/a/156050
-\gappto\captionsrussian{\input{common/renames}\unskip} % for polyglossia and babel
-\input{common/renames}
+% Подсчёт количества публикаций
+\input{biblio/calcrefs}
 
 %%% Структура диссертации (ГОСТ Р 7.0.11-2011, 4)
-\include{Dissertation/title}    % Титульный лист
-\setcounter{page}{5} % оглавление начинается с 5 страницы, остальное генерится из ИСУ
-\include{Dissertation/contents} % Оглавление
+% Титульный лист
+% Оглавление
+% Введение
+% Главы диссертации
+% Заключение
+% Список литературы
+% Приложения
+
+%%% Титульный лист
+\include{Dissertation/title}
+
+%%% Оглавление
+\setcounter{page}{5}
+\include{Dissertation/contents}
 
 \ifnumequal{\value{contnumfig}}{1}{}{\counterwithout{figure}{chapter}}
 \ifnumequal{\value{contnumtab}}{1}{}{\counterwithout{table}{chapter}}
 
-\renewcommand{\figurename}{Рисунок}
-\renewcommand{\tablename}{Таблица}
-\include{Dissertation/syn_ru} % реферат на русском
+%%% Реферат на русском
+% \include{Dissertation/syn_ru}
 
+%%% Реферат на английском
 % \renewcommand{\figurename}{Figure}
 % \renewcommand{\tablename}{Table}
-% \include{Dissertation/syn_en} % реферат на английском
+% \include{Dissertation/syn_en}
+% \selectlanguage{russian}
 
-\renewcommand{\figurename}{Рисунок}
-\renewcommand{\tablename}{Таблица}
-
-\include{Dissertation/introduction} % Введение
+%%% Введение
+\include{Dissertation/introduction}
 
 \ifnumequal{\value{contnumfig}}{1}{\counterwithout{figure}{chapter}}{\counterwithin{figure}{chapter}}
 \ifnumequal{\value{contnumtab}}{1}{\counterwithout{table}{chapter}}{\counterwithin{table}{chapter}}
 
-\include{Dissertation/chapter1} % Глава 1
-\include{Dissertation/chapter2} % Глава 2
-\include{Dissertation/chapter3} % Глава 3
-\include{Dissertation/chapter4} % Глава 4
+%%% Главы диссертации
+\include{Dissertation/chapter1}
+\include{Dissertation/chapter2}
+\include{Dissertation/chapter3}
+\include{Dissertation/chapter4}
 
-\include{Dissertation/conclusion}       % Заключение
-% \include{Dissertation/acronyms}         % Список сокращений и условных обозначений
-% \include{Dissertation/dictionary}       % Словарь терминов
-% \include{Dissertation/lists}            % Списки таблиц и изображений (иллюстративный материал)
-\include{Dissertation/references}       % Список литературы
-% \include{Dissertation/acknowledgements} % Благодарности
+%%% Заключение
+\include{Dissertation/conclusion}
+
+%%% Список сокращений и условных обозначений
+% \include{Dissertation/acronyms}
+
+%%% Словарь терминов:
+% \include{Dissertation/dictionary}
+
+%%% Списки таблиц и изображений
+% \include{Dissertation/lists}
+
+%%% Список литературы
+\include{Dissertation/references}
+
+%%% Благодарности
+% \include{Dissertation/acknowledgements}
 
 % Подсчёт количества глав
 \setcounter{totalchapter}{\value{chapter}}
 
-%%% Настройки для приложений
+% Настройки для приложений
 \appendix
 % Оформление заголовков приложений ближе к ГОСТ:
 \setlength{\midchapskip}{20pt}
 \renewcommand*{\afterchapternum}{\par\nobreak\vskip \midchapskip}
 \renewcommand\thechapter{\Asbuk{chapter}} % чтобы приложения русскими буквами нумеровались
 
-\include{Dissertation/appendix} % Приложения, в т.ч. все публикации в PDF:
+%%% Приложения, в т.ч. все публикации в PDF:
+\include{Dissertation/appendix}
 
 % Подсчёт количества приложений
 \setcounter{totalappendix}{\value{chapter}}
-
 
 \end{document}
