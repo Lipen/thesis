@@ -14,12 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate PDFs
+      - name: Generate PDF for thesis
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: |
-            main.tex
-            synopsis.tex
+          root_file: main.tex
+
+      - name: Generate PDF for synopsis
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: synopsis.tex
 
       - name: Upload PDFs as artifact
         uses: actions/upload-artifact@v4
