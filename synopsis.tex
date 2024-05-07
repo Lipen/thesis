@@ -1,0 +1,28 @@
+\documentclass[a4paper,14pt,oneside,openany]{memoir}
+
+\input{common/setup}            % Общие настройки шаблона
+\input{common/packages}         % Пакеты, которые нужны для шаблона
+\input{common/setupsimple}      % Упрощённые настройки шаблона
+\input{common/fonts}            % Определение шрифтов (частичное)
+\input{common/styles}           % ГОСТ
+\input{biblio/biblatex}         % Библиография через biblatex с движком biber
+\input{Dissertation/statements} % Положения
+\input{Dissertation/custom}     % Собственные дополнительные надстройки
+
+% Вывести информацию о версиях используемых библиотек в лог сборки:
+\listfiles
+
+
+\begin{document}
+\selectlanguage{russian}
+
+% Подсчёт количества публикаций
+\input{biblio/calcrefs}
+
+\ifnumequal{\value{contnumfig}}{1}{}{\counterwithout{figure}{chapter}}
+\ifnumequal{\value{contnumtab}}{1}{}{\counterwithout{table}{chapter}}
+
+%%% Реферат на русском
+\include{Dissertation/syn_ru}
+
+\end{document}
