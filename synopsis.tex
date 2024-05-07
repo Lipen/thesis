@@ -2,6 +2,7 @@
 
 \input{common/setup}            % Общие настройки шаблона
 \input{common/packages}         % Пакеты, которые нужны для шаблона
+\synopsistrue
 \input{common/setupsimple}      % Упрощённые настройки шаблона
 \input{common/fonts}            % Определение шрифтов (частичное)
 \input{common/styles}           % ГОСТ
@@ -18,6 +19,9 @@
 
 % Подсчёт количества публикаций
 \input{biblio/calcrefs}
+
+%%% Титульный лист
+\include{Dissertation/title}
 
 \ifnumequal{\value{contnumfig}}{1}{}{\counterwithout{figure}{chapter}}
 \ifnumequal{\value{contnumtab}}{1}{}{\counterwithout{table}{chapter}}
