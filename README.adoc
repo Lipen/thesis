@@ -1,6 +1,7 @@
 = PhD thesis
 
-image:https://img.shields.io/badge/PDF-PhD Thesis-blue?style=social&logo=gitbook["Thesis", link="https://lipen.github.io/thesis/main.pdf"]
+image:https://img.shields.io/badge/PDF-Thesis-blue?style=social&logo=gitbook["Thesis", link="https://lipen.github.io/thesis/main.pdf"]
+image:https://img.shields.io/badge/PDF-Synopsis-blue?style=social&logo=gitbook["Synopsis", link="https://lipen.github.io/thesis/synopsis.pdf"]
 
-"Decomposition Methods for Boolean Satisfiability Problem in Synthesis and Verification of Discrete Control Models"
+"Decomposition Methods for Boolean Satisfiability Problem in Synthesis and Verification of Automata"
 -- Konstantin Chukharev
