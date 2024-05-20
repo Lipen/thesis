@@ -42,3 +42,28 @@
 %       \renewcommand*{\makelabel}[1]{\hss##1}}
 %   {\endlist}
 %   {\item}
+
+
+\ifsynopsis
+\ExecuteBibliographyOptions{autocite=footnote}
+\newbibmacro*{cite:full}{%
+    \printtext[bibhypertarget]{%
+        \usedriver{%
+            \DeclareNameAlias{sortname}{default}%
+        }{%
+            \thefield{entrytype}%
+        }%
+    }%
+    \usebibmacro{shorthandintro}%
+}
+\DeclareCiteCommand{\smartcite}[\mkbibfootnote]{%
+    \usebibmacro{prenote}%
+}{%
+    \usebibmacro{citeindex}%
+    \usebibmacro{cite:full}%
+}{%
+    \multicitedelim%
+}{%
+    \usebibmacro{postnote}%
+}
+\fi
