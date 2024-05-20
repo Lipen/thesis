@@ -1,0 +1,61 @@
+\documentclass[../main.tex]{subfiles}%
+\begin{document}%
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{
+    c c c
+    @{\hspace{8pt}}
+    c c c c
+    @{\hspace{8pt}}
+    ccc
+    @{\hspace{8pt}}
+    ccc
+}
+\toprule
+    % \multirowcell{2}{LTL properties} &
+    % \multirowcell{2}{Scenarios} &
+    \multirowcell{2}{Дополнительное \\[-4pt] LTL-свойство} &
+    % \multirowcell{2}{Сценарии} &
+    \multirowcell{2}{$\SetPositiveScenarios$} &
+    \multirowcell{2}{$N_{\text{init}}$} &
+    \multicolumn{4}{c}{\AlgoCegisMin} &
+    \multicolumn{3}{c}{\AlgoCegis} &
+    \multicolumn{3}{c}{\smallcaps{fbCSP+LTL}~\cite{chivilikhin-18}}
+\\ & & % LTL, S, N_init
+    & Время,\,с. & \#iter & $P$ & $\Nmin$ % cegis-min
+    & Время,\,с. & \#iter & $N$           % cegis
+    & Время,\,с. & \#iter & $N$           % fbCSP+LTL
+\\\cmidrule(lr){1-3} \cmidrule(lr){4-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+    \multirowcell{3}{$\LTLPropWP{1}$}
+    & $\SetScenarios^{(1)}$ & 14
+    & 55 & 273 & 3 & 16  % cegis-min
+    & 19 & 79 & 33       % cegis
+    & >12h & >500 & --   % fbCSP+LTL
+\\
+    & $\SetScenarios^{(10)}$ & 25
+    & 242 & 20 & 5 & 28  % cegis-min
+    & 60 & 2 & 118       % cegis
+    & 613 & 10 & 40      % fbCSP+LTL
+\\
+    & $\SetScenarios^{(39)}$ & 25
+    & 425 & 70 & 5 & 28  % cegis-min
+    & 142 & 20 & 128     % cegis
+    & 1019 & 2 & 41      % fbCSP+LTL  
+%\\
+%    & $\SetScenarios^{(49)}$ & 39 &
+%    1412 & 4 & 6 & 40 &   % cegis-min
+%    127  & 2 & 142 &      % cegis
+%    -- & -- & --          % fbCSP+LTL
+\\\cmidrule(lr){1-3} \cmidrule(lr){4-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+    \multirowcell{1}{$\LTLPropWP{2}$} & $\SetScenarios^{(1)\prime\prime}$ & 14
+    & 63 & 193 & 3 & 16  % cegis-min
+    & 37 & 188 & 29      % cegis
+    & >12h & >500 & --   % fbCSP+LTL
+\\\cmidrule(lr){1-3} \cmidrule(lr){4-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+    \multirowcell{1}{$\LTLPropWP{3}$} & $\SetScenarios^{(1)\prime\prime\prime}$ & 14
+    & 116 & 353 & 3 & 16  % cegis-min
+    & 400 & 1450 & 34     % cegis
+    & >12h & >500 & --    % fbCSP+LTL
+\\\bottomrule
+\end{tabular}
+\end{adjustbox}%
+\end{document}

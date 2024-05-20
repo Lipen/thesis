@@ -1,0 +1,61 @@
+\documentclass[../main.tex]{subfiles}%
+\begin{document}%
+\begin{adjustbox}{max width=\textwidth}
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{
+    cc
+    @{\hspace{6pt}}
+    cccc
+    @{\hspace{6pt}}
+    cccc
+    @{\hspace{6pt}}
+    cccc
+    @{\hspace{6pt}}
+    cccc
+}
+\toprule
+    \multirowcell{3}{$\SetPositiveScenarios$} & \multirowcell{3}{$\card{\PositiveTree}$}
+    & \multicolumn{4}{c}{\multirowcell{2}{Two-stage~\cite{chivilikhin-19}}}
+    & \multicolumn{12}{c}{\AlgoExtendedMinUB}
+\\ & & & & &  % S, |T|, Two-stage [basic-min+tt2bf]
+    & \multicolumn{4}{c}{$(w = 0)$}
+    & \multicolumn{4}{c}{$(w = 2)$}
+    & \multicolumn{4}{c}{$(w = \infty)$}
+\\ &  % S, |T|
+    & Время,\,с. & $\Cmin$ & $\Tmin$ & $N_\text{sum}$ % Two-stage
+    & Время,\,с. & $P$ & $T$ & $\Nmin$ % w = 0
+    & Время,\,с. & $P$ & $T$ & $\Nmin$ % w = 2
+    & Время,\,с. & $P$ & $T$ & $\Nmin$ % w = \infty
+\\\cmidrule(lr){1-2} \cmidrule(lr){3-6} \cmidrule(lr){7-10} \cmidrule(lr){11-14} \cmidrule(lr){15-18}
+   %%% S1
+    $\SetScenarios^{(1)}$ & 24
+    % time, P, T, Nmin
+    & 8 & 6 & 8 & 15  % Two-stage
+    & 3 & 3 & 8 & 14  % w = 0
+    & 4 & 3 & 8 & 14  % w = 2
+    & 5 & 3 & 8 & 14  % w = infty
+\\ %%% S10
+    $\SetScenarios^{(10)}$ & 234
+    % time, P, T, Nmin
+    &   3 & 8 & 17 & 36  % Two-stage
+    &  17 & 3 & 18 & 38  % w = 0
+    &  58 & 5 & 16 & 25  % w = 2
+    &  87 & 5 & 16 & 25  % w = infty
+\\ %%% S39
+    $\SetScenarios^{(39)}$ & 960
+    % time, P, T, Nmin
+    &  13 & 8 & 15 & 32  % Two-stage
+    &  41 & 3 & 18 & 38  % w = 0
+    & 124 & 5 & 16 & 25  % w = 2
+    & 162 & 5 & 16 & 25  % w = infty
+\\ %%% S49
+    $\SetScenarios^{(49)}$ & 2939
+    % time, P, T, Nmin
+    &    36 & 8 & 18 & 60  % Two-stage
+    &   602 & 5 & 18 & 44  % w = 0
+    &  4305 & 6 & 16 & 39  % w = 2
+    & 51666 & 6 & 16 & 39  % w = infty
+\\\bottomrule
+\end{tabular}
+\end{adjustbox}%
+\end{document}

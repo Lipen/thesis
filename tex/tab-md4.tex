@@ -1,0 +1,69 @@
+\documentclass[../main.tex]{subfiles}%
+\begin{document}%
+\begingroup%
+\setlength{\tabcolsep}{0.5em}%
+\renewcommand{\arraystretch}{0.8}%
+\newcommand{\supmidrule}{\cmidrule(lr){1-11}}%
+\newcommand{\avgsd}[2]{\np{#1} &\,$\pm$\,& \np{#2}}%
+\newcommand{\minmax}[2]{\np{#1} &\,--\,& \np{#2}}%
+% \newcommand{\cnczaikin}{\multicolumn{3}{c}{\Part{CnC}~\cite{DBLP:conf/ijcai/Zaikin2022}}}
+% \newcommand{\myestimate}[1]{\llap{${}^{*}$}#1}
+\newcommand{\myestimate}[1]{#1\rlap{${}^{*}$}}
+\newcommand{\myest}{\multicolumn{1}{r}{\small (est.)}}
+\newcommand{\myfull}{\multicolumn{1}{r}{\small (full)}}
+\noindent%
+\begin{tabular}{
+    c% Instance
+    r@{}c@{}l% Partitioning
+    r@{}c@{}l% Avg±sd time
+    r@{}c@{}l% Min-max time
+    c% Total time (seconds)
+}
+\toprule
+    \thead{Inst.}
+    & \multicolumn{3}{c}{\thead{Partitioning \\ (type / size)}}
+    & \multicolumn{3}{c}{\thead{Avg $\pm$ sd \\ time, s}}
+    & \multicolumn{3}{c}{\thead{Min\,--\,max \\ time, s}}
+    & \thead{Time, s}
+\\
+\midrule
+
+%% MD4
+\instance{MD4}{40}
+    % & \cnczaikin & &\clap{---}& & &\clap{---}& & \np{10550880} \\
+    & \Part{CnC} &\,/\,& \np{400509} & \avgsd{26}{274} & \minmax{0.01}{39087} & \np{10550880} \\
+    %& \Part{Est.} &\,/\,& \np{10}k & \avgsd{1721}{2156}& \minmax{8.5}{26114} & \np{17206800} \\
+    %& \Part{Est.} &\,/\,& \np{50}k & \avgsd{251}{315}& \minmax{0.1}{3915} & \np{12590000} \\
+    \myest & \Part{INT} &\,/\,& \np{70}k & \avgsd{182}{210} & \minmax{0.08}{1927} & \myestimate{\np{12747000}} \\
+    %& \Part{Est.} &\,/\,& \np{80}k & \avgsd{153}{163}& \minmax{0.07}{1457} & \np{12205600} \\
+    %& \Part{Est.} &\,/\,& \np{90}k & \avgsd{140}{149}& \minmax{0.08}{1292} & \np{12550500} \\
+    \myest & \Part{INT} &\,/\,& \np{110}k & \avgsd{105}{113} & \minmax{0.08}{1382} & \myestimate{\np{11511500}} \\
+    %& \Part{Est.} &\,/\,& \np{130}k & \avgsd{105}{114}& \minmax{0.09}{931} & \np{12288900} \\
+    \myest & \Part{INT} &\,/\,& \np{150}k & \avgsd{84}{86} & \minmax{0.09}{659} & \myestimate{\np{12480000}} \\
+    %& \Part{Full} &\,/\,& \np{90}k & \avgsd{137}{92}& \minmax{0.07}{2595} & \np{12301213} \\
+    \myfull & \Part{INT} &\,/\,& \np{110}k & \avgsd{112}{124} & \minmax{0.06}{2210} & \np{12250123} \\
+
+\supmidrule
+\instance{MD4}{43}
+    % & \cnczaikin & &\clap{---}& & &\clap{---}& & \np{1686960} \\
+    & \Part{CnC} &\,/\,& \np{54611} & \avgsd{31}{52} & \minmax{0.01}{2236} & \np{1686960} \\
+    \myest & \Part{INT} &\,/\,& \np{10}k & \avgsd{356}{380} & \minmax{7}{5109} & \myestimate{\np{3561400}} \\
+    %& \Part{Est.} &\,/\,& \np{20}k & \avgsd{170}{162}& \minmax{0.1}{1453} & \np{3399400} \\
+    \myest & \Part{INT} &\,/\,& \np{30}k & \avgsd{105}{90} & \minmax{0.1}{842} & \myestimate{\np{3205800}} \\
+    \myest & \Part{INT} &\,/\,& \np{50}k & \avgsd{65}{52} & \minmax{0.08}{371} & \myestimate{\np{3241000}} \\
+    %\myest & \Part{INT} &\,/\,& \np{60}k & \avgsd{65}{59} & \minmax{0.1}{627} & \mystar\np{3877200} \\
+    %& \Part{Est.} &\,/\,& \np{80}k & \avgsd{46}{34}& \minmax{0.08}{251} & \np{3666400} \\
+    %\myest & \Part{INT} &\,/\,& \np{90}k & \avgsd{82}{65} & \minmax{0.15}{743} & \mystar\np{7379100} \\
+    %& \Part{Est.} &\,/\,& \np{110}k & \avgsd{41}{32}& \minmax{0.1}{310} & \np{4507800} \\
+    %& \Part{Est.} &\,/\,& \np{120}k & \avgsd{33}{22}& \minmax{0.08}{164} & \np{4213300} \\
+    %& \Part{Est.} &\,/\,& \np{150}k & \avgsd{31}{20}& \minmax{0.08}{126} & \np{4630500} \\
+    %\myfull & \Part{INT} &\,/\,& \np{20}k & \avgsd{166}{163} & \minmax{0.08}{3134} & \np{3313450} \\
+    \myfull & \Part{INT} &\,/\,& \np{30}k & \avgsd{112}{104} & \minmax{0.07}{1910} & \np{3349802} \\
+    %& \Part{Full} &\,/\,& \np{60}k & \avgsd{61}{49}& \minmax{0.07}{988} & \np{3627241} \\
+    %& \Part{Full} &\,/\,& \np{90}k & \avgsd{44}{33}& \minmax{0.07}{699} & \np{3956651} \\
+
+
+\bottomrule
+\end{tabular}%
+\endgroup%
+\end{document}

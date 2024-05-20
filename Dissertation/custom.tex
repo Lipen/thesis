@@ -50,6 +50,13 @@
 \hyphenpenalty=500 % Default is 50
 \tolerance=200 % Default is 200
 
+%% makecell setup
+\renewcommand\theadfont{\bfseries\normalsize}
+\renewcommand\theadgape{}
+
+%% Column types
+\newcolumntype{R}{>{$}r<{$}}
+
 %% Big operators factory
 \newcommand\newbigop[2]{% {<name>}{<symbol>}
     \expandafter\newcommand\csname big#1\endcsname{%
@@ -169,13 +176,13 @@
     }{#1}}
 
 % %% Maximum height of float (on 'p' page)
-% \newcommand{\maxheight}[1]{% {<lines>}
-%     \textheight% Total text area height
-%     -#1\baselineskip% Line height
-%     -\abovecaptionskip% Space above caption
-%     -\belowcaptionskip% Space below caption
-%     -0.1pt% Just because something is a little bit off after all
-% }
+\newcommand{\maxheight}[1]{% {<lines>}
+    \textheight% Total text area height
+    -#1\baselineskip% Line height
+    -\abovecaptionskip% Space above caption
+    -\belowcaptionskip% Space below caption
+    -0.1pt% Just because something is a little bit off after all
+}
 
 %% Input/Output actions
 \newcommand{\ActionMM}[2]{% {<event>}{<values>}

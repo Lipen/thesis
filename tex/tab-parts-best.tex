@@ -1,0 +1,165 @@
+\documentclass[../main.tex]{subfiles}%
+\begin{document}%
+\begingroup%
+\setlength{\tabcolsep}{0.5em}%
+% \setlength{\tabcolsep}{3pt}%
+\renewcommand{\arraystretch}{0.7}%
+\newcommand{\supmidrule}{\cmidrule(lr){1-11}}%
+\newcommand{\supmidrulebold}{\cmidrule[\lightrulewidth](lr){1-11}}%
+\newcommand{\myseq}{\multicolumn{3}{c}{Sequential} & &\clap{---}& & &\clap{---}&}%
+\newcommand{\avgsd}[2]{\np{#1} &\,$\pm$\,& \np{#2}}%
+\newcommand{\minmax}[2]{\np{#1} &\,--\,& \np{#2}}%
+\noindent%
+\begin{tabular}{
+    c% Instance
+    r@{}c@{}l% Partitioning
+    r@{}c@{}l% Avg±sd time
+    r@{}c@{}l% Min-max time
+    c% Total time (seconds)
+    % c% Total time (human)
+}
+\toprule
+    \thead{Instance}
+    & \multicolumn{3}{c}{\thead{Partitioning \\ (type / size)}}
+    & \multicolumn{3}{c}{\thead{Avg $\pm$ sd \\ time, s}}
+    & \multicolumn{3}{c}{\thead{Min\,--\,max \\ time, s}}
+    & \thead{Total \\ time, s}
+    % & \thead{Total \\ time}
+\\
+\midrule
+
+%% 12x12 multipliers
+% \instance{CvK}{12}
+%     & \myseq & \np{36864} \\ % & 10h \\
+%     % & \llap{\Part{CnC-def}} &\,/\, & \np{56404} & \avgsd{0.15}{0.23} & \minmax{0.01}{12} & \np{8357} \\% & 2h 19m \\
+%     & \llap{\Part{CnC-d8}} &\,/\, & \np{256} & \avgsd{16}{12} & \minmax{2.9}{133} & \np{4109} \\% & 1h 8m \\
+%     % & \llap{\Part{CnC-n4600}} &\,/\,& \np{273} & \avgsd{16}{30} & \minmax{2.1}{418} & \np{4497} \\ % & 1h 15m \\
+%     % & \Part{2-DIS} &\,/\,& \np{4096} & \avgsd{17}{15} & \minmax{1.8}{219} & \np{71066} \\ % & 20h \\
+%     % & \Part{2-XOR} &\,/\,& \np{4096} & \avgsd{2.9}{0.1} & \minmax{2.4}{3.6} & \np{11756} \\ % & 3h 16m \\
+%     % & \Part{3-MAJ} &\,/\,& \np{256} & \avgsd{21}{1.1} & \minmax{18}{26} & \np{5437} \\ % & 1h 31m \\
+%     & \Part{3-XOR} &\,/\,& \np{256} & \avgsd{21}{0.9} & \minmax{19}{24} & \np{5315} \\ % & 1h 29m \\
+%     % & \Part{INT} &\,/\,& \np{1024} & \avgsd{4.5}{0.5} & \minmax{1.5}{5.6} & \np{4595} \\ % & 1h 17m \\
+%     % & \Part{INT} &\,/\,& \np{512} & \avgsd{8.0}{0.7} & \minmax{3.7}{9.7} & \np{4101} \\ % & 1h 8m \\
+%     & \Part{INT} &\,/\,& \np{256} & \avgsd{16}{1.4} & \minmax{9.1}{18} & \np{4021} \\ % & 1h 7m \\
+%     % & \Part{INT} &\,/\,& \np{128} & \avgsd{33}{3.2} & \minmax{21}{39} & \np{4227} \\ % & 1h 10m \\
+%     % & \Part{INT} &\,/\,& \np{64} & \avgsd{75}{7.0} & \minmax{53}{87} & \np{4774} \\ % & 1h 20m \\
+%     % & \Part{INT} &\,/\,& \np{32} & \avgsd{176}{20} & \minmax{134}{212} & \np{5646} \\ % & 1h 34m \\
+% \supmidrule
+\instance{CvW}{12}
+    & \myseq & \np{6612} \\ % & 1h 50m \\
+    % & \Part{CnC-d8} &\,/\,& \np{256} & \avgsd{19}{254} & \minmax{0.7}{4065} & \np{4777} \\ % & 1h 20m \\
+    & \llap{\Part{CnC-n2850}} &\,/\,& \np{261} & \avgsd{14}{31} & \minmax{0.6}{299} & \np{3583} \\ % & 1h \\
+    % & \Part{3-XOR} &\,/\,& \np{256} & \avgsd{17}{1.0} & \minmax{14}{20} & \np{4339} \\ % & 1h 12m \\
+    & \Part{3-MAJ} &\,/\,& \np{256} & \avgsd{15}{3.4} & \minmax{3.5}{25} & \np{3832} \\ % & 1h 4m \\
+    & \Part{INT} &\,/\,& \np{256} & \avgsd{11}{3.0} & \minmax{0.6}{17} & \np{2809} \\ % & 47m \\
+\supmidrule
+\instance{DvC}{12}
+    & \myseq & \np{3299} \\ % & 55m \\
+    & \llap{\Part{CnC-d8}} &\,/\,& \np{256} & \avgsd{9.7}{20} & \minmax{1.2}{275} & \np{2474} \\ % & 41m \\
+    % & \Part{CnC-n2800} &\,/\,& \np{250} & \avgsd{11}{31} & \minmax{0.6}{263} & \np{2766} \\ % & 46m \\
+    & \Part{3-XOR} &\,/\,& \np{256} & \avgsd{14}{1.0} & \minmax{12}{17} & \np{3571} \\ % & 1h \\
+    % & \Part{3-MAJ} &\,/\,& \np{256} & \avgsd{13.5}{2.1} & \np{3456} & \minmax{5.5}{20} \\ % & 0m 0s \\
+    & \Part{INT} &\,/\,& \np{256} & \avgsd{8.9}{2.2} & \minmax{0.4}{13} & \np{2272} \\ % & 38m \\
+\supmidrule
+\instance{DvK}{12}
+    & \myseq & \np{36224} \\ % & 10h \\
+    & \llap{\Part{CnC-d8}} &\,/\,& \np{256} & \avgsd{17}{12} & \minmax{0.2}{65} & \np{4361} \\ % & 1h 13m \\
+    % & \Part{CnC-n4450} &\,/\,& \np{246} & \avgsd{20.2}{39.4} & \minmax{2.1}{463} & \np{4959} \\ % & 1h 23m \\
+    & \Part{3-XOR} &\,/\,& \np{256} & \avgsd{23}{1.1} & \minmax{21}{27} & \np{5880} \\ % & 1h 38m \\
+    % & \Part{3-MAJ} &\,/\,& \np{256} & \avgsd{23.3}{1.6} & \minmax{19}{30} & \np{5965} \\ % & 1h 39m \\
+    & \Part{INT} &\,/\,& \np{256} & \avgsd{17}{1.7} & \minmax{10}{22} & \np{4348} \\ % & 1h 12m \\
+\supmidrule
+\instance{DvW}{12}
+    & \myseq & \np{10373} \\ % & 3h \\
+    % & \Part{CnC-d8} &\,/\,& \np{256} & \avgsd{16}{136} & \minmax{1.2}{2177} & \np{4058} \\ % & 1h 8m \\
+    & \llap{\Part{CnC-n2650}} &\,/\,& \np{293} & \avgsd{13}{35} & \minmax{0.6}{374} & \np{3880} \\ % & 1h 5m \\
+    % & \Part{3-XOR} &\,/\,& \np{256} & \avgsd{19}{1.1} & \minmax{16}{22} & \np{4808} \\ % & 1h 20m \\
+    & \Part{3-MAJ} &\,/\,& \np{256} & \avgsd{17}{3.2} & \minmax{4.4}{27} & \np{4393} \\ % & 1h 13m \\
+    & \Part{INT} &\,/\,& \np{256} & \avgsd{13}{3.7} & \minmax{0.6}{20} & \np{3308} \\ % & 55m \\
+\supmidrule
+\instance{KvW}{12}
+    & \myseq & \np{37339} \\ % & 10h \\
+    & \llap{\Part{CnC-d8}} &\,/\,& \np{256} & \avgsd{20}{22} & \minmax{0.2}{227} & \np{5047} \\ % & 1h 24m \\
+    % & \Part{CnC-n4550} &\,/\,& \np{217} & \avgsd{26}{48} & \minmax{2.3}{524} & \np{5676} \\ % & 1h 35m \\
+    & \Part{3-XOR} &\,/\,& \np{256} & \avgsd{25}{1.0} & \minmax{22}{29} & \np{6267} \\ % & 1h 44m \\
+    % & \Part{3-MAJ} &\,/\,& \np{256} & \avgsd{25}{2.6} & \minmax{19}{36} & \np{6295} \\ % & 1h 45m \\
+    & \Part{INT} &\,/\,& \np{256} & \avgsd{19}{2.1} & \minmax{10}{24} & \np{4838} \\ % & 1h 21m \\
+
+
+\supmidrulebold
+
+%% 16x16 multipliers
+% \instance{CvK}{16}
+%     & \myseq & \llap{$>$}\np{864000} \\ % & >10d \\
+%     & \llap{\Part{CnC-d16}} &\,/\, & \np{65536} & \avgsd{23}{18} & \minmax{0.1}{254} & \np{1491116} \\ % & 17d \\
+%     & \Part{2-XOR} &\,/\,& \np{65536} & \avgsd{33}{1.4} & \minmax{26}{41} & \np{2178663} \\ % & 25d \\
+%     % & \Part{3-XOR} &\,/\,& \np{2048} & \avgsd{2441}{234} & \minmax{1752}{3242} & \np{4998083} \\ % & 58d \\
+%     % & \Part{3-MAJ} &\,/\,& \np{2048} & \avgsd{2092}{655} & \minmax{1194}{3555} & \np{4284518} \\ % & 50d \\
+%     % & \Part{INT} &\,/\,& \np{131072} & \avgsd{10}{1.2} & \minmax{0.01}{14} & \np{1321270} \\ % & 15d \\
+%     & \Part{INT} &\,/\,& \np{65536} & \avgsd{19}{2.3} & \minmax{0.01}{27} & \np{1223521} \\ % & 14d \\
+%     % & \Part{INT} &\,/\,& \np{32768} & \avgsd{40}{4} & \minmax{0.9}{55} & \np{1305053} \\ % & 15d \\
+%     % & \Part{INT} &\,/\,& \np{16384} & \avgsd{90}{8} & \minmax{9.1}{119} & \np{1467433} \\ % & 17d \\
+% \supmidrule
+\instance{CvW}{16}
+    & \myseq & \llap{$>$}\np{864000} \\ % & \llap{$>$}10d \\
+    & \llap{\Part{CnC-n4500}} &\,/\,& \np{51350} & \avgsd{27}{150} & \minmax{0.05}{13531} & \np{1392714} \\ % & 16d \\
+    & \Part{2-XOR} &\,/\,& \np{65536} & \avgsd{22}{1.9} & \minmax{16}{31} & \np{1418199} \\ % & 16d \\
+    % & \Part{3-XOR} &\,/\,& \np{2048} & \avgsd{2110.4}{144.4} & \minmax{1633}{2601} & \np{4322038} \\ % & 50d \\
+    % & \Part{3-MAJ} &\,/\,& \np{2048} & \avgsd{1513.0}{733.4} & \minmax{121}{4394} & \np{3098644} \\ % & 36d \\
+    & \Part{INT} &\,/\,& \np{65536} & \avgsd{19}{2.3} & \minmax{0.01}{27} & \np{875966} \\ % & 10d \\
+\supmidrule
+\instance{DvC}{16}
+    & \myseq & \llap{$>$}\np{864000} \\ % & \llap{$>$}10d \\
+    & \llap{\Part{CnC-d16}} &\,/\,& \np{65534} & \avgsd{12}{36} & \minmax{0.01}{2797} & \np{809516} \\ % & 9d \\
+    & \Part{2-XOR} &\,/\,& \np{65536} & \avgsd{20}{2.1} & \minmax{12}{30} & \np{1302856} \\ % & 15d \\
+    % & \Part{3-XOR} &\,/\,& \np{2048} & \avgsd{1220}{101.2} & \minmax{803}{1561} & \np{2499297} \\ % & 29d \\
+    % & \Part{3-MAJ} &\,/\,& \np{2048} & \avgsd{1120}{412.1} & \minmax{257}{2506} & \np{2293699} \\ % & 27d \\
+    & \Part{INT} &\,/\,& \np{65536} & \avgsd{9.1}{2.3} & \minmax{0.01}{16} & \np{597104} \\ % & 7d \\
+\supmidrule
+\instance{DvK}{16}
+    & \myseq & \llap{$>$}\np{864000} \\ % & \llap{$>$}10d \\
+    & \llap{\Part{CnC-d16}} &\,/\,& \np{65535} & \avgsd{25}{28} & \minmax{0.01}{918} & \np{1640023} \\ % & 19d \\
+    & \Part{2-XOR} &\,/\,& \np{65536} & \avgsd{35}{1.8} & \minmax{28}{45} & \np{2301014} \\ % & 27d \\
+    % & \Part{3-XOR} &\,/\,& \np{2048} & \avgsd{2525}{211.5} & \minmax{1976}{3326} & \np{5170872} \\ % & 60d \\
+    % & \Part{3-MAJ} &\,/\,& \np{2048} & \avgsd{2196}{684.8} & \minmax{1217}{3625} & \np{4496445} \\ % & 52d \\
+    & \Part{INT} &\,/\,& \np{65536} & \avgsd{20}{2.6} & \minmax{0.01}{31} & \np{1327640} \\ % & 15d \\
+\supmidrule
+\instance{DvW}{16}
+    & \myseq & \llap{$>$}\np{864000} \\ % & \llap{$>$}10d \\
+    & \llap{\Part{CnC-n4300}} &\,/\,& \np{54347} & \avgsd{24}{113} & \minmax{0.01}{8062} & \np{1304536} \\ % & 15d \\
+    & \Part{2-XOR} &\,/\,& \np{65536} & \avgsd{24}{2.2} & \minmax{18}{36} & \np{1595146} \\ % & 18d \\
+    % & \Part{3-XOR} &\,/\,& \np{2048} & \avgsd{2145}{191} & \minmax{1473}{2807} & \np{4391977} \\ % & 51d \\
+    % & \Part{3-MAJ} &\,/\,& \np{2048} & \avgsd{1676}{746.8} & \minmax{146}{4450} & \np{3432960} \\ % & 40d \\
+    & \Part{INT} &\,/\,& \np{65536} & \avgsd{14}{3.7} & \minmax{0.01}{27} & \np{885362} \\ % & 10d \\
+\supmidrule
+\instance{KvW}{16}
+    & \myseq & \llap{$>$}\np{864000} \\ % & \llap{$>$}10d \\
+    & \llap{\Part{CnC-n7500}} &\,/\,& \np{70469} & \avgsd{31}{109} & \minmax{0.2}{11293} & \np{2159531} \\ % & 25d \\
+    & \Part{2-XOR} &\,/\,& \np{65536} & \avgsd{36}{1.7} & \minmax{29}{48} & \np{2344223} \\ % & 27d \\
+    % & \Part{3-XOR} &\,/\,& \np{2048} & \avgsd{2815}{186} & \minmax{2287}{3641} & \np{5765837} \\ % & 67d \\
+    % & \Part{3-MAJ} &\,/\,& \np{2048} & \avgsd{2514}{799} & \minmax{1310}{4613} & \np{5149409} \\ % & 60d \\
+    & \Part{INT} &\,/\,& \np{65536} & \avgsd{22}{2.9} & \minmax{0.01}{31} & \np{1423759} \\ % & 16d \\
+
+
+% \supmidrulebold
+
+% %% Sorting algorithms
+% \instance{SvB}{9,4}
+%     & \myseq & \np{2471} & 41m \\
+%     & \Part{CnC-d12} &\,/\,& \np{3041} & \avgsd{2.7}{7.7} & \minmax{0.01}{141} & \np{8234} & 2h 17m \\
+%     & \Part{3-MAJ} &\,/\,& \np{4096} & \avgsd{99}{43} & \minmax{19}{434} & \np{406852} & 5d \\
+%     & \Part{INT} &\,/\,& \np{4096} & \avgsd{36}{10} & \minmax{10}{69} & \np{148921} & 2d \\
+%     % & \Part{INT} &\,/\,& \np{32} & \avgsd{542}{87} & \minmax{388}{727} & \np{17339} & 5h \\
+% \supmidrule
+% \instance{PvS}{9,4}
+%     & \myseq & \np{41901} & 12h \\
+%     & \Part{CnC-d12} &\,/\,& \np{3044} & \avgsd{22}{93} & \minmax{0.02}{1642} & \np{67933} & 19h \\
+%     & \Part{3-MAJ} &\,/\,& \np{4096} & \avgsd{689}{199} & \minmax{235}{2162} & \np{2822840} & 33d \\
+%     & \Part{INT} &\,/\,& \np{4096} & \avgsd{299}{121} & \minmax{45}{738} & \np{1223049} & 14d \\
+%     % & \Part{INT} &\,/\,& \np{16} & \avgsd{10337}{3042} & \minmax{6900}{14935} & \np{165399} & 2d \\
+
+
+\bottomrule
+\end{tabular}%
+\endgroup%
+\end{document}
