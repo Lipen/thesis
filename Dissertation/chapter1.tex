@@ -123,8 +123,8 @@
 \label{sec:basic-fb-model}
 
 В данном разделе приводится описание формальной модели базового функционального блока~\cite{dubinin-2006}.
-Базовый функциональный блок (\textit{Basic Function Block} \--- BFB) состоит из интерфейса, диаграммы управления выполнением (\textit{Execution Control Chart} \--- ECC), набора алгоритмов управления ($\mathit{Alg}$), а также множества внутренних переменных $V$.
-Отметим, что в данной работе рассматриваются только функциональные блоки без внутренних переменных, поэтому в дальнейшем большинство упоминаний множества внутренних переменных $V$ будут опущены.
+Базовый функциональный блок (\textit{Basic Function Block} \--- BFB) состоит из интерфейса, диаграммы управления выполнением (\textit{Execution Control Chart} \--- ECC), набора алгоритмов управления ($\mathit{Alg}$), а также множества внутренних переменных~$V$.
+Отметим, что в данной работе рассматриваются только функциональные блоки без внутренних переменных, поэтому в дальнейшем большинство упоминаний множества внутренних переменных~$V$ будут опущены.
 
 Интерфейс функционального блока включает в себя входные и выходные события (множества $\SetInputEvents$ и $\SetOutputEvents$) и переменные (множества $\SetInputVariables$ и $\SetOutputVariables$), а также отношения ассоциации событий с переменными ($\AssociationInput$ и $\AssociationOutput$).
 Формально, $\mathit{Interface} = \Tuple{\SetInputEvents, \SetOutputEvents, \SetInputVariables, \SetOutputVariables, \AssociationInput, \AssociationOutput}$,
@@ -136,7 +136,9 @@ $\AssociationOutput \subseteq \SetOutputEvents \times \SetOutputVariables$.
 Однако на текущем этапе разработки методов, предлагаемых в данной работе, полноценный учет ассоциации событий и переменных является нецелесообразным.
 
 % TODO: ссылку на стандарт?
-Алгоритмы управления функциональных блоков реализуются на языках стандарта IEC~61131-3 (SFC \--- \textit{Sequential Function Chart}, LD \--- \textit{Ladder Diagram}, FBD \--- \textit{Function Block Diagram}, ST \--- \textit{Structured Text}, IL \--- \textit{Instruction List}) с использованием типов данных, описанных в IEC~61131-3 (например, булевы значений, целые числа, числа с плавающей точкой, символы и строки, объекты даты и времени, а также пользовательские типы, такие как перечисления, массивы и структуры), и могут быть представлены функциями вида $f_{\mathit{alg}} : \bigprodnolim{x \in \SetInputVariables} \Dom(x) \times \bigprodnolim{z \in \SetOutputVariables} \Dom(z) \times \bigprodnolim{v \in V} \Dom(v) \to \bigprodnolim{z \in \SetOutputVariables} \Dom(z) \times \bigprodnolim{v \in V} \Dom(v)$, которые изменяют значения выходных и внутренних переменных в зависимости от входных переменных. Здесь $\Dom(v)$ означает домен (область значений) переменной $v$. В данной работе рассматриваются только логические контроллеры ($\forall x \in \SetInputVariables, z \in \SetOutputVariables : \Dom(x) = \Dom(z) = \Bool = \Set{\top, \bot}$) без внутренних переменных ($V = \emptyset$) и с алгоритмами управления, явно независящими от входных переменных, поэтому функции алгоритмов принимают простой вид $f_{\mathit{alg}} : \BoolVec{\SetOutputVariables} \to \BoolVec{\SetOutputVariables}$.
+Алгоритмы управления функциональных блоков реализуются на языках стандарта IEC~61131-3 (SFC \--- \textit{Sequential Function Chart}, LD \--- \textit{Ladder Diagram}, FBD \--- \textit{Function Block Diagram}, ST \--- \textit{Structured Text}, IL \--- \textit{Instruction List}) с использованием типов данных, описанных в IEC~61131-3 (например, булевы значений, целые числа, числа с плавающей точкой, символы и строки, объекты даты и времени, а также пользовательские типы, такие как перечисления, массивы и структуры), и могут быть представлены функциями вида $f_{\mathit{alg}} \colon \bigprodnolim_{x \in \SetInputVariables} \Dom(x) \times \bigprodnolim_{z \in \SetOutputVariables} \Dom(z) \times \bigprodnolim_{v \in V} \Dom(v) \to \bigprodnolim_{z \in \SetOutputVariables} \Dom(z) \times \bigprodnolim_{v \in V} \Dom(v)$, которые изменяют значения выходных и внутренних переменных в зависимости от входных переменных.
+Здесь $\Dom(v)$ означает домен (область значений) переменной~$v$.
+В данной работе рассматриваются только логические контроллеры ($\forall x \in \SetInputVariables, z \in \SetOutputVariables : \Dom(x) = \Dom(z) = \Bool = \Set{\top, \bot}$) без внутренних переменных ($V = \emptyset$) и с алгоритмами управления, явно независящими от входных переменных, поэтому функции алгоритмов принимают простой вид $f_{\mathit{alg}} \colon \BoolVec{\SetOutputVariables} \to \BoolVec{\SetOutputVariables}$.
 % [TODO: обоснование допущений об отсутствии внутренних переменных]
 % FIXME: check
 Отметим, что данный вид алгоритмов обладает способностью к преобразованию любого набора значений выходных переменных, что является достаточным в задачах логического управления.
@@ -145,17 +147,18 @@ $\AssociationOutput \subseteq \SetOutputEvents \times \SetOutputVariables$.
 Формально, $\mathit{ECC} = \Tuple{\mathit{ECState}, s_0, \mathit{ECAction}, \mathit{ECTran}, \mathit{ECTCond}, \mathit{PriorT}}$,
 где $\mathit{ECState} = (s_0, s_1, \dotsc, s_r)$ \--- множество состояний автомата;
 $s_0$ \--- начальное состояние;
-$\mathit{ECAction} : \mathit{ECState} \setminus \Set{s_0} \to \mathit{ECA}^{*}$ \--- функция соответствия состояниям автомата действий,
+$\mathit{ECAction} \colon \mathit{ECState} \setminus \Set{s_0} \to \mathit{ECA}^{*}$ \--- функция соответствия состояниям автомата действий,
 где $\mathit{ECA} = \mathit{Alg} \times \SetOutputEvents \union \mathit{Alg} \union \SetOutputEvents$ \--- множество синтаксически корректных действий автомата,
-$\mathit{ECA}^{*} = \bigunionnolim{k \in \Range{0}{\infty}} \mathit{ECA}^k$ \--- множество всевозможных последовательностей действий (включая пустую последовательность действий, обозначаемую впоследствии $\mathit{ECA}^0 = \Tuple{\varepsilon})$;
+$\mathit{ECA}^{*} = \bigunionnolim_{k \in \Range{0}{\infty}} \mathit{ECA}^k$ \--- множество всевозможных последовательностей действий (включая пустую последовательность действий, обозначаемую впоследствии $\mathit{ECA}^0 = \Tuple{\varepsilon})$;
 $\mathit{ECTran} \subseteq \mathit{ECState}^2$ \--- множество переходов автомата;
-$\mathit{ECTCond} : \mathit{ECTran} \to \bigl[ \bigprodnolim{e_i \in \SetInputEvents} \Dom(e_i) \times \bigprodnolim{x \in \SetInputVariables} \Dom(x) \times \bigprodnolim{z \in \SetOutputVariables} \Dom(z) \times \bigprodnolim{v \in V} \Dom(v) \to \Bool \bigr]$ \--- функция соответствия переходам автомата охранных условий \--- логических функций, зависящих от входных событий и (потенциально) всех переменных; $\mathit{PriorT} : \mathit{ECTran} \to \mathbb{N}_{+}$ \--- функция приоритетов переходов.
+$\mathit{ECTCond} \colon \mathit{ECTran} \to \bigl[ \bigprodnolim_{e_i \in \SetInputEvents} \Dom(e_i) \times \bigprodnolim_{x \in \SetInputVariables} \Dom(x) \times \bigprodnolim_{z \in \SetOutputVariables} \Dom(z) \times \bigprodnolim_{v \in V} \Dom(v) \to \Bool \bigr]$ \--- функция соответствия переходам автомата охранных условий \--- логических функций, зависящих от входных событий и (потенциально) всех переменных; $\mathit{PriorT} \colon \mathit{ECTran} \to \mathbb{N}_{+}$ \--- функция приоритетов переходов.
 
 % TODO: Описание семантики выполнения
 
 Говорят, что ECC находится в канонической форме~\cite{dubinin-2006}, если с каждым состоянием автомата ассоциировано не более одного действия.
 В данной работе в основном рассматриваются канонические конечно-автоматные модели, состояния которых имеют в точности одно выходное действие, так как такие модели в большистве случаев значительно проще для реализации, использования и анализа.
-В разделе~\ref{sec:non-canonical-fb-model} дополнительно приводится расширение разрабатываемых методов применительно к неканоническим~ECC\@.
+% TODO: add missing section
+% В разделе~\ref{sec:non-canonical-fb-model} дополнительно приводится расширение разрабатываемых методов применительно к неканоническим~ECC\@.
 
 
 
