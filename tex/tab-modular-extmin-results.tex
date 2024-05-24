@@ -1,0 +1,35 @@
+\documentclass[../main.tex]{subfiles}%
+\begin{document}%
+\begin{adjustbox}{max width=\textwidth}
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{
+    cc
+    @{\hspace{10pt}}
+    ccccc
+    @{\hspace{10pt}}
+    ccccc
+}
+\toprule
+    \multirowcell{2}{$\SetPositiveScenarios$} & \multirowcell{2}{$\card{\PositiveTree}$}
+    & \multicolumn{5}{c}{\AlgoModularParallelExtendedMin}
+    & \multicolumn{5}{c}{\AlgoModularConsecutiveExtendedMin}
+\\
+    & % S, |T|
+    & $\Cmin$ & $P$ & $T$ & $\Nmin$ & Время, c
+    & $\Cmin$ & $P$ & $T$ & $\Nmin$ & Время, c
+\\\cmidrule(lr){1-2} \cmidrule(lr){3-7} \cmidrule(lr){8-12}
+    $\SetScenarios^{(1)}$ & 24
+    & 4 & 3 & 6+7 & 12+13 & 4    % Parallel
+    & 4 & 3 & 6+7 & 10+11 & 6.5  % Consecutive
+\\
+    $\SetScenarios^{(4)}$ & 94
+    & 5 & 3 & 15+11 & 35+27 & 37    % Parallel
+    & 5 & 3 & 12+12 & 18+20 & 4043  % Consecutive
+\\
+    $\SetScenarios^{(39)}$ & 960
+    & 5    & 5 & 12+10 & 33+18 & 1130  % Parallel
+    & \--- & 5 & \---  & \---  & >6ч   % Consecutive
+\\\bottomrule
+\end{tabular}
+\end{adjustbox}%
+\end{document}
