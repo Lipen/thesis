@@ -1,0 +1,36 @@
+\documentclass[../main.tex]{subfiles}%
+\begin{document}%
+\begin{algorithm}[p]
+    \caption{Алгоритм $\AlgoExtendedMinUB(\SetPositiveScenarios, w)$}%
+    \label{alg:extended-min-ub}
+\begin{algorithmic}[1]
+    \Input $\SetPositiveScenarios$ \--- набор позитивных сценариев выполнения, \allowbreak$w$ \=== максимальная ширина плато (локального минимума).
+    \Result $\Automaton$ \--- конечный автомат с минимальным числом состояний~$\Cmin$ и суммарным размером охранных условий~$\Nmin$.
+\par%
+\algoskip
+\Function{\AlgoExtendedMinUB}{$\SetPositiveScenarios$}
+    \newcommand{\AutomatonBasic}{\Automaton_{\text{basic}}}
+    \myState{$\AutomatonBasic \gets \Call{\AlgoBasicMin}{\SetPositiveScenarios}$}
+    \myState{$\Cmin \gets \FnGetC{\AutomatonBasic}$}
+    \myState{$\Tmin \gets \FnGetT{\AutomatonBasic}$}
+    \myState{$\Nmin^\text{best} \gets \Nmin^\text{prev} \gets P_\text{low} \gets \infty$}
+    \For{$P \gets \FromTo{1}{\infty}$}
+        % \tcp*[h]{upper bound reached}
+        \myState{\lIf{$P > (\Nmin^\text{best} - \Tmin)$}{\Break}\lComment[\hfill]{{\small достигнута верхняя граница $P$}}}
+        % \tcp*[h]{max width reached}
+        \myState{\lIf{$(P - P_\text{low}) > w$}{\Break}\lComment[\hfill]{{\small достигнута максимальная ширина плато $w$}}}
+        \myState{$\Automaton \gets \Call{\AlgoExtendedMinN}{\SetPositiveScenarios, \Cmin, P}$}
+        \If{$\Automaton \neq \texttt{null}$}
+            \myState{$N_\text{min} \gets \FnGetN{\Automaton}$}
+            % \tcp*[h]{update best found $N$}
+            \myState{\lIf{$N_\text{min} < N^\text{best}_\text{min}$}{$\Nmin^\text{best} \gets\ \Nmin$}\lComment[\hfill]{{\small обновление наилучшего $N$}}}
+            % \tcp*[h]{update local minimum}
+            \myState{\lIf{$\Nmin \neq \Nmin^\text{prev}$}{$P_\text{low} \gets P$}\lComment[\hfill]{{\small обновление локального минимума}}}
+            \myState{$\Nmin^\text{prev} \gets \Nmin$}
+        \EndIf
+    \EndFor
+    \myState{\Return{$\Automaton$}}
+\EndFunction
+\end{algorithmic}%
+\end{algorithm}%
+\end{document}

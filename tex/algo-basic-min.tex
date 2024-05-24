@@ -1,0 +1,38 @@
+\documentclass[../main.tex]{subfiles}%
+\begin{document}%
+\begin{algorithm}[htp]
+    \caption{Алгоритм $\AlgoBasicMin(\SetPositiveScenarios)$ со вспомогательными функциями $\AlgoBasicMinC(\SetPositiveScenarios)$ и $\AlgoBasicMinT(\SetPositiveScenarios, C)$}%
+    \label{alg:basic-min}
+\begin{algorithmic}[1]
+    \Input $\SetPositiveScenarios$ \--- набор позитивных сценариев выполнения.
+    \Result $\Automaton$ \--- конечный автомат с минимальным числом состояний $\Cmin$.
+\par%
+\algoskip
+\Function{\AlgoBasicMin}{$\SetPositiveScenarios$}
+    \myState{$\Automaton' \gets \Call{\AlgoBasicMinC}{\SetPositiveScenarios}$}
+    \myState{$\Cmin \gets \FnGetC{\Automaton'}$}
+    \myState{$\Automaton \gets \Call{\AlgoBasicMinT}{\SetPositiveScenarios, \Cmin}$}
+    \myState{\Return{$\Automaton$}}
+\EndFunction
+\algoskip
+\Function{\AlgoBasicMinC}{$\SetPositiveScenarios$}
+    \For{$C \gets \FromTo{1}{\infty}$}
+        \myState{$\Automaton \gets \Call{\AlgoBasic}{\SetPositiveScenarios, \Cmin}$}
+        \myState{\lIf{$\Automaton \neq \texttt{null}$}{\Return{$\Automaton$}}}
+    \EndFor
+\EndFunction
+\algoskip
+\Function{\AlgoBasicMinT}{$\SetPositiveScenarios, C$}
+    \myState{$T \gets \infty$}
+    \Repeat
+        \myState{$\Automaton \gets \Call{\AlgoBasicFull}{\SetPositiveScenarios, C, T}$}
+        \If{$\Automaton \neq \texttt{null}$}
+            \myState{$\AutomatonBest \gets \Automaton$}
+            \myState{$T \gets \FnGetT{\AutomatonBest} - 1$}
+        \EndIf
+    \Until{$\Automaton = \texttt{null}$}
+    \myState{\Return{$\AutomatonBest$}}
+\EndFunction
+\end{algorithmic}%
+\end{algorithm}%
+\end{document}

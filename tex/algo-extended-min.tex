@@ -1,0 +1,33 @@
+\documentclass[../main.tex]{subfiles}%
+\begin{document}%
+\begin{algorithm}[p]
+    \caption{Алгоритм $\AlgoExtendedMin(\SetPositiveScenarios, P)$}%
+    \label{alg:extended-min}
+\begin{algorithmic}[1]
+    \Input $\SetPositiveScenarios$ \--- набор позитивных сценариев выполнения, $P$ \=== максимальный размер охранного условия.
+    \Result $\Automaton$ \--- конечный автомат с минимальным числом состояний~$\Cmin$ и суммарным размером охранных условий~$\Nmin$.
+\par%
+\algoskip
+\Function{\AlgoExtendedMin}{$\SetPositiveScenarios, P$}
+    \myState{$\Automaton' \gets \Call{\AlgoBasicMin}{\SetPositiveScenarios}$}
+    \myState{$\Cmin \gets \FnGetC{\Automaton'}$}
+    \myState{$\Automaton \gets \Call{\AlgoExtendedMinN}{\SetPositiveScenarios, \Cmin, P}$}
+    \myState{\Return{$\Automaton$}}
+\EndFunction
+\algoskip
+\Comment{Функция $\AlgoExtendedMinN(\SetPositiveScenarios, C, P)$ аналогична $\AlgoBasicMinT$,}
+\Comment{только вместо $T$ используется $N$.}
+% \Function{\AlgoExtendedMinN}{$\SetPositiveScenarios, C, P$}
+%     \myState{$N \gets \infty ;~~ \AutomatonBest \gets \texttt{null}$}
+%     \Repeat
+%         \myState{$\Automaton \gets \Call{\AlgoExtended}{\SetPositiveScenarios, C, P, N}$}
+%         \If{$\Automaton \neq \texttt{null}$}
+%             \myState{$\AutomatonBest \gets \Automaton$}
+%             \myState{$N \gets \FnGetN{\AutomatonBest} - 1$}
+%         \EndIf
+%     \Until{$\Automaton = \texttt{null}$}
+% \myState{\Return{$\AutomatonBest$}}
+% \EndFunction
+\end{algorithmic}%
+\end{algorithm}%
+\end{document}
