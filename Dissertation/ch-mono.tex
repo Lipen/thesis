@@ -318,7 +318,7 @@ $b \in \Bool$ \--- текущее значение выходной переме
 \[
     (\BfsParentAutomaton{q_j} = q_i)
     \implies
-    \BfsParentAutomaton[\mathit{(order)}]{q_i} .
+    \BfsParentAutomaton[\mathit{(order)}]{q_i}
 \]
 К сожалению, данное усовершенствование не привело к видимым изменениям производительности сведения (результаты экспериментального исследования не приводятся), поэтому здесь и далее в данной работе считается, что используется наивный способ кодирования BFS-предиката нарушения симметрии.
 
@@ -392,7 +392,10 @@ $b \in \Bool$ \--- текущее значение выходной переме
 Переменная $\NodeType{q,k,p} \in \Set{\NodeTypeTerminal, \NodeTypeAnd, \NodeTypeOr, \NodeTypeNot, \NodeTypeNone}$ кодирует тип вершины дерева разбора~$p$, где \enquote{$\NodeTypeTerminal$} обозначает терминальные вершины, \enquote{$\NodeTypeAnd$}, \enquote{$\NodeTypeOr$}, \enquote{$\NodeTypeNot$} \--- логические операторы, а \enquote{$\NodeTypeNone$} \--- нетипизированные вершины.
 Без потери общности можно задать ограничение на то, что нетипизированные вершины имеют наибольшие номера в дереве: $(\NodeType{q,k,p} =\nobreak \NodeTypeNone) \implies (\NodeType{q,k,p+1} =\nobreak \NodeTypeNone)$.
 Переменная $\NodeInputVariable{q,k,p} \in\nobreak \SetInputVariables \union\nobreak \Set{0}$ кодирует входную переменную (или ее отсутствие: $\NodeInputVariable{q,k,p} = 0$), ассоциированную с терминальной вершиной $p$.
-Только терминальные вершины могут иметь ассоциированные входные переменные: $(\NodeType{q,k,p} = \NodeTypeTerminal) \iff (\NodeInputVariable{q,k,p} \neq 0)$.
+Только терминальные вершины могут иметь ассоциированные входные переменные:
+\[
+    (\NodeType{q,k,p} = \NodeTypeTerminal) \iff (\NodeInputVariable{q,k,p} \neq 0)
+\]
 
 Для задания структуры дерева разбора, а именно, для определения родительских связей между вершинами, используются переменные $\NodeParent{q,k,p} \in\nobreak \Range{0}{(p-1)}$ и~$\NodeChild{q,k,p} \in\nobreak \Set{0} \union \Range{(p+1)}{P}$, кодирующие, соответственно, родителя и \emph{левого} ребенка вершины~$p$ (либо их отсутствие: $\NodeParent{q,k,p} = 0$, $\NodeChild{q,k,p} = 0$).
 Взаимосвязь между этими переменными задается следующим образом:
