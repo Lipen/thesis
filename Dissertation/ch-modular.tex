@@ -68,11 +68,11 @@
 \begin{equation}
 \label{eq:constraint-mapping}
 \begin{split}
-    \biglandsmashl{\substack{
+    \bigland_{\substack{
         m \in \Modules \\
         v \in \SetTreeNodesActive \\
         q \in Q }}
-    % \bigland{q \in Q}
+    % \bigland_{q \in Q}
     \Bigl[
         (\ModularMapping{v} = q)
         % \iff
@@ -156,15 +156,15 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 Для определения переменной $\ModularComputedValue{}$ объявляются следующие ограничения.
 Изначально, в момент времени после \enquote{обработки} фиктивного корня $\TreeRoot$ дерева сценариев, вычисленные значения всех выходных переменных $z \in \SetOutputVariables$ во всех модулях $m \in \Modules$ равны \texttt{False}:
 \[
-    \bigland{m \in \Modules}
-    \bigland{z \in \SetOutputVariables}
+    \bigland_{m \in \Modules}
+    \bigland_{z \in \SetOutputVariables}
     (\ModularComputedValue{\TreeRoot,z} = \bot) .
 \]
 В следующие моменты времени, при обработке вершин $v \in \SetTreeNodes \setminus \Set{\TreeRoot}$, вычисляемые значения выходных переменных определяются в соответствии с работой алгоритмов в состояниях, в которых в эти моменты времени находятся модули \--- то есть в состояниях, в которые отображаются рассматриваемые вершины дерева сценариев: $\ModularMapping{v}$. \\
 Для первого модуля:
 \[
-    \bigland{v \in \SetTreeNodes \setminus \Set{\TreeRoot}}
-    \bigland{z \in \SetOutputVariables}
+    \bigland_{v \in \SetTreeNodes \setminus \Set{\TreeRoot}}
+    \bigland_{z \in \SetOutputVariables}
     \left[
         \ModularComputedValue{v,z}
         \iff
@@ -173,9 +173,9 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 \]
 Для последующих модулей:
 \[
-    \bigland{m \in [2 \twodots M]}
-    \bigland{v \in \SetTreeNodes \setminus \Set{\TreeRoot}}
-    \bigland{z \in \SetOutputVariables}
+    \bigland_{m \in [2 \twodots M]}
+    \bigland_{v \in \SetTreeNodes \setminus \Set{\TreeRoot}}
+    \bigland_{z \in \SetOutputVariables}
     \left[
         \ModularComputedValue{v,z}
         \iff
@@ -186,9 +186,9 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 При отображении активных вершин дерева необходимо учесть, что все модули, кроме последнего, передают входное событие следующему модулю. Стоит отметить, что при этом реакция модулей на входные события не изменяется \--- входные события так же играют свою роль в охранных условиях на переходах автомата.
 Также необходимо учесть, что значения выходных переменных ограничиваются для соответствия дереву сценариев только для последнего модуля \--- все предыдущие модули могут производить произвольные операции над выходными переменными в рамках существующего сведения.
 \begin{gather*}
-    \biglandsmashl{v \in \SetTreeNodesActive}
-    \bigland{m \in [1 \twodots (M-1)]}
-    \bigland{q \in Q}
+    \bigland_{v \in \SetTreeNodesActive}
+    \bigland_{m \in [1 \twodots (M-1)]}
+    \bigland_{q \in Q}
     \left[
         (\ModularMapping{v} = q)
         \implies
@@ -197,8 +197,8 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
         % Note: "outputevent = e", THIS IS NOT A TYPO
         (\ModularStateOutputEvent{q} = e)
     \right] , \\
-    \biglandsmashl{v \in \SetTreeNodesActive}
-    \bigland{q \in Q}
+    \bigland_{v \in \SetTreeNodesActive}
+    \bigland_{q \in Q}
     \left[
         (\ModularMapping[M]{v} = q)
         \implies
@@ -214,8 +214,8 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 
 При отображения пассивных вершин достаточно закодировать тот факт, что все модули игнорируют входное воздействие, то есть автоматы не изменяют своего состояния.
 \[
-    \biglandsmashl{v \in \SetTreeNodesPassive}
-    \bigland{m \in \Modules}
+    \bigland_{v \in \SetTreeNodesPassive}
+    \bigland_{m \in \Modules}
     (\ModularActualTransitionFunction{q',e,u} = 0) ,
 \]
 где $p = \tp{v}$, $q' = \ModularMapping{p}$, $e = \tie{v}$, $u = \tin{v}$.
@@ -283,44 +283,44 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 \label{sub:modular-arbitrary-constraints}
 
 Для определения переменных $\InboundVarPinComputedValue{v,p}$ и $\OutboundVarPinComputedValue{v,p}$ объявляются следующие ограничения:
-\begin{enumerate}[label=\arabic*)]
+\begin{enumerate}
 % DC: СТОИТ НАПИСАТЬ СЛОВАМИ, КАКАЯ ИМЕННО
-\item Во-первых, учитывается взаимосвязь родителя контакта с его потомком:
+\item Взаимосвязь родителя контакта с его потомком:
 \[
-    \bigland{v \in \SetTreeNodes}
-    \bigland{p \in \SetInboundVarPins}
+    \bigland_{v \in \SetTreeNodes}
+    \bigland_{p \in \SetInboundVarPins}
     \left[
         \OutboundVarPinComputedValue{v,p}
         \iff
         \InboundVarPinComputedValue{v,\VarPinParent{p}}
-    \right] .
+    \right]
 \]
 
-\item Во-вторых, учитываются начальные значения (\texttt{False}) всех выходных контактов:
+\item Начальные значения всех выходных контактов равны \texttt{False}:
 \[
-    \bigland{p \in \SetOutboundVarPins}
+    \bigland_{p \in \SetOutboundVarPins}
     \left[
         \OutboundVarPinComputedValue{1,p} = \bot
-    \right] .
+    \right]
 \]
 
-\item В-третьих, учитываются значения входных переменных, записанные в вершинах дерева (кроме корня):
+\item Значения входных переменных, записанные в вершинах дерева (кроме корня):
 \[
-    \bigland{v \in \SetTreeNodes \setminus \Set{\TreeRoot}}
-    \bigland{p \in \SetExternalOutboundVarPins}
+    \bigland_{v \in \SetTreeNodes \setminus \Set{\TreeRoot}}
+    \bigland_{p \in \SetExternalOutboundVarPins}
     \left[
         \OutboundVarPinComputedValue{v,p} = \tiv{v,\funcname{pinToInputVar}(p)}
     \right] ,
 \]
 где $\funcname{pinToInputVar}$ \--- функция, возвращающая входную переменную $x \in \SetInputVariables$, соответствующую внешнему выходному контакту $p \in \SetExternalOutboundVarPins$.
 
-\item В-четвертых, значения входных контактов, у которых нет родителей, принимаются равными \texttt{False}:
+\item Значения входных контактов, у которых нет родителей, принимаются равными \texttt{False}:
 \[
-    \bigland{p \in \SetInboundVarPins}
+    \bigland_{p \in \SetInboundVarPins}
     \left[
         (\VarPinParent{p} = 0)
         \implies
-        \bigland{v \in \SetTreeNodes}
+        \bigland_{v \in \SetTreeNodes}
         (\InboundVarPinComputedValue{v,p} = \bot)
     \right] .
 \]
@@ -328,8 +328,8 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 
 При отображении активных вершин дерева сценариев на состояния модулей необходимо учитывать нововведенную переменную~$\ModularInputIndex{}$:
 \[
-    \bigland{m \in \Modules}
-    \bigland{v \in \SetTreeNodes}
+    \bigland_{m \in \Modules}
+    \bigland_{v \in \SetTreeNodes}
     \left[
         (\ModularMapping{v} = q)
         \implies
@@ -340,10 +340,10 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 
 Вычисляемые значения выходных контактов модулей зависят от своих предыдущих значений и определяются с помощью алгоритмов в состояниях модулей:
 \[
-    \bigland{m \in \Modules}
-    \bigland{v \in \SetTreeNodes}
-    \bigland{p \in \SetOutboundVarPins}
-    \bigland{z \in \SetOutputVariables}
+    \bigland_{m \in \Modules}
+    \bigland_{v \in \SetTreeNodes}
+    \bigland_{p \in \SetOutboundVarPins}
+    \bigland_{z \in \SetOutputVariables}
     \left[
         \OutboundVarPinComputedValue{v,p}
         \iff
@@ -353,8 +353,8 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 где $v' = \tp{v}$, $q = \ModularMapping{v}$.
 Также необходимо ограничить значения внешних входных контактов (напомним, что эти контакты соответствуют выходным переменным внешнего модульного автомата) в соответствии со значениями в дереве сценариев:
 \[
-    \bigland{v \in \SetTreeNodes}
-    \bigland{p \in \SetExternalInboundVarPins}
+    \bigland_{v \in \SetTreeNodes}
+    \bigland_{p \in \SetExternalInboundVarPins}
     \left[
         \InboundVarPinComputedValue{v,p} = \tov{v, \funcname{pinToOutputVar}(p)}
     \right] ,
@@ -364,8 +364,8 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 % DC: Кстати, в общем случае это, вероятно, не так. Некоторые модули могут что-то делать. Нам достаточно потребовать, что на выход не передается события, а переменные не изменяют своих значений. Можно также упомянуть про это и указать, что мы сейчас используем такое упрощение.
 При отображении пассивных вершин достаточно закодировать тот факт, что все модули игнорируют входное действие, записанное в вершине дерева сценариев. При этом необходимо учесть нововведенную переменную~$\ModularInputIndex{}$:
 \[
-    \bigland{m \in \Modules}
-    \bigland{v \in \SetTreeNodesPassive}
+    \bigland_{m \in \Modules}
+    \bigland_{v \in \SetTreeNodesPassive}
     \left[
         (\ModularMapping{v} = \ModularMapping{\tp{v}})
         \land
@@ -375,8 +375,8 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 где $q' = \ModularMapping{\tp{v}}$, $u = \ModularInputIndex{v}$
 Также, значения выходных контактов не изменяются, так как модули не генерируют выходных событий:
 \[
-    \bigland{v \in \SetTreeNodesPassive}
-    \bigland{p \in \SetOutboundVarPins}
+    \bigland_{v \in \SetTreeNodesPassive}
+    \bigland_{p \in \SetOutboundVarPins}
     \left[
         \OutboundVarPinComputedValue{v,p} = \OutboundVarPinComputedValue{\tp{v},p}
     \right] .
