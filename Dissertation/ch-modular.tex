@@ -1,7 +1,8 @@
-\chapter{Синтез конечно-автоматных моделей модульных логических контроллеров}%
+\chapter{Синтез модульных конечно-автоматных моделей}%
 \label{ch:modular-synthesis}
 
-Данная глава посвящена решению задачи синтеза конечно-автоматных моделей модульных логических контроллеров с различными видами композиции модулей: (1)~параллельная (раздел~\ref{sec:modular-parallel-synthesis}), (2)~последовательная (раздел~\ref{sec:modular-consecutive-synthesis}) и (3)~произвольная (раздел~\ref{sec:modular-arbitrary-synthesis}).
+Данная глава посвящена решению задачи синтеза модульных конечно-автоматных моделей с различными видами композиции модулей: (1)~параллельная (раздел~\ref{sec:modular-parallel-synthesis}), (2)~последовательная (раздел~\ref{sec:modular-consecutive-synthesis}) и (3)~произвольная (раздел~\ref{sec:modular-arbitrary-synthesis}).
+% TODO: distributed CEGIS section
 Раздел~\ref{sec:experiments-modular} содержит экспериментальное исследование, нацеленное на определение эффективности и применимости разработанных методов модульного синтеза.
 % В качестве модельной системы используется система Pick-and-Place манипулятора, уже рассмотренная ранее в разделе~\ref{sec:experiments-monolith-pnp}.
 % Несмотря на то, что оригинальная система фактически является монолитной, разработанные методы позволяют синтезировать распределенную модульную систему, обладающую схожим поведением.
@@ -11,23 +12,24 @@
 % \subfile{tex/sec-composite-fb-model}
 
 % \subfile{tex/sec-modular-parallel-synthesis}
-\section{Метод синтеза конечно-автоматных моделей модульных логических контроллеров с параллельной композицией модулей по примерам поведения}%
+\section{Метод синтеза модульных конечно-автоматных моделей с параллельной композицией модулей по примерам поведения}%
 \label{sec:modular-parallel-synthesis}
 
-В этом разделе рассматривается задача синтеза конечно-автоматной модели модульного контроллера с параллельной композицией модулей.
-Аналогично главе~\ref{ch:monolith-synthesis}, исходная задача сводится к задаче выполнимости SAT.
+В этом разделе рассматривается задача синтеза модульной конечно-автоматной модели с параллельной композицией модулей.
+Аналогично главе~\ref{ch:automata-synthesis}, исходная задача сводится к задаче выполнимости SAT.
 Полученное сведение состоит из двух компонент: (1)~определение переменных и (2)~определение ограничений.
 
 
 \subsection{Сведение к SAT: переменные}%
 \label{sub:modular-parallel-variables}
 
-При параллельной композиции для описания каждого модуля используются те же переменные, что и при монолитном синтезе.
-Таким образом, ко всем переменным добавляется верхний индекс $(m)$, где $m \in \Modules$.
-Дополнительно, объявляется переменная $\ModuleControllingOutputVariable{z} \in \Modules$, кодирующая модуль, управляющий выходной переменной $z \in Z$.
-В данной постановке задачи рассматривается ситуация, когда каждый из модулей \enquote{управляет} своим собственным набором выходных переменных $\SetOutputVariables^{(m)} \subset \SetOutputVariables$, причём эти наборы попарно не пересекаются.
+При параллельной композиции для описания каждого модуля~$m \in \Modules$ используются те же переменные, что и при монолитном синтезе \--- ко всем переменным добавляется верхний индекс~$(m)$.
+Здесь и далее фраза \enquote{модуль~$m$} означает \enquote{модуль с номером~$m$}.
+% TODO: Например, ... означает ... для модуля~$m$.
+Дополнительно, объявляется переменная $\ModuleControllingOutputVariable_{z} \in \Modules$, кодирующая модуль, управляющий выходной переменной~$z \in Z$.
+В данной постановке задачи рассматривается ситуация, когда каждый из модулей \enquote{управляет} своим собственным набором выходных переменных $\ModularSetOutputVariables \subset \SetOutputVariables$, причём эти наборы попарно не пересекаются.
 Стоит отметить, что в общем случае эти наборы неизвестны заранее, а определяются динамически в ходе решения задачи SAT.
-Возможна также ситуация, когда полное или частичное распределение переменных по модулям известно \--- в таком случае разработанный метод позволяет это учесть путём введения дополнительных ограничений на описанную переменную $\ModuleControllingOutputVariable*$.
+Возможна также ситуация, когда полное или частичное распределение переменных по модулям известно \--- в таком случае разработанный метод позволяет это учесть путём введения дополнительных ограничений на описанную переменную~$\ModuleControllingOutputVariable$.
 
 
 \subsection{Сведение к SAT: ограничения}%
@@ -40,67 +42,76 @@
 \begin{itemize}
     \item каждая выходная переменная $z \in \SetOutputVariables$ управляется ровно одним модулем:
     \[
-        \ExactlyOne[m \in \Modules]{\ModuleControllingOutputVariable{z} = m}
+        \ExactlyOne[m \in \Modules]{\ModuleControllingOutputVariable_{z} = m}
     \]
 
     \item каждый модуль $m \in \Modules$ управляет хотя бы одной выходной переменной:
     \[
-        \AtLeastOne[z \in \SetOutputVariables]{\ModuleControllingOutputVariable{z} = m}
+        \AtLeastOne[z \in \SetOutputVariables]{\ModuleControllingOutputVariable_{z} = m}
     \]
 
-    \item если выходная переменная $z \in \SetOutputVariables$ не управляется модулем $m \in \Modules$, то алгоритмы во всех состояниях $q \in \SetStates$ модуля $m$ \enquote{ничего не делают}, то есть переводят $\top$ в $\top$ и $\bot$ в $\bot$:
+    \item если выходная переменная $z \in \SetOutputVariables$ не управляется модулем~$m \in \Modules$, то алгоритмы во всех состояниях~$q \in \SetStates$ модуля~$m$ \enquote{ничего не делают} \--- переводят $\top$ в~$\top$ и $\bot$ в~$\bot$:
     \[
-        (\ModuleControllingOutputVariable{z} \neq m)
+        (\ModuleControllingOutputVariable_{z} \neq m)
         \implies
-        \biglandclap{q \in \SetStates}
-        \left[
-            (\ModularStateAlgorithm{q,z,\top} = \top)
+        \bigland_{\mathclap{q \in \SetStates}}
+        \Bigl[
+            (\ModularStateAlgorithm_{q,z,\top} = \top)
             \land
-            (\ModularStateAlgorithm{q,z,\bot} = \bot)
-        \right]
+            (\ModularStateAlgorithm_{q,z,\bot} = \bot)
+        \Bigr]
     \]
 \end{itemize}
 
-В свою очередь ограничения, кодирующие соответствие поведения синтезируемого модульного автомата дереву сценариев, отличаются от аналогичных при монолитном синтезе.
-Для отображения пассивных вершин $\SetTreeNodesPassive$ дерева сценариев используются те же ограничения, что и при монолитном синтезе.
-А при отображении активных вершин $\SetTreeNodesActive$ дерева сценариев $\PositiveTree$ на состояния $\SetStates$ каждого модуля $m \in \Modules$ необходимо дополнительно учитывать контролируемые этим модулем выходные переменные:
-
+В~свою очередь ограничения, кодирующие соответствие поведения синтезируемого модульного автомата дереву сценариев, отличаются от аналогичных при монолитном синтезе.
+Для отображения пассивных вершин~$\SetTreeNodesPassive$ дерева сценариев используются те же ограничения, что и при монолитном синтезе.
+А~при отображении активных вершин~$\SetTreeNodesActive$ дерева сценариев~$\PositiveTree$ на состояния~$\SetStates$ каждого модуля~$m \in \Modules$ необходимо дополнительно учитывать контролируемые этим модулем выходные переменные:
+%
 \begin{equation}
 \label{eq:constraint-mapping}
 \begin{split}
-    \bigland_{\substack{
-        m \in \Modules \\
-        v \in \SetTreeNodesActive \\
-        q \in Q }}
-    % \bigland_{q \in Q}
-    \Bigl[
-        (\ModularMapping{v} = q)
-        % \iff
-        \implies
-        (\ModularActualTransitionFunction{q',e,u} = q)
+    \bigland_{m \in \Modules}
+    \bigland_{v \in \SetTreeNodesActive}
+    \bigland_{q \in Q}
+    \biggl[
+        (\ModularMapping_{v} = q)
+        \iff
+        % \implies
+        \Bigl(
+        (\ModularActualTransitionFunction_{q',e,u} = q)
         \land
-        (\ModularStateOutputEvent{q} = o)
+        (\ModularStateOutputEvent_{q} = o)
         \land
-    \Bigr.\\
-    \Bigl.
+        {}
+        \Bigr.
+    \biggr. \\
+    \biggl.
+        \Bigl.
+        {}
         \land % from previous line
-        \biglandclap{z \in Z}
-        \left(
-            (\ModuleControllingOutputVariable{z} = m)
+        \bigland_{\mathclap{z \in Z}}
+        \bigl[
+            (\ModuleControllingOutputVariable_{z} = m)
             \implies
-            (\ModularStateAlgorithm{q,z,\tov{p,z}} = \tov{v,z})
-        \right)
-    \Bigr]
-    ,
+            (\ModularStateAlgorithm_{q,z,\tov{p,z}} = \tov{v,z})
+        \bigr]
+        \Bigr)
+    \biggr] ,
 \end{split}
 \end{equation}
-где $p = \tp{v}$, $q' = \ModularMapping{p}$, $e = \tie{v}$, $u = \tin{v}$, $o = \toe{v}$.
+где
+$p = \tp{v}$,
+$q' = \ModularMapping_{p}$,
+$e = \tie{v}$,
+$u = \tin{v}$,
+$o = \toe{v}$.
 
+% TODO: make modular output action?
 Дополнительно, необходимо гарантировать корректность выходных событий модулей для соответствия дереву сценариев.
 Для этого рассмотрим обработку модульным автоматом некоторого входного действия~$\InputAction$ из некоторой \emph{активной} вершины~$v$ дерева сценариев (то есть $\toe{v} \neq \varepsilon$).
 Каждый параллельный модуль $m \in \Modules$, входящий в состав модульного автомата, в ответ на входное действие генерирует выходное действие~$\OutputAction[(m)]$.
 Возникает необходимость некоторым образом объединить эти выходные действия в одно~$\OutputAction$, которое будет являться финальной реакцией модульного автомата на исходное входное действие~$\InputAction$.
-Фактически, необходимо использовать специальный функциональный блок, называемый в IEC~61499 \texttt{E\_MERGE}, реализующий объединение событий.
+Фактически, необходимо использовать специальный функциональный блок, реализующий объединение событий и называемый \texttt{E\_MERGE} в IEC~61499.
 Существует несколько способов такого объединения: (1)~синхронное \emph{rendezvous}, (2)~асинхронное \emph{rendezvous}, (3)~\emph{гибридное}.
 
 Синхронное \emph{rendezvous} подразумевает ожидание завершения работы всех модулей, при этом корректной считается ситуация, когда выходные события всех модулей совпадают.
@@ -127,11 +138,18 @@
 \label{sub:algorithm-modular-parallel-basic-and-extended}
 
 Обозначим $\AlgoModularParallelBasicFull(\SetPositiveScenarios, M, C, T)$ алгоритм, реализующий синтез модели, удовлетворяющей заданным сценариям выполнения $\SetPositiveScenarios$ и состоящей из $M$ \emph{параллельно} соединенных модулей, каждый из которых состоит $C$ состояний (то есть суммарное число состояний равно $M \cdot C$), а суммарное число переходов во всех модулях не больше $T$.
-Также введем обозначение $\AlgoModularParallelBasic(\SetPositiveScenarios, M, C) =\allowbreak \AlgoModularParallelBasicFull(\SetPositiveScenarios, M, C, {T=\infty})$ для случая, когда число переходов в автомате остается неограниченным.
+Также введем обозначение для случая, когда число переходов в автомате остается неограниченным:
+\[
+    \AlgoModularParallelBasic(\SetPositiveScenarios, M, C) = \AlgoModularParallelBasicFull(\SetPositiveScenarios, M, C, {T = \infty})
+\]
 
-Отметим, что модификации сведения для синтеза расширенных моделей не отличаются от описанных в главе~\ref{ch:monolith-synthesis} \--- структура охранных условий кодируется независимо от количества модулей и их композиции.
+Отметим, что модификации сведения для синтеза расширенных моделей не отличаются от описанных в главе~\ref{ch:automata-synthesis} \--- структура охранных условий кодируется независимо от количества модулей и их композиции.
 Поэтому здесь и далее алгоритмы, реализующие синтез расширенных моделей, будут объявляться без пояснений:
-$\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoModularParallelExtended(\SetPositiveScenarios, M, C, P) = \AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N=\infty)$.
+% $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$, а также отдельное обозначение:
+\begin{align*}
+    & \AlgoModularParallelExtended(\SetPositiveScenarios, M, C, P) = \\
+    & = \AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, {N = \infty})
+\end{align*}
 
 
 % \subfile{tex/sec-modular-consecutive-synthesis}
@@ -139,106 +157,120 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 \label{sec:modular-consecutive-synthesis}
 
 Последовательная композиция модулей значительно отличается от параллельной, так как модули в таком случае перестают быть независимыми \--- каждый следующий модуль зависит от предыдущего.
-В данной работе рассматривалась постановка задачи синтеза модульного контроллера со следующими особенностями и допущениями: (1) каждый модуль зависит от всех входных переменных \emph{внешнего} (модульного) автомата, (2) значения выходных переменных каждого модуля зависят от предыдущих значений выходных переменных предыдущего модуля (для первого модуля \enquote{предыдущим} считается он сам), (3) входное событие обрабатывается (то есть происходит генерация ответного выходного события) только последним модулем, до которого оно неизменно передается от модуля к модулю.
+В данной работе рассматривалась постановка задачи синтеза модульного контроллера со следующими особенностями и допущениями: (1)~каждый модуль зависит от всех входных переменных \emph{внешнего} (модульного) автомата, (2)~значения выходных переменных каждого модуля зависят от предыдущих значений выходных переменных предыдущего модуля (для первого модуля \enquote{предыдущим} считается он сам), (3)~входное событие обрабатывается (то есть происходит генерация ответного выходного события) только последним модулем, до которого оно неизменно передается от модуля к модулю.
 % TODO: картинка
 
 
 \subsection{Сведение к SAT: переменные}%
 \label{sub:modular-consecutive-variables}
 
-Аналогично параллельной композиции, структура каждого модуля кодируется так же, как и при монолитном синтезе, с учетом допущения о том, что только последний модуль реагирует на входные события, а все предыдущие модули просто неизменно передают полученное входное событие далее \--- это достигается тем, что множества выходных событий каждого модуля приравниваются множеству входных событий ($\forall m \in [1 \twodots (M-1)] : O^{(m)} = E$).
-Дополнительно объявляется переменная $\ModularComputedValue{v,z} \in \Bool$, кодирующая \enquote{вычисленное} значение выходной переменной $z \in \SetOutputVariables$ при отображении каждой вершины $v \in \SetTreeNodes$ дерева сценариев, то есть значение в каждый момент времени после обработки соответствующей вершины дерева.
+Аналогично параллельной композиции, структура каждого модуля кодируется так же, как и при монолитном синтезе, с учетом допущения о том, что только последний модуль реагирует на входные события, а все предыдущие модули просто неизменно передают полученное входное событие далее \--- это достигается тем, что множества выходных событий каждого модуля приравниваются множеству входных событий ($\forall m \in [1 .. (M-1)] : {\ModularSetOutputEvents = \SetInputEvents}$).
+Дополнительно объявляется переменная $\ModularComputedValue_{v,z} \in \Bool$, кодирующая \enquote{вычисленное} значение выходной переменной $z \in \SetOutputVariables$ при отображении каждой вершины $v \in \SetTreeNodes$ дерева сценариев, то есть значение в каждый момент времени после обработки соответствующей вершины дерева.
 
 
 \subsection{Сведение к SAT: ограничения}%
 \label{sub:modular-consecutive-constraints}
 
-Для определения переменной $\ModularComputedValue{}$ объявляются следующие ограничения.
+Для определения переменной $\ModularComputedValue_{}$ объявляются следующие ограничения.
 Изначально, в момент времени после \enquote{обработки} фиктивного корня $\TreeRoot$ дерева сценариев, вычисленные значения всех выходных переменных $z \in \SetOutputVariables$ во всех модулях $m \in \Modules$ равны \texttt{False}:
 \[
     \bigland_{m \in \Modules}
     \bigland_{z \in \SetOutputVariables}
-    (\ModularComputedValue{\TreeRoot,z} = \bot) .
+    (\ModularComputedValue_{\TreeRoot,z} = \bot) .
 \]
-В следующие моменты времени, при обработке вершин $v \in \SetTreeNodes \setminus \Set{\TreeRoot}$, вычисляемые значения выходных переменных определяются в соответствии с работой алгоритмов в состояниях, в которых в эти моменты времени находятся модули \--- то есть в состояниях, в которые отображаются рассматриваемые вершины дерева сценариев: $\ModularMapping{v}$. \\
+В следующие моменты времени, при обработке вершин $v \in \SetTreeNodes \setminus \{ \TreeRoot \}$, вычисляемые значения выходных переменных определяются в соответствии с работой алгоритмов в состояниях, в которых в эти моменты времени находятся модули \--- то есть в состояниях, в которые отображаются рассматриваемые вершины дерева сценариев:~$\ModularMapping_{v}$.
 Для первого модуля:
 \[
-    \bigland_{v \in \SetTreeNodes \setminus \Set{\TreeRoot}}
+    \bigland_{v \in \SetTreeNodes \setminus \{ \TreeRoot \}}
     \bigland_{z \in \SetOutputVariables}
-    \left[
-        \ModularComputedValue{v,z}
+    \Bigl[
+        \ModularComputedValue_{v,z}
         \iff
-        \ModularStateAlgorithm{\ModularMapping{v},z,\tov{\tp{v},z}}
-    \right] .
+        \ModularStateAlgorithm_{\ModularMapping_{v},z,\tov{\tp{v},z}}
+    \Bigr] %.
 \]
 Для последующих модулей:
 \[
     \bigland_{m \in [2 \twodots M]}
     \bigland_{v \in \SetTreeNodes \setminus \Set{\TreeRoot}}
     \bigland_{z \in \SetOutputVariables}
-    \left[
-        \ModularComputedValue{v,z}
+    \Bigl[
+        \ModularComputedValue_{v,z}
         \iff
-        \ModularStateAlgorithm{\ModularMapping{v},z,\ModularComputedValue[m-1]{v,z}}
-    \right] .
+        \ModularStateAlgorithm_{\ModularMapping_{v},z,\ModularComputedValue[m-1]_{v,z}}
+    \Bigr] %.
 \]
 
 При отображении активных вершин дерева необходимо учесть, что все модули, кроме последнего, передают входное событие следующему модулю. Стоит отметить, что при этом реакция модулей на входные события не изменяется \--- входные события так же играют свою роль в охранных условиях на переходах автомата.
 Также необходимо учесть, что значения выходных переменных ограничиваются для соответствия дереву сценариев только для последнего модуля \--- все предыдущие модули могут производить произвольные операции над выходными переменными в рамках существующего сведения.
 \begin{gather*}
     \bigland_{v \in \SetTreeNodesActive}
-    \bigland_{m \in [1 \twodots (M-1)]}
+    \bigland_{m \in [1..(M-1)]}
     \bigland_{q \in Q}
-    \left[
-        (\ModularMapping{v} = q)
+    \Bigl[
+        (\ModularMapping_{v} = q)
         \implies
-        (\ModularActualTransitionFunction{q',e,u} = q)
-        \land
-        % Note: "outputevent = e", THIS IS NOT A TYPO
-        (\ModularStateOutputEvent{q} = e)
-    \right] , \\
+        \bigl(
+            (\ModularActualTransitionFunction_{q',e,u} = q)
+            \land
+            % Note: "outputevent = e", THIS IS NOT A TYPO
+            (\ModularStateOutputEvent_{q} = e)
+        \bigr)
+    \Bigr] , \\
     \bigland_{v \in \SetTreeNodesActive}
     \bigland_{q \in Q}
-    \left[
-        (\ModularMapping[M]{v} = q)
+    \Bigl[
+        (\ModularMapping[M]_{v} = q)
         \implies
-        (\ModularActualTransitionFunction[M]{q',e,u} = q)
-        \land
-        (\ModularStateOutputEvent[M]{q} = o)
-        \land
-        \biglandclap{z \in \SetOutputVariables}
-        (\ModularComputedValue[M]{v,z} = \tov{v,z})
-    \right] ,
+        \bigl(
+            (\ModularActualTransitionFunction[M]_{q',e,u} = q)
+            \land
+            (\ModularStateOutputEvent[M]_{q} = o)
+            \land
+            \bigland_{\mathclap{z \in \SetOutputVariables}}
+            (\ModularComputedValue[M]_{v,z} = \tov{v,z})
+        \bigr)
+    \Bigr] ,
 \end{gather*}
-где $p = \tp{v}$, $q' = \ModularMapping{p}$, $e = \tie{v}$, $u = \tin{v}$.
+где
+$p = \tp{v}$,
+$q' = \ModularMapping_{p}$,
+$e = \tie{v}$,
+$u = \tin{v}$.
 
 При отображения пассивных вершин достаточно закодировать тот факт, что все модули игнорируют входное воздействие, то есть автоматы не изменяют своего состояния.
 \[
     \bigland_{v \in \SetTreeNodesPassive}
     \bigland_{m \in \Modules}
-    (\ModularActualTransitionFunction{q',e,u} = 0) ,
+    % TODO: check whether "= q_0" is correct, originally was "= 0"
+    (\ModularActualTransitionFunction_{q',e,u} = q_0) ,
 \]
-где $p = \tp{v}$, $q' = \ModularMapping{p}$, $e = \tie{v}$, $u = \tin{v}$.
+где
+$p = \tp{v}$,
+$q' = \ModularMapping_{p}$,
+$e = \tie{v}$,
+$u = \tin{v}$.
 
 
 \subsection{Алгоритмы \AlgoModularConsecutiveBasic\ и \AlgoModularConsecutiveExtended}%
 \label{sub:algorithm-modular-consecutive-basic-and-extended}
 
 Аналогично разделу~\ref{sub:algorithm-modular-parallel-basic-and-extended}, обозначим $\AlgoModularConsecutiveBasicFull(\SetPositiveScenarios, M, C, T)$ алгоритм, реализующий синтез модульной модели с \emph{последовательной} композицией модулей.
-Также введем обозначение $\AlgoModularConsecutiveBasic(\SetPositiveScenarios, M, C) =\allowbreak \AlgoModularConsecutiveBasicFull(\SetPositiveScenarios, M, C, T=\infty)$.
+Также введем обозначение $\AlgoModularConsecutiveBasic(\SetPositiveScenarios, M, C) =\allowbreak \AlgoModularConsecutiveBasicFull(\SetPositiveScenarios, M, C, {T = \infty})$.
 В соответствии с разделом~\ref{sub:algorithm-modular-parallel-basic-and-extended}, алгоритм для синтеза расширенных моделей объявляется без пояснений:
-\resizebox{.99\hsize}{!}{$\AlgoModularConsecutiveExtended(\SetPositiveScenarios, M, C, P) = \AlgoModularConsecutiveExtendedFull(\SetPositiveScenarios, M, C, P, N=\infty)$}.
+\begin{align*}
+    & \AlgoModularConsecutiveExtended(\SetPositiveScenarios, M, C, P) = \\
+    & = \AlgoModularConsecutiveExtendedFull(\SetPositiveScenarios, M, C, P, {N = \infty}) %.
+\end{align*}
 
 
-
-% \subfile{tex/sec-modular-arbitrary-synthesis}
-\section{Метод синтеза конечно-автоматных моделей модульных логических контроллеров с произвольной композицией модулей по примерам поведения}%
+\section{Метод синтеза модульных конечно-автоматных моделей с произвольной композицией модулей по примерам поведения}%
 \label{sec:modular-arbitrary-synthesis}
 
 Наиболее общей формулировкой задачи синтеза конечно-автоматных моделей логических контроллеров является модульный синтез с произвольной композицией модулей.
 Каждый модуль рассматривается как черный ящик с набором входных и выходных контактов для входных/выходных событий/переменных. Содержимое черного ящика \--- монолитный контроллер, структура которого кодируется так же, как при монолитном синтезе.
-Совокупность модулей является внутренним содержимым модульного контроллера, так же обладающего входными и выходными \emph{контактами}.
-Контакты соединяются \emph{связями}, что обеспечивает взаимодействие модулей друг с другом.
+Совокупность модулей является внутренним содержимым модульного контроллера, так же обладающего входными и выходными \emph{textit}.
+Контакты соединяются \textit{связями}, что обеспечивает взаимодействие модулей друг с другом.
 При такой постановке задачи, разрабатываемый метод обладает максимальными возможностями для синтеза комплексных модульных структур, и является свободным от ограничений, присущих рассмотренным ранее параллельной и последовательной композициям.
 Стоит отметить, что для корректных вычислений выходных событий и значений выходных переменных необходимо знать порядок вычисления модулей, что возможно только если граф связей модулей является ацикличным.
 Данное ограничение не уменьшает вычислительной способности модульного контроллера, поэтому в данной работе предполагается, что граф связей модулей является ацикличным, а также то, что модули упорядочены в порядке их номеров: от~1 до~$M$.
@@ -255,88 +287,84 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 \label{sub:modular-arbitrary-variables}
 
 Рассмотрим подробнее, как устроено сведение для модульного синтеза с произвольной композицией.
-Обозначим $\ModularSetInboundVarPins = \Set{(m-1) \cdot \card{\SetInputVariables} + 1, \dotsc,\allowbreak m \cdot \card{\SetInputVariables}}$ множество входных контактов для переменных, считая, что контакты нумеруются натуральными числами, начиная с единицы, а нумерация является сквозной среди всех модулей $m \in \Modules$ для всех контактов одного типа.
-Аналогично, обозначим $\ModularSetOutboundVarPins$ множество выходных контактов для переменных, а также обозначим множества входных и выходных контактов для событий $\ModularSetInboundEventPins$ и $\ModularSetOutboundEventPins$.
-Дополнительно, обозначим множества контактов для внешнего (модульного) автомата следующим образом: $\SetExternalInboundVarPins$, $\SetExternalOutboundVarPins$, $\SetExternalInboundEventPins$, $\SetExternalOutboundEventPins$.
-Отметим, что, например, множество $\SetExternalInboundVarPins$ внешних входных контактов для переменных соответствует выходным переменным~$\SetOutputVariables$, так как эти контакты являются входами для входящих в них связей из выходных контактов.
-При этом нумерация внешних контактов продолжает нумерацию модульных того же типа, например, $\SetExternalInboundVarPins = \Set{M \cdot \card{\SetInputVariables} + 1, \dotsc, M \cdot \card{\SetInputVariables} + \card{\SetOutputVariables}}$
-Для упрощения используемой нотации обозначим множества \emph{всех} входных/выходных контактов для переменных/событий $\SetInboundVarPins$, $\SetOutboundVarPins$, $\SetInboundEventPins$, $\SetOutboundEventPins$, где, например, $\SetInboundVarPins = \bigunionnolim{m \in \Modules} \ModularSetInboundVarPins \union \SetExternalInboundVarPins$.
+Обозначим $\ModularSetInboundVarPins = \{ {(m-1) \cdot \card{\SetInputVariables} + 1}, \dots, {m \cdot \card{\SetInputVariables}} \}$ множество входных контактов для переменных, считая, что контакты нумеруются натуральными числами, начиная с единицы, а нумерация является сквозной среди всех модулей~$m \in \Modules$ для всех контактов одного типа.
+Аналогично, обозначим~$\ModularSetOutboundVarPins$ множество выходных контактов для переменных, а также обозначим множества входных и выходных контактов для событий $\ModularSetInboundEventPins$ и~$\ModularSetOutboundEventPins$.
+Дополнительно, обозначим множества контактов для внешнего (модульного) автомата следующим образом: $\SetExternalInboundVarPins$, $\SetExternalOutboundVarPins$, $\SetExternalInboundEventPins$,~$\SetExternalOutboundEventPins$.
+Отметим, что, например, множество~$\SetExternalInboundVarPins$ внешних входных контактов для переменных соответствует выходным переменным~$\SetOutputVariables$, так как эти контакты являются входами для входящих в них связей из выходных контактов.
+При этом нумерация внешних контактов продолжает нумерацию модульных того же типа, например, $\SetExternalInboundVarPins = \{ {M \cdot \card{\SetInputVariables} + 1}, \dots, {M \cdot \card{\SetInputVariables} + \card{\SetOutputVariables}} \}$.
+Для упрощения используемой нотации обозначим множества \emph{всех} входных/выходных контактов для переменных/событий $\SetInboundVarPins$, $\SetOutboundVarPins$, $\SetInboundEventPins$,~$\SetOutboundEventPins$, где, например, $\SetInboundVarPins = \bigunionnolim_{m \in \Modules} \ModularSetInboundVarPins \union \SetExternalInboundVarPins$.
 
 Следующий шаг \--- определение графа соединений контактов модулей.
-Введем переменные $\VarPinParent{p} \in \SetOutboundVarPins$ и $\EventPinParent{p} \in \SetOutboundEventPins$, обозначающие родителя входного контакта $p$ для переменных/событий.
+Введем переменные $\VarPinParent_{p} \in \SetOutboundVarPins$ и $\EventPinParent_{p} \in \SetOutboundEventPins$, обозначающие родителя входного контакта~$p$ для переменных/событий.
 Можно заметить, что родителем входного контакта может быть только выходной контакт.
 Если контакт является родителем другого, то они соединены \emph{связью}, и обновление значения родителя приводит к обновлению значения ребенка.
-Пользуясь допущением об ацикличности графа соединений модулей, определим, что родителем входного контакта $p$ может быть выходной контакт из модуля с меньшим номером, либо внешний выходной контакт, например, для некоторого контакта $p \in \SetInboundVarPins$ из модуля $m$: $\VarPinParent{p} \in \SetExternalOutboundVarPins \union \bigunionnolim{m' < m} \ModularSetOutboundVarPins[m']$.
+Пользуясь допущением об ацикличности графа соединений модулей, определим, что родителем входного контакта~$p$ может быть выходной контакт из модуля с меньшим номером, либо внешний выходной контакт, например, для некоторого контакта~$p \in \SetInboundVarPins$ из модуля~$m$: $\VarPinParent_{p} \in \SetExternalOutboundVarPins \union \bigunionnolim_{m' < m} \ModularSetOutboundVarPins[m']$.
 
 Для каждого контакта необходимо кодировать его вычисленное значение в каждый момент времени в процессе отображения вершин дерева сценариев на состояния модулей.
-Для этого вводятся переменные $\InboundVarPinComputedValue{v,p}$~и~$\OutboundVarPinComputedValue{v,p}$, кодирующие значения входных/выходных контактов $p \in \SetInboundVarPins$ / $p \in \SetOutboundVarPins$ в момент времени после обработки вершины $v$ дерева сценариев.
+Для этого вводятся переменные $\InboundVarPinComputedValue_{v,p}$ и~$\OutboundVarPinComputedValue_{v,p}$, кодирующие значения входных/выходных контактов ${p \in \SetInboundVarPins}$ / ${p \in \SetOutboundVarPins}$ в момент времени после обработки вершины~$v$ дерева сценариев.
 
 Важно отметить, что в отличие от рассмотренных ранее методов, при произвольной композиции каждый модуль может получать на вход произвольные наборы значений входных переменных.
 Всего существует $2^{\card{\SetInputVariables}}$ таких наборов, и каждый из них должен быть корректно обработан каждым модулем.
-Поэтому при кодировании структуры автомата необходимо учитывать множество всех возможных различных входов $\SetAllInputs = \boolvec{\SetInputVariables} = \Set{\Vector{0 \dots 0}, \dotsc, \Vector{1 \dots 1}}$, а не только множество входов $\SetTreeInputs \subseteq \SetAllInputs$, встречающихся в дереве сценариев.
-Введем переменную $\ModularInputIndex{v} \in \SetAllInputs$, обозначающую вход в момент времени после обработки вершины~$v$ дерева сценариев.
-Заметим, что вычисленные значения $\InboundVarPinComputedValue{v,p}$ входных контактов являются битами в бинарной записи номера входа~$u \in \SetAllInputs$, учитывая, что входы нумеруются с нуля.
-Для взаимосвязи этих двух переменных была использована техника кодирования целочисленных SAT переменных OneHot+Binary~\cite{sat-encodings}: числовое значение переменной~$\ModularInputIndex{v}$ соответствует номеру входа~$u \in \SetAllInputs$, а биты соответствующего двоичного числа \--- значениям переменной $\InboundVarPinComputedValue{v,p}$.
+Поэтому при кодировании структуры автомата необходимо учитывать множество всех возможных различных входов $\SetAllInputs = \boolvec{\SetInputVariables} = \{ \Vector{0 \dots 0}, \dots, \Vector{1 \dots 1} \}$, а не только множество входов $\SetTreeInputs \subseteq \SetAllInputs$, встречающихся в дереве сценариев.
+Введем переменную $\ModularInputIndex_{v} \in \SetAllInputs$, обозначающую вход в момент времени после обработки вершины~$v$ дерева сценариев.
+Заметим, что вычисленные значения~$\InboundVarPinComputedValue_{v,p}$ входных контактов являются битами в бинарной записи номера входа~$u \in \SetAllInputs$, учитывая, что входы нумеруются с нуля.
+Для взаимосвязи этих двух переменных была использована техника кодирования целочисленных SAT переменных OneHot+Binary~\cite{sat-encodings}: числовое значение переменной~$\ModularInputIndex_{v}$ соответствует номеру входа~$u \in \SetAllInputs$, а биты соответствующего двоичного числа \--- значениям переменной~$\InboundVarPinComputedValue_{v,p}$.
 
 
 \subsection{Сведение к SAT: ограничения}%
 \label{sub:modular-arbitrary-constraints}
 
-Для определения переменных $\InboundVarPinComputedValue{v,p}$ и $\OutboundVarPinComputedValue{v,p}$ объявляются следующие ограничения:
+Для определения переменных $\InboundVarPinComputedValue_{v,p}$ и $\OutboundVarPinComputedValue_{v,p}$ объявляются следующие ограничения:
 \begin{enumerate}
 % DC: СТОИТ НАПИСАТЬ СЛОВАМИ, КАКАЯ ИМЕННО
 \item Взаимосвязь родителя контакта с его потомком:
 \[
     \bigland_{v \in \SetTreeNodes}
     \bigland_{p \in \SetInboundVarPins}
-    \left[
-        \OutboundVarPinComputedValue{v,p}
+    \Bigl[
+        \OutboundVarPinComputedValue_{v,p}
         \iff
-        \InboundVarPinComputedValue{v,\VarPinParent{p}}
-    \right]
+        \InboundVarPinComputedValue_{v,\VarPinParent_{p}}
+    \Bigr]
 \]
 
 \item Начальные значения всех выходных контактов равны \texttt{False}:
 \[
     \bigland_{p \in \SetOutboundVarPins}
-    \left[
-        \OutboundVarPinComputedValue{1,p} = \bot
-    \right]
+    (\OutboundVarPinComputedValue_{1,p} = \bot)
 \]
 
 \item Значения входных переменных, записанные в вершинах дерева (кроме корня):
 \[
     \bigland_{v \in \SetTreeNodes \setminus \Set{\TreeRoot}}
     \bigland_{p \in \SetExternalOutboundVarPins}
-    \left[
-        \OutboundVarPinComputedValue{v,p} = \tiv{v,\funcname{pinToInputVar}(p)}
-    \right] ,
+    (\OutboundVarPinComputedValue_{v,p} = \tiv{v,\funcname{pinToInputVar}(p)}) ,
 \]
 где $\funcname{pinToInputVar}$ \--- функция, возвращающая входную переменную $x \in \SetInputVariables$, соответствующую внешнему выходному контакту $p \in \SetExternalOutboundVarPins$.
 
 \item Значения входных контактов, у которых нет родителей, принимаются равными \texttt{False}:
 \[
     \bigland_{p \in \SetInboundVarPins}
-    \left[
-        (\VarPinParent{p} = 0)
+    \Bigl[
+        (\VarPinParent_{p} = 0)
         \implies
         \bigland_{v \in \SetTreeNodes}
-        (\InboundVarPinComputedValue{v,p} = \bot)
-    \right] .
+        (\InboundVarPinComputedValue_{v,p} = \bot)
+    \Bigr] .
 \]
 \end{enumerate}
 
-При отображении активных вершин дерева сценариев на состояния модулей необходимо учитывать нововведенную переменную~$\ModularInputIndex{}$:
+При отображении активных вершин дерева сценариев на состояния модулей необходимо учитывать нововведенную переменную~$\ModularInputIndex_{}$:
 \[
     \bigland_{m \in \Modules}
     \bigland_{v \in \SetTreeNodes}
-    \left[
-        (\ModularMapping{v} = q)
+    \Bigl[
+        (\ModularMapping_{v} = q)
         \implies
-        (\ModularActualTransitionFunction{q',u} = q)
-    \right] ,
+        (\ModularActualTransitionFunction_{q',u} = q)
+    \Bigr] ,
 \]
-где $p = \tp{v}$, $q' = \ModularMapping{p}$, $u = \ModularInputIndex{v}$.
+где $p = \tp{v}$, $q' = \ModularMapping_{p}$, $u = \ModularInputIndex_{v}$.
 
 Вычисляемые значения выходных контактов модулей зависят от своих предыдущих значений и определяются с помощью алгоритмов в состояниях модулей:
 \[
@@ -344,42 +372,41 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
     \bigland_{v \in \SetTreeNodes}
     \bigland_{p \in \SetOutboundVarPins}
     \bigland_{z \in \SetOutputVariables}
-    \left[
-        \OutboundVarPinComputedValue{v,p}
+    \Bigl[
+        \OutboundVarPinComputedValue_{v,p}
         \iff
-        \fun{ITE}(\OutboundVarPinComputedValue{v',p}, \ModularStateAlgorithm{q,z,\top}, \ModularStateAlgorithm{q,z,\bot})
-    \right] ,
+        \fun{ITE}(\OutboundVarPinComputedValue_{v',p}, \ModularStateAlgorithm_{q,z,\top}, \ModularStateAlgorithm_{q,z,\bot})
+    \Bigr] ,
 \]
-где $v' = \tp{v}$, $q = \ModularMapping{v}$.
+где $v' = \tp{v}$, $q = \ModularMapping_{v}$.
 Также необходимо ограничить значения внешних входных контактов (напомним, что эти контакты соответствуют выходным переменным внешнего модульного автомата) в соответствии со значениями в дереве сценариев:
 \[
     \bigland_{v \in \SetTreeNodes}
     \bigland_{p \in \SetExternalInboundVarPins}
-    \left[
-        \InboundVarPinComputedValue{v,p} = \tov{v, \funcname{pinToOutputVar}(p)}
-    \right] ,
+    \Bigl[
+        \InboundVarPinComputedValue_{v,p} = \tov{v, \funcname{pinToOutputVar}(p)}
+    \Bigr] ,
 \]
-где $\funcname{pinToOutputVar}(p)$ \--- функция, возвращающая выходную переменную $z \in \SetOutputVariables$, соответствующую внешнему входному контакту $p \in \SetExternalInboundVarPins$.
+где $\funcname{pinToOutputVar}(p)$ \--- функция, возвращающая выходную переменную~$z \in \SetOutputVariables$, соответствующую внешнему входному контакту~$p \in \SetExternalInboundVarPins$.
 
 % DC: Кстати, в общем случае это, вероятно, не так. Некоторые модули могут что-то делать. Нам достаточно потребовать, что на выход не передается события, а переменные не изменяют своих значений. Можно также упомянуть про это и указать, что мы сейчас используем такое упрощение.
-При отображении пассивных вершин достаточно закодировать тот факт, что все модули игнорируют входное действие, записанное в вершине дерева сценариев. При этом необходимо учесть нововведенную переменную~$\ModularInputIndex{}$:
+При отображении пассивных вершин достаточно закодировать тот факт, что все модули игнорируют входное действие, записанное в вершине дерева сценариев. При этом необходимо учесть нововведенную переменную~$\ModularInputIndex$:
 \[
     \bigland_{m \in \Modules}
     \bigland_{v \in \SetTreeNodesPassive}
-    \left[
-        (\ModularMapping{v} = \ModularMapping{\tp{v}})
+    \Bigl[
+        (\ModularMapping_{v} = \ModularMapping_{\tp{v}})
         \land
-        (\ModularActualTransitionFunction{q',u} = 0)
-    \right] ,
+        (\ModularActualTransitionFunction_{q',u} = 0)
+    \Bigr] ,
 \]
-где $q' = \ModularMapping{\tp{v}}$, $u = \ModularInputIndex{v}$
+где $q' = \ModularMapping_{\tp{v}}$, $u = \ModularInputIndex_{v}$.
 Также, значения выходных контактов не изменяются, так как модули не генерируют выходных событий:
 \[
     \bigland_{v \in \SetTreeNodesPassive}
     \bigland_{p \in \SetOutboundVarPins}
-    \left[
-        \OutboundVarPinComputedValue{v,p} = \OutboundVarPinComputedValue{\tp{v},p}
-    \right] .
+    (\OutboundVarPinComputedValue_{v,p} = \OutboundVarPinComputedValue_{\tp{v},p})
+    %.
 \]
 
 
@@ -387,9 +414,15 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 \label{sub:algorithm-modular-arbitrary-basic-and-extended}
 
 Аналогично разделу~\ref{sub:algorithm-modular-parallel-basic-and-extended}, обозначим $\AlgoModularArbitraryBasicFull(\SetPositiveScenarios, M, C, T)$ алгоритм, реализующий синтез модульной модели с \emph{произвольной} композицией модулей.
-Также введем обозначение $\AlgoModularArbitraryBasic(\SetPositiveScenarios, M, C) =\allowbreak \AlgoModularArbitraryBasicFull(\SetPositiveScenarios, M, C, T=\infty)$.
+Также введем обозначение следующее обозначение:
+\[
+    \AlgoModularArbitraryBasic(\SetPositiveScenarios, M, C) = \AlgoModularArbitraryBasicFull(\SetPositiveScenarios, M, C, {T = \infty})
+\]
 В соответствии с разделом~\ref{sub:algorithm-modular-parallel-basic-and-extended}, алгоритм для синтеза расширенных моделей объявляется без пояснений:
-\resizebox{.99\hsize}{!}{$\AlgoModularArbitraryExtended(\SetPositiveScenarios, M, C, P) = \AlgoModularArbitraryExtendedFull(\SetPositiveScenarios, M, C, P, N=\infty)$}.
+\begin{align*}
+    & \AlgoModularArbitraryExtended(\SetPositiveScenarios, M, C, P) = \\
+    & = \AlgoModularArbitraryExtendedFull(\SetPositiveScenarios, M, C, P, {N = \infty})
+\end{align*}
 
 
 % \subfile{tex/sec-modular-minimal}
@@ -400,27 +433,308 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 
 Для синтеза \emph{минимальных} модульных моделей в данной работе используется тот же итеративный подход, что и при монолитном синтезе (раздел~\ref{sec:monolith-minimal}).
 
-Алгоритм $\AlgoModularParallelBasicMin(\SetPositiveScenarios, M)$ позволяет синтезировать базовую конечно-автоматную модель композитного функционального блока с параллельной композицией заданного числа модулей $M$ с минимальным числом состояний и переходов.
+Алгоритм $\AlgoModularParallelBasicMin(\SetPositiveScenarios, M)$ позволяет синтезировать базовую конечно-автоматную модель композитного функционального блока с параллельной композицией заданного числа модулей~$M$ с минимальным числом состояний и переходов.
 При минимизации предполагается, что все модули имеют одинаковое число состояний, а число переходов считается суммарно во всех модулях.
 Возможно также рассмотрение такой постановки задачи, когда размеры каждого модуля заданы явно (или в виде некоторых интервальных оценок), однако в общем случае эти значения абсолютно неизвестны заранее.
-В результате минимальная модульная модель содержит $M \cdot \Cmin$ состояний (по $\Cmin$ в каждом модуле) и $\Tmin = \Tmin^{(1)} + \dotsb + \Tmin^{(M)}$ переходов.
-Здесь стоит отметить, что используемая нотация $\Tmin^{(m)}$ обозначает \emph{возможно неминимальное} число переходов в модуле $m \in \Modules$, входящего в состав \emph{минимальной} модульной модели с \emph{минимальным} суммарным числом переходов~$\Tmin$.
+В результате минимальная модульная модель содержит~${M \cdot \Cmin}$ состояний (по~$\Cmin$ в каждом модуле) и $\Tmin = \Tmin^{(1)} + \dotsb + \Tmin^{(M)}$ переходов.
+Здесь стоит отметить, что используемая нотация~$\Tmin^{(m)}$ обозначает \emph{возможно неминимальное} число переходов в модуле~${m \in \Modules}$, входящего в состав \emph{минимальной} модульной модели с \emph{минимальным} суммарным числом переходов~$\Tmin$.
 
-Аналогично, алгоритм $\AlgoModularParallelExtendedMin(\SetPositiveScenarios, M, P)$ позволяет синтезировать расширенную модульную модель с параллельной композицией $M$ модулей с минимальным числом состояний $M \cdot \Cmin$, минимальным суммарным размером охранных условий $\Nmin$ и максимальным размером каждого охранного условия~$P$.
+Аналогично, алгоритм $\AlgoModularParallelExtendedMin(\SetPositiveScenarios, M, P)$ позволяет синтезировать расширенную модульную модель с параллельной композицией $M$~модулей с минимальным числом состояний~${M \cdot \Cmin}$, минимальным суммарным размером охранных условий~$\Nmin$ и максимальным размером каждого охранного условия~$P$.
 
 Аналогичным образом определяются алгоритмы для синтеза базовых и расширенных модульных моделей с последовательной и произвольной композиций модулей:
 \begin{itemize}[nosep]
     \item $\AlgoModularConsecutiveBasicMin(\SetPositiveScenarios, M)$: базовая/последовательная;
-    \item $\AlgoModularConsecutiveExtendedMin(\SetPositiveScenarios, M, P)$: \rlap{расширенная/последовательная;}
+    \item $\AlgoModularConsecutiveExtendedMin(\SetPositiveScenarios, M, P)$: расширенная/последовательная;
     \item $\AlgoModularArbitraryBasicMin(\SetPositiveScenarios, M)$: базовая/произвольная;
     \item $\AlgoModularArbitraryExtendedMin(\SetPositiveScenarios, M, P)$: расширенная/произвольная.
 \end{itemize}
-% \begin{itemize}[nosep]
-%     \item $\AlgoModularConsecutiveBasicMin(\SetPositiveScenarios, M)$: \\ синтез базовой модели с последовательной композицией;
-%     \item $\AlgoModularConsecutiveExtendedMin(\SetPositiveScenarios, M, P)$: \\ синтез расширенной модели с последовательной композицией;
-%     \item $\AlgoModularArbitraryBasicMin(\SetPositiveScenarios, M)$: \\ синтез базовой модели с произвольной композицией;
-%     \item $\AlgoModularArbitraryExtendedMin(\SetPositiveScenarios, M, P)$: \\ синтез расширенная модели с произвольной композицией.
-% \end{itemize}
+
+
+
+% \section{From Monolithic to Distributed Synthesis}%
+% \label{sec:distributed}
+
+% This paper proposes an extension of the \com{fbSAT} approach~\cite{fbSAT-arXiv} described in the previous section.
+% The proposed extension allows for synthesis of distributed controllers, and is based on two ideas.
+% The first one is to declare a reduction for monolithic case for each module independently.
+% This is described in \cref{sec:distributed:modular}.
+% The second idea has to do with the adaptation of CEGIS developed in~\cite{fbSAT-arXiv} to make it applicable for distributed synthesis, and is the main idea of the paper.
+% % The most important difference from the monolithic case arises in the implementation of CEGIS\@.
+% The difficulty of using CEGIS for distributed synthesis is that since the specification is written for the system as a whole, negative scenarios derived from counterexamples are also written for the system as a whole.
+% % \commentDC{The previous sentence is imperfect, too. We should directly emphasize that since the specification is written for the distributed system as a whole, counterexamples generated by the model checker are also in terms of the system as a whole. And the question is how to deal with these counterexamples.}
+% \Cref{sec:distributed:construction} describes the structure of these scenarios.
+% The difficulty is that it is not known in advance, which modules behave incorrectly in some particular negative scenario, and thus we do not know, in which module do we need to prohibit the negative scenario.
+
+% The na\"ive approach would be to prohibit each negative scenario for all modules, but it would be incorrect to do so: a behavior that is incorrect for one of the modules may be completely normal for another one.
+% Thus, this na\"ive approach would lead to unsatisfiability of corresponding Boolean formulas, and the sought distributed controller would not be synthesized.
+
+% The key idea to cope with this difficulty is to make sure that each negative scenario is prohibited for at least one module.
+% This is described in \cref{sec:distributed:mapping}.
+% Finally, in \cref{sec:distributed:minimal} we discuss the algorithm for minimization of inferred automata in terms of their parameters, \eg number of states and total size of guard conditions.
+
+
+\section{От монолитного к распределённому синтезу}
+\label{sec:distributed}
+
+% В данной работе предлагается расширение подхода, описанного в разделе .
+Предлагаемое расширение позволяет осуществлять синтез моделей распределённых систем и основывается на двух идеях.
+Первая идея заключается в том, чтобы для каждого модуля в распределённой системе независимо кодировать задачу монолитного синтеза в SAT.
+Это описано в разделе~\ref{sec:distributed:modular}.
+Вторая идея связана с адаптацией подхода CEGIS, описанного и использованного в разделе~\ref{sec:monolith-cegis}, с целью сделать его применимым для распределённого синтеза.
+
+Сложность использования CEGIS для распределённого синтеза заключается в том, что поскольку спецификация написана для системы \emph{в целом}, негативные сценарии, полученные из контрпримеров, также описывают (негативное) поведение системы в целом.
+Раздел~\ref{sec:distributed:construction} описывает структуру этих сценариев.
+Проблема заключается в том, что заранее неизвестно, какие именно модули ведут себя неправильно в конкретном негативном сценарии, и, следовательно, неизвестно, в каком модуле необходимо запретить данный негативный сценарий.
+
+Наивный подход заключался бы в том, чтобы запретить каждый отрицательный сценарий для всех модулей, но это было бы некорректно: поведение, которое является неправильным для одного из модулей, может быть совершенно нормальным для другого.
+Таким образом, этот наивный подход привёл бы к невыполнимости соответствующих булевых формул, и искомая распределённая система не была бы синтезирована.
+
+Ключевая идея для преодоления этой проблемы заключается в том, чтобы убедиться, что каждый отрицательный сценарий запрещён хотя бы для одного модуля.
+Это описано в разделе~\ref{sec:distributed:mapping}.
+Наконец, в разделе~\ref{sec:distributed:minimal} обсуждается алгоритм синтеза минимальных автоматов с точки зрения их параметров, например, количества состояний и суммарного размера охранных условий.
+
+
+% \subsection{Reduction for distributed synthesis from positive scenarios}%
+% \label{sec:distributed:modular}
+
+% We declare the reduction described in \cref{sec:monolithic} for each module independently, adding the module index to every variable.
+% Thus, respective constraints remain the same, but are now quantified over all modules.
+% For instance, variable \(\ModularTransitionDestination_{q,k} \in \SetStatesAux\) denotes the destination state of the~$k$-th transition from state~$q$ in the automaton for the~$m$-th module, and variable \(\ModularTransitionInputEvent_{q,k} \in \SetInputEvents \union \{\varepsilon\}\) denotes the input event associated with that transition.
+% With the constraint \(
+%     (\ModularTransitionDestination_{q,k} = q_0) \iff (\ModularTransitionInputEvent_{q,k} = \varepsilon)
+% \) we enforce that only transitions to $q_0$ are marked with the $\varepsilon$ input event.
+% We also add module indices to the reduction parameters. For example, $\ModularC$ denotes the number of states in $\ModularAutomaton$ \--- the automaton for the~$m$-th module.
+% All other parts of the encoding from \cref{sec:monolithic} are extended in a similar way, except for the negative mapping, which we discuss below.
+
+% The difference with positive scenarios is that now we have a set of positive scenario trees $\Set{\ModularPositiveTree}_{m \in \Modules}$, one for each module of the distributed controller.
+% % , where $\ModularPositiveTree$ is a positive scenario tree for the $m$-th module.
+% Variable $\ModularMapping_{v}$ denotes a state in which the automaton for the $m$-th module finishes processing a sequence of inputs formed by following the positive tree from the root till the node~$v$ (since the tree is deterministic, for each node $v$ there is only one path from the root).
+% This variable represents a mapping $\ModularMapping_{} : \ModularSetTreeNodes \to \ModularSetStates$ between the nodes of $\ModularPositiveTree$ and the states of an automaton $\ModularAutomaton$, and the constraints on this mapping are the same to those described in \cref{sec:monolithic:positive}.
+
+
+\subsection{Сведение к SAT для распределённого синтеза из положительных сценариев}
+\label{sec:distributed:modular}
+
+В данном подразделе представлено сведение к SAT, основа которого уже была описана в разделе~\ref{sec:monolithic}.
+Для каждого модуля независимо объявляется описанный набор переменных и ограничений \--- ко всем переменным в сведении добавляется индекс модуля.
+Таким образом, соответствующие ограничения остаются теми же, но теперь они также квантифицированы по всем модулям.
+Например, переменная $\ModularTransitionDestination_{q,k} \in \SetStatesAux$ обозначает конечное состояние $k$-го перехода из состояния~$q$ в автомате для $m$-го модуля, а переменная $\ModularTransitionInputEvent_{q,k} \in \SetInputEvents \union \{\varepsilon\}$ обозначает входное событие, связанное с этим переходом.
+Ограничение
+\[
+    (\ModularTransitionDestination_{q,k} = q_0)
+    \iff
+    (\ModularTransitionInputEvent_{q,k} = \varepsilon)
+\]
+обеспечивает, что только переходы в~$q_0$ отмечены входным событием~$\varepsilon$.
+Мы также добавляем индексы модулей к параметрам редукции.
+Например, $\ModularC$~обозначает количество состояний в~$\ModularAutomaton$ \--- автомате для $m$-го модуля.
+Все остальные части кодировки из раздела~\ref{sec:monolith-synthesis} расширяются аналогичным образом, за исключением отрицательного отображения, которое мы обсудим ниже.
+
+Различие с положительными сценариями заключается в том, что теперь у нас есть набор деревьев положительных сценариев $\Set{\ModularPositiveTree}_{m \in \Modules}$, по одному для каждого модуля распределённого контроллера.
+Переменная~$\ModularMapping_{v}$ обозначает состояние, в~котором автомат для $m$-го модуля завершает обработку последовательности входных данных, образованной следованием по положительному дереву от корня до узла~$v$ (поскольку дерево детерминированное, для каждого узла~$v$ существует только один путь от корня).
+Эта переменная представляет отображение $\ModularMapping \colon \ModularSetTreeNodes \to \ModularSetStates$ между вершинами дерева~$\ModularPositiveTree$ и состояниями автомата~$\ModularAutomaton$, а ограничения на это отображение аналогичны описанным в разделе~\ref{sub:encoding-positive-mapping}.
+
+
+% \subsection{Compound Negative Scenario Tree}%
+% \label{sec:distributed:construction}
+
+% %% Figure: Looping distributed system
+% \begin{figure}[!ht]
+%     \centering%
+%     % \vspace*{5pt}%
+%     \begin{adjustbox}{max width=\linewidth}
+%         \subfile{tex/tikz-distributed-looping}
+%     \end{adjustbox}%
+%     \caption{Looping distributed system.}%
+%     \label{fig:looping-system}
+% \end{figure}
+
+% A \emph{compound negative scenario} is a sequence of \emph{compound scenario elements} $c_i$, where $c_i$ is an $M$-tuple of scenario elements for each synthesized module: ${c_i = \Tuple{s_i^m}}$, where ${s_i^m = \Pair{ i[\bar{x}], o[\bar{z}] }}$.
+
+% Consider a system of two interconnected modules depicted in \cref{fig:looping-system}.
+% The graph and the table in \cref{fig:looping-system} show the execution state sequence of this system, illustrating the violation of the LTL property: $\temp{GF} \neg z$.
+% A compound negative scenario obtained from this execution sequence is shown below (the beginning of the loop is marked with an underline).
+% \begin{equation*}
+% \begin{aligned}
+% [
+%     &\Tuple{
+%         \Pair{\ActionTT{R}{0}, \ActionMT{\varepsilon}{0}},
+%         \Pair{\EmptyActionT{R}, \ActionTT{C}{1}}
+%     };\\
+%     &\underline{\Tuple{
+%         \Pair{\ActionTT{R}{1}, \ActionTT{C}{1}},
+%         \Pair{\EmptyActionT{R}, \ActionTT{C}{0}}
+%     }}; \\
+%     &\Tuple{
+%         \Pair{\ActionTT{R}{0}, \ActionMT{\varepsilon}{1}},
+%         \Pair{\EmptyActionT{R}, \ActionTT{C}{0}}
+%     }; \\
+%     &\Tuple{
+%         \Pair{\ActionTT{R}{0}, \ActionMT{\varepsilon}{1}},
+%         \Pair{\EmptyActionT{R}, \ActionTT{C}{1}}
+%     }; \\
+%     &\Tuple{
+%         \Pair{\ActionTT{R}{1}, \ActionTT{C}{1}},
+%         \Pair{\EmptyActionT{R}, \ActionTT{C}{0}}
+%     };\\
+%     &\Tuple{
+%         \Pair{\ActionTT{R}{0}, \ActionTT{C}{1}},
+%         \Pair{\EmptyActionT{R}, \ActionTT{C}{0}}
+%     }
+% ]
+% \end{aligned}
+% \end{equation*}
+
+% One important difference from the monolithic case is that in distributed synthesis we assume that the input event might be empty: $i \in \SetInputEvents \union \{ \varepsilon \}$.
+% This corresponds to the case when one of the modules does not receive any input at some point in time.
+% We also assume that in valid scenarios $i = \varepsilon$ implies $o = \varepsilon$, i.e. if a module does not receive any input event, then it remains idle.
+% Note that in negative traces derived from counterexamples obtained from the model checker, it might be the case that all synthesized modules do not receive an input event.
+% It happens when all modules are idle, awaiting some input events from the environment.
+% We filter out such elements, since they do not carry any information useful for the synthesis.
+
+% % Note: this paragraph is partly incorrect: the projection is done on a tree level to preserve node indices
+% % In order to constrain individual modules, we make the \emph{projection} of the compound negative scenario.
+% % A \emph{projection} of a compound scenario $\{ s_i \}$ to a module $m$ is a sequence of $m$-th elements of this scenario.
+% % We construct a negative scenario tree from projections in a similar fashion and proceed with negative mapping.
+% % \textbf{TBD} rewrite this passage and illustrate it with an example.
+
+% A \emph{compound negative scenario tree} (or \emph{compound tree}) $\NegativeCompoundTree$ is a negative scenario tree built from a set of compound negative scenarios in a similar way as described in \cref{sec:monolithic:trees}.
+% Each node of $\NegativeCompoundTree$ and its incoming edge correspond to a compound scenario element.
+% We denote the set of nodes of tree $\NegativeCompoundTree$ with $\SetNegativeCompoundTreeNodes$ and reuse the negative tree auxiliary functions ($\negtp{\negv}$, $\negtie{\negv}$, \etc) for the compound tree.
+
+% A \emph{projection} of a compound scenario element to module $m$ is simply its $m$-th element.
+% % $\ModularNegativeScenarioTree$ is a projection of a compound tree $\NegativeCompoundTree$ if every node of $\ModularNegativeScenarioTree$ is a projection of $\NegativeCompoundTree$.
+% A \emph{projection} $\ModularNegativeTree$ of a compound tree $\NegativeCompoundTree$ to module $m$ is a tree isomorphic to $\NegativeCompoundTree$, each node of which is a projection of the scenario element in the respective node of $\NegativeCompoundTree$ to module~$m$.
+
+
+% \subsection{Compound Negative Scenario Tree Mapping}
+% \label{sec:distributed:mapping}
+
+% Variable $\ModularNegativeMapping_{\negv}$ denotes the satisfying state in automaton $\ModularAutomaton$ for node $\negv \in \SetNegativeCompoundTreeNodes$, with $\ModularNegativeMapping_{\negv} = q_0$ in case when the automaton does not exhibit this particular behavior, and hence there is no satisfying state for $\negv$ (auxiliary state $q_0$ is common for all modules).
+% For each module, the root node of the compound negative tree maps to the initial state of the corresponding automaton: $\ModularNegativeMapping_{\NegativeTreeRoot} = \ModularInitialState$.
+
+% The projection of a compound tree may contain nodes with $i = \varepsilon$ on an incoming edge \--- we call such nodes \emph{idle}.
+% Among non-idle nodes, we recognize passive (with $\negtoe{\negv} = \varepsilon$) and active nodes (with $\negtoe{\negv} \neq \varepsilon$) with the same properties as for regular negative trees.
+% We denote the sets of idle, passive and active nodes of the compound negative tree as $\SetNegativeCompoundTreeNodesIdle$, $\SetNegativeCompoundTreeNodesPassive$, and $\SetNegativeCompoundTreeNodesActive$ respectively.
+
+% The constraints for passive and active nodes are the same as in the reduction for monolithic synthesis.
+% Each idle node maps to the same state as its parent.
+% The only difference from passive nodes is that we do not need to encode that the automaton ignores an input action, since, in fact, it does not receive any:
+% \[
+%     (\ModularNegativeMapping_{\negv} = \ModularNegativeMapping_{\negtp{\negv}}) ,
+% \]
+% where
+% ${\negv \in \SetNegativeCompoundTreeNodesIdle}$.
+
+% Similar to the monolithic case, we ensure that if the node $\negv \in \SetNegativeCompoundTreeNodes$ is unmapped (\ie mapped to $q_0$), then this property is propagated down the tree:
+% \begin{equation*}
+%     (\ModularNegativeMapping_{\negtp{\negv}} = q_0)
+%     \implies
+%     (\ModularNegativeMapping_{\negv} = q_0) .
+% \end{equation*}
+
+% Finally, we need to prohibit the looping behavior described in counterexamples, but in such a way that each loop is prohibited in at least one module.
+% This is done by adding a disjunction over $m \in \Modules$ for each loop:
+% \begin{equation*}
+% \begin{split}
+%     \bigland_{\negv' \in \negtbe{\negv}}
+%     \biglor_{m \in \Modules}
+%         \left[
+%             (\ModularNegativeMapping_{\negv} \neq \ModularNegativeMapping_{\negv'})
+%             \lor
+%             (\ModularNegativeMapping_{\negv} = \ModularNegativeMapping_{\negv'} = q_0)
+%         \right] %.
+% \end{split}
+% \end{equation*}
+% Thus, on each CEGIS iteration we accumulate clauses in the SAT formula to encode that this particular negative scenario is prohibited for at least one module.
+% Essentially, this approach is an implicit search delegated to a SAT solver.
+
+
+% \subsection{Finding a Minimal Distributed Controller}%
+% \label{sec:distributed:minimal}
+
+% Ultimately, we want to infer the \emph{minimal} distributed controller complying with the given specification $\LTLSpec$.
+% Minimal models have more value in practice \--- they are much more comprehensible for humans and more efficient in the hardware.
+% However, if we start minimizing (\eg by adding additional constraints) the solution \--- set of modules $\Set{\ModularAutomaton}$ \--- found by a CEGIS, the resulting minimal solution may (and, in practice, will) not comply with the specification $\LTLSpec$, though the already obtained negative scenarios will still not be satisfied, as expected.
+% Therefore, the minimization step should be included into the CEGIS loop.
+% Moreover, producing minimal models on each CEGIS iteration allows to perform model checking much faster, because smaller models have a smaller state space.
+% Later we will refer to CEGIS with minimization included as CEGIS-min.
+
+% In order to enable the minimization of the synthesized automata in terms of total number of states we perform the following extensions of the reduction to SAT\@.
+% To begin with, observe that parameters $\ModularC$ \--- maximum number of states in each module $m \in \Modules$ \--- have to be known before the beginning of inference process, and the solution (if found) will have exactly the specified size (number of states).
+% The simplest strategy for finding a satisfying solution with a minimal total number of states would be an iterative strategy \--- linear bottom-up search.
+% However, in case of $M > 1$ (\ie any non-monolithic synthesis) it is unclear how to perform the iteration of parameters \--- efficiently, whereas maintaining the minimality \--- and this becomes a problem by itself.
+% One possible way is to iterate all~$\ModularC$ altogether until we find some solution (all \enquote{too small} values result in UNSAT), and then try to decrease some of~$\ModularC$.
+% However, the latter \--- inference with different $\ModularC$ values \--- requires \emph{restarts} of the SAT solver, since the declared variables (those with index $q \in \ModularSetStates$) and constraints depend on the $\ModularC$ \emph{statically}, \ie this parameter cannot be easily changed while preserving the satisfiability.
+% Hence, we need a \emph{dynamic} way to gradually \enquote{disable} some states in the modules.
+% This can be done using the \enquote{used states} approach proposed in~\cite{chivilikhin2020}.
+% The main idea is to mark each state \emph{used}/\emph{unused}, which allows us to minimize the total number of \emph{used} states by encoding it with the \emph{totalizer}~\cite{sat-cardinality}.
+
+% Variable $\StateUsed_{q} \in \Bool$ denotes whether the state $q$ is \emph{used} by an automaton, \ie is reachable from the initial state $\InitialState$.
+% Clearly, the initial state is always \emph{used}.
+% A~(non-initial) state is \emph{used} if and only if it has an incoming transition:
+% \begin{equation*}
+%     \StateUsed_{\InitialState}
+%     \land
+%     \bigland_{\mathclap{q \in \SetStates \setminus \Set{\InitialState}}}
+%     \Bigl[
+%         \StateUsed_{q}
+%         \iff
+%         \biglorclap{\substack{
+%             q \in \SetStates \\
+%             k \in [1..K]
+%         }}
+%         (\TransitionDestination_{q',k} = q)
+%     \Bigr] .
+% \end{equation*}
+% Additionally, the following constraint ensures that unused states have the largest indices:
+% % Note: this constraint is auxiliary
+% \begin{equation*}
+%     \neg\StateUsed_{q_i}
+%     \implies
+%     \neg\StateUsed_{q_{i+1}} %.
+% \end{equation*}
+% In the context of distributed synthesis, this variable is declared for each module ${m \in \Modules}$: $\ModularStateUsed_{q}$.
+% The total number of used states in all modules is denoted~$\StatesUsed$ and encoded using the \emph{totalizer}~\cite{sat-cardinality}.
+% % \StatesUsed = \bigsumclap{m \in \Modules, q \in \SetStates} \ModularStateUsed_{q}
+
+% Symmetry-breaking constraints declared earlier (\cref{sec:monolithic:sat:structure} require the states of the automaton to be enumerated in the BFS traversal order, \ie to be included in the BFS traverse tree.
+% This implies that all states (except the initial one) have an incoming transition, due to the definition of $\BfsParent{q}$ variable \--- parent of the state~$q$ in the BFS traverse tree.
+% Consequently, this implies that all states are \emph{used}, by definition.
+% In order to both reduce the search space by using the BFS constraints \emph{and} allow the states to be \emph{unused}, the former have to be modified in the following way.
+% Modified variable $\BfsParentModified_{q_j} \in \Set{q_0, q_1, \dotsc, q_{j-1}}$ ($j \in [2..C]$) includes $q_0$ in its domain, which represents the absence of a parent for the state $q_j \in \SetStates$.
+% Only \emph{unused} states do not have a parent:
+% \begin{equation*}
+%     \neg \StateUsed_{q_j}
+%     \iff
+%     (\BfsParentModified_{q_j} = q_0) .
+% \end{equation*}
+% Variable $\BfsTransition_{q_i, q_j} \in \Bool$ and all other constraints \--- definitions of $\BfsTransition$ and $\BfsParentModified_{}$, and the actual BFS constraint \--- do not require any additional changes.
+
+% %% Algorithm: Distributed-CEGIS-min
+% \subfile{tex/algo-cegis-min}
+
+% The main procedure implementing the CEGIS-min is shown in \cref{alg:distributed-cegis-min}.
+% First, we estimate parameter~$D$: the \emph{common} upper bound for the number of states in each module.
+% The estimation is done by a simple bottom-up linear search.
+% On each iteration we call the function $\texttt{infer}(\CommonArgs)$, where $\CommonArgs$ denotes the common arguments $\Tuple{ \Set{\ModularSetPositiveScenarios}, \SetNegativeCompoundScenarios, \allowbreak \Set{{\ModularC = \CompoundNumberOfStates}}, P }$.
+% The $\texttt{infer}$ procedure is responsible for:
+% \begin{enumerate}
+%     \item building positive scenario trees for~$\Set{\ModularSetPositiveScenarios}$ and a negative compound scenario tree for~$\SetNegativeCompoundScenarios$;
+
+%     \item reducing the inference problem to SAT by declaring the constraints described in this paper;
+
+%     \item delegating to a SAT solver to actually solve the SAT problem;
+
+%     \item building a solution \--- set of automata (modules)~$\Set{\ModularAutomaton}$ satisfying given scenarios \--- from the satisfying assignment found by the SAT solver.
+% \end{enumerate}
+% Next, we start an actual CEGIS loop.
+% First, we minimize $\StatesUsed$ using a top-down approach.
+% Here, we call $\texttt{infer}$ with an extra predicate\-/argument \enquote{$\StatesUsed < \texttt{UB}$}, where $\texttt{UB}$ denotes the upper bound for a total number of used (reachable) states in all synthesized automata.
+% This predicate represents a \emph{cardinality constraint} which is encoded using a \emph{totalizer} technique~\cite{sat-cardinality}.
+% Next, we minimize $\NodesUsed$ using the same approach.
+% After that, we perform model checking of the synthesized distributed controller represented by automata~$\Set{\ModularAutomaton}$ for compliance with the given LTL\-/specification~$\LTLSpec$ using NuSMV~\cite{NuSMV} model checker, and obtain a set of negative compound scenarios $\SetNegativeCompoundScenariosNew$ \--- if there are any, they will be taken into account on the next iteration, else the CEGIS is done and $\Set{\ModularAutomaton}$ is the satisfying solution.
+
 
 
 % \subfile{tex/sec-exp-modular}
@@ -436,7 +750,7 @@ $\AlgoModularParallelExtendedFull(\SetPositiveScenarios, M, C, P, N)$ и $\AlgoM
 % Система PnP\-манипулятора была рассмотрена ранее, в разделе~\ref{sec:experiments-monolith-pnp}, в контексте монолитного синтеза.
 Несмотря на то, что исходная модель контроллера PnP\-/манипулятора является монолитной, модульный синтез позволяет синтезировать распределенную систему, реализующую схожее поведение.
 
-Стоит отметить, что приведенное экспериментальное исследование не включает в себя сравнение с существующими методами, так как двухэтапный метод \enquote{Two-stage}~\cite{chivilikhin-19}, использованный в главе~\ref{ch:monolith-synthesis} неприменим к задаче модульного синтеза, а среди доступных инструментов для задачи модульного синтеза можно выделить только EFSM-tools~\cite{efsm-tools}, однако данное решение обладает следующими недостатками: (1)~низкая эффективность (по критериям времени работы и размерам моделей) на задаче монолитного синтеза, что подтверждено в~\cite{chivilikhin-19}, (2)~модульное разбиение должно быть известно заранее, так как его необходимо указывать вручную, в то время как разработанные в данной работе методы позволяют получать модульное разбиение автоматически.
+Стоит отметить, что приведенное экспериментальное исследование не включает в себя сравнение с существующими методами, так как двухэтапный метод \enquote{Two-stage}~\cite{chivilikhin-19}, использованный в главе~\ref{ch:automata-synthesis} неприменим к задаче модульного синтеза, а среди доступных инструментов для задачи модульного синтеза можно выделить только EFSM-tools~\cite{efsm-tools}, однако данное решение обладает следующими недостатками: (1)~низкая эффективность (по критериям времени работы и размерам моделей) на задаче монолитного синтеза, что подтверждено в~\cite{chivilikhin-19}, (2)~модульное разбиение должно быть известно заранее, так как его необходимо указывать вручную, в то время как разработанные в данной работе методы позволяют получать модульное разбиение автоматически.
 
 В первом эксперименте были использованы методы для синтеза \emph{базовой} модульной модели, состоящей из двух модулей: $M = 2$.
 В качестве входных данных были использованы наборы сценариев $\SetScenarios^{(1)}$, $\SetScenarios^{(4)}$ и $\SetScenarios^{(39)}$, где верхний индекс означает число сценариев в наборе.

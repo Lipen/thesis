@@ -1,0 +1,90 @@
+\documentclass[../main.tex]{subfiles}%
+\begin{document}%
+\begingroup%
+\begin{algorithm}[!tp]
+    \caption{Distributed-CEGIS-min($\Set{\ModularSetPositiveScenarios}$, $\LTLSpec$, $P$)}
+    \label{alg:distributed-cegis-min}
+    \DontPrintSemicolon
+    \SetKwInput{Input}{Вход}
+    \SetKwInput{Output}{Результат}
+    % \SetKwFunction{SomeFunction}{КакаяТоФункция}
+
+    \Input{
+        множество позитивных сценариев $\Set{\ModularSetPositiveScenarios}_{m \in \Modules}$,
+        LTL\-/спецификация~$\LTLSpec$,
+        максимальный размер дерева разбора~$P$.
+    }
+    \Output{
+        модульный автомат $\Set{\ModularAutomaton}_{m \in \Modules}$ удовлетворяющий спецификации~$\LTLSpec$.
+    }
+    \BlankLine
+
+    \tcp*[l]{Compound negative scenarios}
+    $\SetNegativeCompoundScenarios \gets \emptyset$\;
+    \BlankLine
+
+    \tcp*[l]{Common arguments (for \enquote{\texttt{infer}})}
+    $\CommonArgs := \Tuple{
+        \Set{\ModularSetPositiveScenarios},
+        \SetNegativeCompoundScenarios,
+        \Set{C^{(m)\!} = \CompoundNumberOfStates},
+        P
+    }$\;
+    \BlankLine
+
+    \Label{\textit{start}}
+    \BlankLine
+
+    %% Estimate D
+    \tcp*[l]{Estimate $\CompoundNumberOfStates$}
+    \For{$\CompoundNumberOfStates \gets 1$ \KwTo $\infty$}{
+        $\Set{\ModularAutomaton} \gets \texttt{infer}(\CommonArgs)$\;
+        \lIf{$\Set{\ModularAutomaton} \neq \Null$}{\Break}
+    }
+    \BlankLine
+
+    \While{\com{true}}{
+        %% Minimize C
+        \tcp*[l]{Minimize $\StatesUsed$}
+        $\Set{\ModularAutomaton} \gets \texttt{infer}(\CommonArgs, \StatesUsed < \infty)$\;
+
+        %% Restart if automaton was not found
+        % (\tcp*[h]{Inference failed})
+        \If{$\Set{\ModularAutomaton} = \Null$}{
+            % \Return{$\Null$}\;
+            \Goto{\textit{start}}\;
+        }
+
+        \While{$\Set{\ModularAutomaton} \neq \Null$}{
+            $\StatesUsedMin \gets \texttt{numberOfUsedStates}(\Set{\ModularAutomaton})$\;
+            $\Set{\ModularAutomaton} \gets \texttt{infer}(\CommonArgs, \StatesUsed < \StatesUsedMin)$\;
+        }
+        \BlankLine
+
+        %% Minimize N
+        \tcp*[l]{Minimize $\NodesUsed$}
+        $\Set{\ModularAutomaton} \gets \texttt{infer}(\CommonArgs, \StatesUsed = \StatesUsedMin, \NodesUsed < \infty)$\;
+        \While{$\Set{\ModularAutomaton} \neq \Null$}{
+            $\NodesUsedMin \gets \texttt{numberOfParseTreeNodes}(\Set{\ModularAutomaton})$\;
+            $\Set{\ModularAutomaton} \gets \texttt{infer}(\CommonArgs, \StatesUsed = \StatesUsedMin, \NodesUsed < \NodesUsedMin)$\;
+        }
+        \BlankLine
+
+        %% Final inference
+        $\Set{\ModularAutomaton} \gets \texttt{infer}(\CommonArgs, \StatesUsed = \StatesUsedMin, \NodesUsed = \NodesUsedMin)$\;
+
+        %% Perform model checking via NuSMV
+        $\SetNegativeCompoundScenariosNew \gets \texttt{performModelChecking}(\Set{\ModularAutomaton}, \LTLSpec)$\;
+
+        %% Return automaton if there is no cexs
+        \If(\tcp*[h]{No counterexamples}){$\SetNegativeCompoundScenariosNew = \emptyset$}{
+            \Return{$\Set{\ModularAutomaton}$}\;
+        }
+        \BlankLine
+
+        %% Append new negative scenarios
+        $\SetNegativeCompoundScenarios \gets \SetNegativeCompoundScenarios \union \SetNegativeCompoundScenariosNew$
+    }
+\end{algorithm}%
+\endgroup%
+\end{document}

@@ -1,0 +1,210 @@
+\documentclass[../main.tex]{subfiles}%
+\enabletikzpreview[1pt]%
+\begin{document}%
+\begin{tikzpicture}[
+    % scale=0.5, transform shape,
+    % framed,
+    >={Stealth[]},
+    shorten >=1pt,
+    auto,
+    on grid,
+    initial text={},
+    label distance=1pt,
+    every state/.style={inner sep=0pt, font=\large},
+    every label/.style={inner sep=1pt, anchor=center},
+    meander/.style={
+        draw,
+        thick,
+    },
+    meanderX/.style={
+        meander,
+        draw=color-meander-X,
+    },
+    meanderZ/.style={
+        meander,
+        draw=color-meander-Z,
+    },
+    mytable/.style={
+    },
+    callout/.style={
+        inner sep=2pt,
+    },
+]
+    \def\HGap{1.8cm}
+    \def\VGap{1.1cm}
+    \def\HDist{3.8cm}
+    \def\MeanderStartX{7.4}
+    \def\MeanderXStartY{0.5}
+    \def\MeanderZStartY{-1}
+    \def\TableStartX{13.2}
+    \def\HGapCallout{0.2}
+    \def\BendAngle{15}
+    \def\BendAngleInside{20}
+
+    % \colorlet{color-meander-X}{blue}
+    % \colorlet{color-meander-Z}{red}
+    \colorlet{color-meander-X}{black}
+    \colorlet{color-meander-Z}{black}
+
+    \def\GuardX{\Guard[\EventR]{x}}
+    \def\GuardNotX{\Guard[\EventR]{\neg x}}
+
+    %%% FIRST %%%
+    %% States
+    \node[initial,state,
+        label={[xshift=-3.5mm,yshift=-1.5mm]below:$\AssignF{z}$}]
+        (q1) at (0,0)
+        {$q_1^{(1)}$};
+    \node[state,
+        label={[yshift=1.5mm]above:$\AssignT{z}$}]
+        (q2) [above right=\VGap and \HGap of q1]
+        {$q_3^{(1)}$};
+    \node[state,
+        label={[yshift=-1.5mm]below:$\AssignT{z}$}]
+        (q3) [below right=\VGap and \HGap of q1]
+        {$q_2^{(1)}$};
+    %% Transitions
+    \path[->]
+        (q2) edge[bend right=\BendAngle] node[sloped,above] {$\GuardX$} (q1)
+        (q1) edge[bend right=\BendAngle] node[sloped,below] {$\GuardX$} (q3)
+        (q3) edge[bend left=\BendAngleInside] node[sloped,above] {$\GuardX$} (q2)
+        (q2) edge[bend left=\BendAngleInside] node[sloped,above] {$\GuardNotX$} (q3)
+    ;
+
+    %%% SECOND %%%
+    %% States
+    \node[initial,state,
+        label={[xshift=-2mm,yshift=-1.5mm]below:$\AssignF{x}$}]
+        (w1) at (\HDist,0)
+        {$q_1^{(2)}$};
+    \node[state,
+        label={[yshift=1.5mm]above:$\AssignT{x}$}]
+        (w2) [above right=\VGap and \HGap of w1]
+        {$q_3^{(2)}$};
+    \node[state,
+        label={[yshift=-1.5mm]below:$\AssignF{x}$}]
+        (w3) [below right=\VGap and \HGap of w1]
+        {$q_2^{(2)}$};
+    %% Transitions
+    \path[->]
+        (w1) edge[bend left=\BendAngle] node[sloped,above] {$\EventR$} (w2)
+        (w2) edge[bend left=\BendAngle] node[sloped,above] {$\EventR$} (w3)
+        (w3) edge[bend left=\BendAngle] node[sloped,below] {$\EventR$} (w1)
+    ;
+
+    \coordinate (meanderX-start) at (\MeanderStartX,\MeanderXStartY);
+    \coordinate (meanderZ-start) at (\MeanderStartX,\MeanderZStartY);
+    \def\MeanderHeight{0.8}
+    \def\WaveWidth{0.4}
+    \def\WaveHeight{0.4}
+    \def\WaveCount{7}
+    \def\axisovershoot{0.1}
+    %% X-axis
+    \draw[->] (meanderX-start) +(-\axisovershoot,0) -- ++({\WaveWidth*\WaveCount+0.3},0);
+    \draw[->] (meanderZ-start) +(-\axisovershoot,0) -- ++({\WaveWidth*\WaveCount+0.3},0);
+    %% Y-axis
+    \draw[->] (meanderX-start) +(0,-\axisovershoot) -- ++(0,0.8) node[left] {$\color{color-meander-X}{\bm{x}}$};
+    \draw[->] (meanderZ-start) +(0,-\axisovershoot) -- ++(0,0.8) node[left] {$\color{color-meander-Z}{\bm{z}}$};
+    %% Meander X
+    \path[meanderX]
+        (meanderX-start)
+        % State 1: low
+        -- ++(\WaveWidth,0)
+        % State 2: high
+        -- ++(0,\WaveHeight)
+        -- ++(\WaveWidth,0)
+        -- ++(0,-\WaveHeight)
+        % State 3: low
+        -- ++(\WaveWidth,0)
+        % State 4: low
+        -- ++(\WaveWidth,0)
+        % State 5: high
+        -- ++(0,\WaveHeight)
+        -- ++(\WaveWidth,0)
+        -- ++(0,-\WaveHeight)
+        % State 6: low
+        -- ++(\WaveWidth,0)
+        % State 7: low
+        -- ++(\WaveWidth,0)
+        % % State 8: high
+        % -- ++(0,\WaveHeight)
+        % -- ++(\WaveWidth,0)
+        % -- ++(0,-\WaveHeight)
+    ;
+    %% Meander Z
+    \path[meanderZ]
+        (meanderZ-start)
+        % State 1: low (init)
+        -- ++(\WaveWidth,0)
+        % State 2: low
+        -- ++(\WaveWidth,0)
+        % State 3: high
+        -- ++(0,\WaveHeight)
+        -- ++(\WaveWidth,0)
+        % State 4: high
+        -- ++(\WaveWidth,0)
+        % State 5: high
+        -- ++(\WaveWidth,0)
+        % State 6: high
+        -- ++(\WaveWidth,0)
+        % State 7: high
+        -- ++(\WaveWidth,0)
+        % % State 8: high
+        % -- ++(\WaveWidth,0)
+    ;
+    %% X-axis labels for X-meander
+    \path
+        (meanderX-start)
+        ++(-\WaveWidth/2, -0.3)
+        \foreach \i in {1,...,\WaveCount} {
+            ++(\WaveWidth,0) node {$\i$}
+        }
+        ++(\WaveWidth,0) node {$t$}
+    ;
+    %% X-axis labels for Z-meander
+    \path
+        (meanderZ-start)
+        ++(-\WaveWidth/2, -0.3)
+        \foreach \i in {1,...,\WaveCount} {
+            ++(\WaveWidth,0) node {$\i$}
+        }
+        ++(\WaveWidth,0) node {$t$}
+    ;
+    %% Y-axis labels for X-meander
+    \path
+        (meanderX-start) node [left,xshift=-1pt] {$0$}
+        ++(0,\WaveHeight) node [left,xshift=-1pt] {$1$}
+        [draw] +(-0.07,0) -- +(0.1,0)
+    ;
+    %% Y-axis labels for Z-meander
+    \path
+        (meanderZ-start) node [left,xshift=-1pt] {$0$}
+        ++(0,\WaveHeight) node [left,xshift=-1pt] {$1$}
+        [draw] +(-0.07,0) -- +(0.1,0)
+    ;
+
+    \node[mytable] (table) at (\TableStartX, 0) {\begin{tabular}{ccccc}
+        % \toprule
+        $t$ & $q^{(1)}$ & $q^{(2)}$ & $x$ & $z$ \\
+        \midrule
+        \tikz[inner sep=0pt]{\node(prefix-start){$1$};} & $q_1$ & $q_1$ & 0 & 0 \\
+        2 & $q_1$ & $q_3$ & 1 & 0 \\
+        \tikz[inner sep=0pt]{\node(prefix-end){$3$};} & $q_2$ & $q_2$ & 0 & 1 \\
+        \tikz[inner sep=0pt]{\node(loop-start){$4$};} & $q_2$ & $q_1$ & 0 & 1 \\
+        5 & $q_2$ & $q_3$ & 1 & 1 \\
+        6 & $q_3$ & $q_2$ & 0 & 1 \\
+        \tikz[inner sep=0pt]{\node(loop-end){$7$};} & $q_2$ & $q_1$ & 0 & 1 \\
+        % \bottomrule
+    \end{tabular}};
+
+    \draw[gray]
+        (prefix-start.north west) -- ++(-\HGapCallout,0) |- (prefix-end.south west)
+        node[callout,pos=0.25,above,rotate=90] {\textit{prefix}}
+    ;
+    \draw[gray]
+        (loop-start.north west) -- ++(-\HGapCallout,0) |- (loop-end.south west)
+        node[callout,pos=0.25,above,rotate=90] {\textit{loop}}
+    ;
+
+\end{tikzpicture}%
+\end{document}

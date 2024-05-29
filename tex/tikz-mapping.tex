@@ -44,25 +44,25 @@
     \node (v1-label) at (v1.west) [left]
         {\(\begin{aligned}
             \toe{v_1} &= o_1 \\[\LineGapMore]
-            \Mapping{v_1\!} &= q_i
+            \Mapping_{v_1\!} &= q_i
         \end{aligned}\)};
     \node (v2-label) at (v2.west) [left]
         {\(\begin{aligned}
             \tie{v_2} &= e_1 \\[\LineGapSmall]
             \tin{v_2} &= u_1 \\[\LineGapSmall]
             \toe{v_2} &= o_2 = \varepsilon \\[\LineGapMore]
-            \Mapping{v_2\!} &= q_i
+            \Mapping_{v_2\!} &= q_i
         \end{aligned}\)};
     \node (v3-label) at ([yshift=-1mm]v3.west) [left]
         {\(\begin{aligned}
             \tie{v_3} &= e_2 \\[\LineGapSmall]
             \tin{v_3} &= u_2 \\[\LineGapSmall]
             \toe{v_3} &= o_3 \\[\LineGapMore]
-            \Mapping{v_3\!} &= q_j
+            \Mapping_{v_3\!} &= q_j
         \end{aligned}\)};
 
-    \node (qi-label) at (qi.east) [right] {$\StateOutputEvent{q_i\!} = o_1$};
-    \node (qj-label) at (qj.east) [right] {$\StateOutputEvent{q_j\!} = o_3$};
+    \node (qi-label) at (qi.east) [right] {$\StateOutputEvent_{q_i} = o_1$};
+    \node (qj-label) at (qj.east) [right] {$\StateOutputEvent_{q_j} = o_3$};
 
     \node[draw,rounded corners,inner sep=4pt,align=center]
         (tree-label)
@@ -76,8 +76,8 @@
     \path[->]
         (qi) edge[right] node {
             \(\begin{aligned}
-                & \ActualTransitionFunction{q_i,e_1,u_1\!} = q_0 \\[\LineGapMore]
-                & \ActualTransitionFunction{q_i,e_2,u_2\!} = q_j
+                & \ActualTransitionFunction_{q_i,e_1,u_1\!} = q_0 \\[\LineGapMore]
+                & \ActualTransitionFunction_{q_i,e_2,u_2\!} = q_j
             \end{aligned}\)} (qj)
         (v1) edge node[sloped,font=\small] {$\Action{e_1}{u_1}$} (v2)
         (v2) edge node[sloped,font=\small] {$\Action{e_2}{u_2}$} (v3)

@@ -20,6 +20,11 @@
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \SetAlgoInsideSkip{smallskip}
 \SetAlgorithmName{Алгоритм}{algorithm}{Список алгоритмов}
+\SetKw{Break}{break}
+\SetKw{Let}{let}
+\SetKw{Label}{label}
+\SetKw{Goto}{goto}
+\SetKwBlock{Loop}{loop}{end loop}
 
 \makeatletter
 \newcommand{\onlyinpreamble}[1]{% {<text>}
@@ -113,6 +118,10 @@
 \DeclarePairedDelimiter{\floor}\lfloor\rfloor
 \DeclarePairedDelimiter{\ceil}\lceil\rceil
 
+%% Simple implication and iff
+\let\implies\rightarrow
+\let\iff\leftrightarrow
+
 %% Union and intersection operators
 \newcommand\union{\cup}
 \newcommand\intersection{\cap}
@@ -188,16 +197,26 @@
 
 %% Input/Output actions
 \newcommand{\ActionMM}[2]{% {<event>}{<values>}
-    \ensuremath{#1[#2]}}
+    \ensuremath{#1[#2]}%
+}
 \newcommand{\ActionTT}[2]{% {<event>}{<values>}
-    \texttt{#1[#2]}}
+    \texttt{#1[#2]}%
+}
 \newcommand{\ActionMT}[2]{% {<event>}{<values>}
-    \ensuremath{#1}\texttt{[#2]}}
+    \ensuremath{#1}\texttt{[#2]}%
+}
 \newcommand{\ActionTM}[2]{% {<event>}{<values>}
-    \texttt{#1}\ensuremath{[#2]}}
+    \texttt{#1}\ensuremath{[#2]}%
+}
 \let\Action\ActionMM
-\newcommand{\InputEvent}{e^{I\!}}
-\newcommand{\OutputEvent}{e^{O\!}}
+\newcommand{\EmptyActionM}[1]{% {<event>}}
+    \ensuremath{#1}%
+}
+\newcommand{\EmptyActionT}[1]{% {<event>}}
+    \texttt{#1}%
+}
+\newcommand{\InputEvent}{e^{I}}
+\newcommand{\OutputEvent}{e^{O}}
 \newcommand{\InputValues}{\bar{x}}
 \newcommand{\OutputValues}{\bar{z}}
 \newcommand{\InputAction}[1][]{% [<index>]
@@ -233,10 +252,14 @@
 % \newcommand{\AMO}[2][]{\mathrm{AMO}_{#1}(#2)}
 % \newcommand{\EO}[2][]{\mathrm{EO}_{#1}(#2)}
 
-% Temporarily add \temp command for temporal operators...
-% \newcommand{\temp}[1]{\textbf{#1}}
-% Some mysterious stuff for LTL formulas
-% \newcommand{\com}[1]{\ensuremath{\mathtt{#1}}}
+%% Temporal operators
+\newcommand{\Temp}[1]{\textbf{#1}}
+
+%% Some mysterious stuff
+\newcommand{\com}[1]{\ensuremath{\mathtt{#1}}}
+
+%% Null
+\newcommand{\Null}{\com{null}}
 
 %% Add hat for NegativeScenarioTree-related stuff
 \newcommand{\Negative}[1]{\vphantom{#1}\smash{\widehat{#1}}}
@@ -251,71 +274,93 @@
 %% Function with parens
 \newcommand{\NewFunction}[2]{% {<command>}{<name>}
     \expandafter\newcommand\csname #1\endcsname[1]{% {<arg>}
-        \funcname{#2}(##1)}}
+        \funcname{#2}(##1)%
+    }%
+}
 \newcommand{\NewNegativeFunction}[2]{% {<command>}{<name>}
     \expandafter\newcommand\csname #1\endcsname[1]{% {<arg>}
-        \Negative{\funcname{#2}}(##1)}}
+        \Negative{\funcname{#2}}(##1)%
+    }%
+}
 \newcommand{\NewFunctionWithNegative}[3][neg]{% [<neg-cmd-prefix>]{<command>}{<name>}
     \NewFunction{#2}{#3}
     \NewNegativeFunction{#1#2}{#3}
 }
 
-%% Variables factory
-\newcommand{\NewVariableEx}[4]{% {<name>}{<symbol>}{<pre-super>}{<pre-sub>}
-    \expandafter\newcommand\csname #1\endcsname[2][]{% [<super>]{<sub>}
-        #2^{#3 ##1}_{#4 ##2}}
-    \WithSuffix\expandafter\newcommand\csname #1\endcsname*{#2}
+%% Assignment
+\newcommand{\Assign}[2]{% {<lhs>}{<rhs>}
+    #1 \gets #2%
 }
-\newcommand{\NewVariable}[2]{% {<name>}{<symbol>}
-    \NewVariableEx{#1}{#2}{}{}}
-\newcommand{\NewModularVariable}[1]{% {<variable>}
-    \expandafter\newcommand\csname Modular#1\endcsname[2][m]{% [<module>]{<sub>}
-        \csname #1\endcsname[(##1)\!]{##2}}}
+\newcommand{\AssignT}[1]{% {<lhs>}
+    \Assign{#1}{1}%
+}
+\newcommand{\AssignF}[1]{% {<lhs>}
+    \Assign{#1}{0}%
+}
 
-%% Tightly spaced text
-\newcommand{\tight}[1]{% {<text>}
-    \textls[-50]{#1}}
-\newcommand{\tightit}[1]{% {<text>}
-    % \tight{$\mathit{#1}$}}
-    \textit{\tight{#1}}}
+%% Const Factory
+\newcommand{\NewConst}[2]{% {<name>}{<symbol>}
+    \expandafter\newcommand\csname #1\endcsname{#2}%
+}
+\newcommand{\NewModularConst}[1]{% <name>}
+    \expandafter\newcommand\csname Modular#1\endcsname[1][m]{% [<index>]
+        \csname #1\endcsname^{(##1)}%
+    }
+}
+
+%% Variables factory
+% \newcommand{\NewVariableEx}[4]{% {<name>}{<symbol>}{<pre-super>}{<pre-sub>}
+%     \expandafter\newcommand\csname #1\endcsname[2][]{% [<super>]{<sub>}
+%         #2^{#3 ##1}_{#4 ##2}}
+%     \WithSuffix\expandafter\newcommand\csname #1\endcsname*{#2}
+% }
+% \newcommand{\NewVariable}[2]{% {<name>}{<symbol>}
+%     \NewVariableEx{#1}{#2}{}{}}
+% \newcommand{\NewModularVariable}[1]{% {<variable>}
+%     \expandafter\newcommand\csname Modular#1\endcsname[2][m]{% [<module>]{<sub>}
+%         \csname #1\endcsname[(##1)]{##2}}}
+% \newcommand{\NewVariable}[2]{% {<name>}{<symbol>}
+%     \expandafter\newcommand\csname #1\endcsname{#2}%
+% }
+% \newcommand{\NewModularVariable}[1]{% {<name>}
+%     \expandafter\newcommand\csname Modular#1\endcsname[1][m]{% [<index>]
+%         \csname #1\endcsname^{(##1)}}%
+% }
 
 %% Common
-\newcommand{\Automaton}{\mathcal{A}}
-\newcommand{\FunctionBlock}{FB}
-\newcommand{\SetStates}{Q}
-\newcommand{\SetStatesAux}{\SetStates_{0}}
-\newcommand{\InitialState}{q_{\text{init}}}
-\newcommand{\SetInputEvents}{E^{I}}
-\newcommand{\SetOutputEvents}{E^{O}}
-\newcommand{\SetInputVariables}{\mathcal{X}}
-\newcommand{\SetOutputVariables}{\mathcal{Z}}
-\newcommand{\AssociationInput}{W^{I\!}}
-\newcommand{\AssociationOutput}{W^{O\!}}
-\newcommand{\SetTreeInputs}{\mathcal{U}}
-\newcommand{\SetTreeOutputs}{\mathcal{Y}}
-\newcommand{\SetScenarios}{\mathcal{S}}
-\newcommand{\SetPositiveScenarios}{\SetScenarios^{+}}
-\newcommand{\SetNegativeScenarios}{\SetScenarios^{-}}
-\newcommand{\LTLSpec}{\mathcal{L}}
-\newcommand{\Tree}{\mathcal{T}}
-\newcommand{\PositiveTree}{\Tree^{+}}
-\newcommand{\NegativeTree}{\Tree^{-}}
-\newcommand{\TreeRoot}{\rho}
-\newcommand{\SetTreeNodes}{V}
-\newcommand{\SetTreeNodesActive}{\SetTreeNodes^{\text{(active)}}}
-\newcommand{\SetTreeNodesPassive}{\SetTreeNodes^{\text{(passive)}}}
-\newcommand{\Modules}{\Range{1}{M}}
-\newcommand{\SetAllInputs}{\SetTreeInputs^{*}}
-\newcommand{\InitialOutputValues}{\OutputValues_{\text{init}}}
-\newcommand{\PreviousOutputValues}{\OutputValues^{\text{prev}}}
-% \let\oldv\v
-% \def\v{v}
-\newcommand{\NegativeTreeRoot}{\Negative{\TreeRoot}}
-\newcommand{\SetNegativeTreeNodes}{\Negative{\SetTreeNodes}}
+\NewConst{Automaton}{\mathcal{A}}
+\NewConst{FunctionBlock}{FB}
+\NewConst{SetStates}{Q}
+\NewConst{SetStatesAux}{\SetStates_{0}}
+\NewConst{InitialState}{q_{\text{init}}}
+\NewConst{SetInputEvents}{E^{I}}
+\NewConst{SetOutputEvents}{E^{O}}
+\NewConst{SetInputVariables}{\mathcal{X}}
+\NewConst{SetOutputVariables}{\mathcal{Z}}
+\NewConst{AssociationInput}{W^{I}}
+\NewConst{AssociationOutput}{W^{O}}
+\NewConst{SetTreeInputs}{\mathcal{U}}
+\NewConst{SetTreeOutputs}{\mathcal{Y}}
+\NewConst{SetScenarios}{\mathcal{S}}
+\NewConst{SetPositiveScenarios}{\SetScenarios^{(+)}}
+\NewConst{SetNegativeScenarios}{\SetScenarios^{(-)}}
+\NewConst{LTLSpec}{\mathcal{L}}
+\NewConst{Tree}{\mathcal{T}}
+\NewConst{PositiveTree}{\Tree^{(+)}}
+\NewConst{NegativeTree}{\Tree^{(-)}}
+\NewConst{TreeRoot}{\rho}
+\NewConst{SetTreeNodes}{V}
+\NewConst{SetTreeNodesActive}{\SetTreeNodes^{\text{(active)}}}
+\NewConst{SetTreeNodesPassive}{\SetTreeNodes^{\text{(passive)}}}
+\NewConst{SetAllInputs}{\SetTreeInputs^{*}}
+\NewConst{InitialOutputValues}{\OutputValues_{\text{init}}}
+\NewConst{PreviousOutputValues}{\OutputValues^{\text{prev}}}
+\NewConst{NegativeTreeRoot}{\Negative{\TreeRoot}}
+\NewConst{SetNegativeTreeNodes}{\Negative{\SetTreeNodes}}
 \newcommand{\negv}{\Negative{v}}
-\newcommand{\SetNegativeTreeNodesActive}{\SetNegativeTreeNodes^{\text{(active)}}}
-\newcommand{\SetNegativeTreeNodesPassive}{\SetNegativeTreeNodes^{\text{(passive)}}}
-\newcommand{\SetNegativeTreeNodesEnds}{\SetNegativeTreeNodes^{\text{(ends)}}}
+\NewConst{SetNegativeTreeNodesActive}{\SetNegativeTreeNodes^{\text{(active)}}}
+\NewConst{SetNegativeTreeNodesPassive}{\SetNegativeTreeNodes^{\text{(passive)}}}
+\NewConst{SetNegativeTreeNodesEnds}{\SetNegativeTreeNodes^{\text{(ends)}}}
 \NewFunctionWithNegative{tp}{\funcname{tp}}
 \NewFunctionWithNegative{tpa}{\funcname{tpa}}
 \NewFunctionWithNegative{tie}{\funcname{tie}}
@@ -327,24 +372,56 @@
 \NewNegativeFunction{negtlb}{\funcname{tlb}}
 \NewNegativeFunction{negtbe}{\funcname{t\smash{b}e}}
 \newcommand{\toeMulti}[2][r]{% {<arg>}
-    \funcname{\funcname{toe}}^{{[#1]}}(#2)}
+    \funcname{\funcname{toe}}^{{[#1]}}(#2)%
+}
 \newcommand{\tovMulti}[2][r]{% {<arg>}
-    \funcname{\funcname{tov}}^{{[#1]}}(#2)}
+    \funcname{\funcname{tov}}^{{[#1]}}(#2)%
+}
 
 %% Modular common
-\newcommand{\SetPins}{\Pi}
-\newcommand{\SetInboundVarPins}{\SetPins^{\mathit{in\;var\!}}}
-\newcommand{\SetOutboundVarPins}{\SetPins^{\mathit{out\;var\!}}}
-\newcommand{\SetInboundEventPins}{\SetPins^{\mathit{in\;ev\!}}}
-\newcommand{\SetOutboundEventPins}{\SetPins^{\mathit{out\;ev\!}}}
-\newcommand{\ModularSetInboundVarPins}[1][m]{\SetInboundVarPins_{(#1)}}
-\newcommand{\ModularSetOutboundVarPins}[1][m]{\SetOutboundVarPins_{(#1)}}
-\newcommand{\ModularSetInboundEventPins}[1][m]{\SetInboundEventPins_{(#1)}}
-\newcommand{\ModularSetOutboundEventPins}[1][m]{\SetOutboundEventPins_{(#1)}}
-\newcommand{\SetExternalInboundVarPins}{\SetInboundVarPins_{(\mathit{ext})}}
-\newcommand{\SetExternalOutboundVarPins}{\SetOutboundVarPins_{(\mathit{ext})}}
-\newcommand{\SetExternalInboundEventPins}{\SetInboundEventPins_{(\mathit{ext})}}
-\newcommand{\SetExternalOutboundEventPins}{\SetOutboundEventPins_{(\mathit{ext})}}
+\NewConst{SetPins}{\Pi}
+\NewConst{SetInboundVarPins}{\SetPins_{\mathit{in~var}}}
+\NewConst{SetOutboundVarPins}{\SetPins_{\mathit{out~var}}}
+\NewConst{SetInboundEventPins}{\SetPins_{\mathit{in~ev}}}
+\NewConst{SetOutboundEventPins}{\SetPins_{\mathit{out~ev}}}
+\NewModularConst{SetInboundVarPins}
+\NewModularConst{SetOutboundVarPins}
+\NewModularConst{SetInboundEventPins}
+\NewModularConst{SetOutboundEventPins}
+\NewConst{SetExternalInboundVarPins}{\SetInboundVarPins^{(\mathit{ext})}}
+\NewConst{SetExternalOutboundVarPins}{\SetOutboundVarPins^{(\mathit{ext})}}
+\NewConst{SetExternalInboundEventPins}{\SetInboundEventPins^{(\mathit{ext})}}
+\NewConst{SetExternalOutboundEventPins}{\SetOutboundEventPins^{(\mathit{ext})}}
+
+%% Modular constants
+\newcommand{\Modules}{\Range{1}{M}}
+\NewModularConst{Automaton}
+\NewModularConst{SetStates}
+\NewModularConst{SetStatesAux}
+\NewModularConst{InitialState}
+% \NewModularConst{SetInputEvents}
+% \NewModularConst{SetOutputEvents}
+\newcommand{\ModularSetInputEvents}[1][m]{% [<module>]
+    E^{I (#1)}%
+}
+\newcommand{\ModularSetOutputEvents}[1][m]{% [<module>]
+    E^{O (#1)}%
+}
+\NewModularConst{SetInputVariables}
+\NewModularConst{SetOutputVariables}
+\NewModularConst{SetTreeInputs}
+\NewModularConst{SetTreeOutputs}
+\NewModularConst{SetScenarios}
+\newcommand{\ModularSetPositiveScenarios}[1][m]{% [<module>]
+    \SetScenarios^{(+)(#1)}%
+}
+\newcommand{\ModularPositiveTree}[1][m]{% [<module]
+    \Tree^{(+)(#1)}%
+}
+\newcommand{\ModularNegativeTree}[1][m]{% [<module]
+    \Tree^{(-)(#1)}%
+}
+\NewModularConst{SetTreeNodes}
 
 %% Interface variables
 % \NewVariable{TransitionFunction}{\lambda}
@@ -353,84 +430,118 @@
 % \NewVariable{AlgorithmFunction}{\OutputFunction*}
 
 %% BFS variables
-\newcommand{\BfsTransitionSymbol}{\tau}
-\newcommand{\BfsParentSymbol}{\pi}
-\NewVariableEx{BfsTransitionAutomaton}{%
-    \BfsTransitionSymbol}{\smallcaps{bfs-}\mathcal{A}}{}
-\NewVariableEx{BfsParentAutomaton}{%
-    \BfsParentSymbol}{\smallcaps{bfs-}\mathcal{A}}{}
-\NewVariableEx{BfsTransitionGuard}{%
-    \BfsTransitionSymbol}{\smallcaps{bfs-}\mathcal{G}}{}
-\NewVariableEx{BfsParentGuard}{%
-    \BfsParentSymbol}{\smallcaps{bfs-}\mathcal{G}}{}
+\NewConst{BfsTransitionSymbol}{\tau}
+\NewConst{BfsParentSymbol}{\pi}
+\NewConst{BfsTransition}%
+    {\BfsTransitionSymbol^\text{BFS}}{}
+\NewConst{BfsParent}%
+    {\BfsParentSymbol^\text{BFS}}
+\NewConst{BfsTransitionAutomaton}{%
+    \BfsTransitionSymbol^\text{BFS-$\mathcal{A}$}}
+\NewConst{BfsParentAutomaton}{%
+    \BfsParentSymbol^\text{BFS-$\mathcal{A}$}}
+\NewConst{BfsTransitionGuard}{%
+    \BfsTransitionSymbol^\text{BFS-$\mathcal{G}$}}
+\NewConst{BfsParentGuard}{%
+    \BfsParentSymbol^\text{BFS-$\mathcal{G}$}}
+\NewConst{BfsTransitionAutomatonOrder}%
+    {\BfsTransitionSymbol^\text{BFS-$\mathcal{A}$ (order)}}
+\NewConst{BfsParentAutomatonOrder}%
+    {\BfsParentSymbol^\text{BFS-$\mathcal{A}$ (order)}}
+\NewConst{BfsTransitionModified}%
+    {\BfsTransitionSymbol^\text{BFS-mod}}
+\NewConst{BfsParentModified}%
+    {\BfsParentSymbol^\text{BFS-mod}}
 
 %% Core variables
-\NewVariable{StateOutputEvent}{\phi}
-\NewVariable{StateAlgorithm}{\gamma}
-\NewVariable{TransitionDestination}{\tau}
-\NewVariable{TransitionInputEvent}{\xi}
-\NewVariable{TransitionTruthTable}{\theta}
-\NewVariable{TransitionFiring}{\delta}
-\NewVariable{TransitionFirstFired}{\mathit{ff}} % ligature!
-\NewVariable{TransitionNotFired}{\mathit{nf}}
-\NewVariable{ActualTransitionFunction}{\lambda}
+\NewConst{StateOutputEvent}{\phi}
+\NewConst{StateAlgorithm}{\gamma}
+\NewConst{StateUsed}{\alpha}
+\NewConst{TransitionDestination}{\tau}
+\NewConst{TransitionInputEvent}{\xi}
+\NewConst{TransitionTruthTable}{\theta}
+\NewConst{TransitionFiring}{\delta}
+\NewConst{TransitionFirstFired}{\mathit{ff}}
+\NewConst{TransitionNotFired}{\mathit{nf}}
+\NewConst{ActualTransitionFunction}{\lambda}
 
 %% Mapping variables
-\NewVariable{Mapping}{\mu}
-% \NewVariable{MemoryOutputValue}{\zeta}
-\NewVariable{MemoryOutputValue}{\nabla}
-\NewVariable{ComputedValue}{\nabla}
+\NewConst{Mapping}{\mu}
+\NewConst{MemoryOutputValue}{\nabla}
+\NewConst{ComputedValue}{\nabla}
 
 %% Guards variables
-\NewVariable{NodeType}{\eta}
+\NewConst{NodeType}{\eta}
 \newcommand{\NodeTypeTerminal}{\square}
 \newcommand{\NodeTypeAnd}{\mathord{\land}}
 \newcommand{\NodeTypeOr}{\mathord{\lor}}
 \newcommand{\NodeTypeNot}{\mathord{\neg}}
 \newcommand{\NodeTypeNone}{\mathord{\bullet}}
-\NewVariable{NodeInputVariable}{\chi}
-\NewVariable{NodeChild}{\sigma}
-\NewVariable{NodeParent}{\pi}
-\NewVariable{NodeValue}{\vartheta}
+\NewConst{NodeInputVariable}{\chi}
+\NewConst{NodeChild}{\sigma}
+\NewConst{NodeParent}{\pi}
+\NewConst{NodeValue}{\vartheta}
 
 %% Negative variables
-% \NewVariable{NegativeTransitionFunction}{\Negative{\TransitionFunction*}}
-\NewVariable{NegativeActualTransitionFunction}{\Negative{\ActualTransitionFunction*}}
-% \NewVariable{NegativeOutputEventFunction}{\Negative{\OutputEventFunction*}}
-% \NewVariable{NegativeOutputFunction}{\Negative{\OutputFunction*}}
-% \NewVariable{NegativeAlgorithmFunction}{\Negative{\AlgorithmFunction*}}
-\NewVariable{NegativeMapping}{\Negative{\Mapping*}}
+% \NewConst{NegativeTransitionFunction}{\Negative{\TransitionFunction*}}
+\NewConst{NegativeActualTransitionFunction}{\Negative{\ActualTransitionFunction}}
+% \NewConst{NegativeOutputEventFunction}{\Negative{\OutputEventFunction*}}
+% \NewConst{NegativeOutputFunction}{\Negative{\OutputFunction*}}
+% \NewConst{NegativeAlgorithmFunction}{\Negative{\AlgorithmFunction*}}
+\NewConst{NegativeMapping}{\Negative{\Mapping}}
 
 %% Modular variables
-\NewVariable{ModuleControllingOutputVariable}{\zeta}
-\NewModularVariable{StateOutputEvent}
-\NewModularVariable{StateOutput}
-\NewModularVariable{StateAlgorithm}
-\NewModularVariable{TransitionDestination}
-\NewModularVariable{TransitionInputEvent}
-\NewModularVariable{TransitionTruthTable}
-\NewModularVariable{TransitionFiring}
-\NewModularVariable{TransitionFirstFired}
-\NewModularVariable{TransitionNotFired}
-\NewModularVariable{TransitionFunction}
-\NewModularVariable{ActualTransitionFunction}
-\NewModularVariable{OutputEventFunction}
-\NewModularVariable{OutputFunction}
-\NewModularVariable{AlgorithmFunction}
-\NewModularVariable{Mapping}
-\NewModularVariable{ComputedValue}
-\NewVariableEx{VarPinParent}{\pi}{\mathit{var}}{}
-\NewVariableEx{EventPinParent}{\pi}{\mathit{ev}}{}
-\NewVariableEx{InboundVarPinComputedValue}{\ComputedValue*}{\mathit{in}}{}
-\NewVariableEx{OutboundVarPinComputedValue}{\ComputedValue*}{\mathit{out}}{}
-\NewVariable{InputIndex}{\partial}
-\NewModularVariable{InputIndex}{}
+\NewConst{ModuleControllingOutputVariable}{\zeta}
+\NewModularConst{StateOutputEvent}
+\NewModularConst{StateAlgorithm}
+\NewModularConst{StateUsed}
+\NewModularConst{TransitionDestination}
+\NewModularConst{TransitionInputEvent}
+\NewModularConst{TransitionTruthTable}
+\NewModularConst{TransitionFiring}
+\NewModularConst{TransitionFirstFired}
+\NewModularConst{TransitionNotFired}
+\NewModularConst{TransitionFunction}
+\NewModularConst{ActualTransitionFunction}
+\NewModularConst{OutputEventFunction}
+\NewModularConst{OutputFunction}
+\NewModularConst{AlgorithmFunction}
+\NewModularConst{Mapping}
+\NewModularConst{ComputedValue}
+\NewConst{VarPinParent}{\pi^{\mathit{var}}}
+\NewConst{EventPinParent}{\pi^{\mathit{ev}}}
+\NewConst{InboundVarPinComputedValue}{\ComputedValue^{\mathit{in}}}
+\NewConst{OutboundVarPinComputedValue}{\ComputedValue^{\mathit{out}}}
+\NewConst{InputIndex}{\partial}
+\NewModularConst{InputIndex}
 
-%% Extra
-\newcommand{\Cmin}{C_{\text{min}}}
-\newcommand{\Tmin}{T_{\text{min}}}
-\newcommand{\Nmin}{N_{\text{min}}}
-\newcommand{\AutomatonBest}{\Automaton_{\text{best}}}
+%% Negative modular variables
+\NewModularConst{NegativeMapping}
+% \NewModularConst{NegativeStateOutputEvent}
+% \NewModularConst{NegativeStateAlgorithm}
+% \NewModularConst{NegativeActualTransitionFunction}
+
+
+%% Compound constants
+\NewConst{SetCompoundScenarios}{\mathcal{CS}}
+\NewConst{SetPositiveCompoundScenarios}{\SetCompoundScenarios^{(+)}}
+\NewConst{SetNegativeCompoundScenarios}{\SetCompoundScenarios^{(-)}}
+\NewConst{CompoundTree}{\mathcal{CT}}
+\NewConst{PositiveCompoundTree}{\CompoundTree^{(+)}}
+\NewConst{SetCompoundTreeNodes}{\mathcal{CV}}
+\NewConst{SetCompoundTreeNodesActive}{\SetCompoundTreeNodes_{\text{(act)}}}
+\NewConst{SetCompoundTreeNodesPassive}{\SetCompoundTreeNodes_{\text{(pass)}}}
+\NewConst{SetCompoundTreeNodesIdle}{\SetCompoundTreeNodes_{\text{(idle)}}}
+\NewConst{SetCompoundTreeNodesEnds}{\SetCompoundTreeNodes_{\text{(ends)}}}
+
+%% Negative compound constants
+\NewConst{NegativeCompoundTree}{\CompoundTree^{(-)}}
+\NewConst{SetNegativeCompoundTreeNodes}{\Negative{\SetCompoundTreeNodes}}
+\NewConst{SetNegativeCompoundTreeNodesActive}{\SetNegativeCompoundTreeNodes_{\text{(act)}}}
+\NewConst{SetNegativeCompoundTreeNodesPassive}{\SetNegativeCompoundTreeNodes_{\text{(pass)}}}
+\NewConst{SetNegativeCompoundTreeNodesIdle}{\SetNegativeCompoundTreeNodes_{\text{(idle)}}}
+\NewConst{SetNegativeCompoundTreeNodesEnds}{\SetNegativeCompoundTreeNodes_{\text{(ends)}}}
+
 
 %% Algorithms
 \newcommand{\NewAlgorithm}[2]{% {<command>}{<name>}
@@ -472,6 +583,33 @@
 \NewAlgorithm{ModularArbitraryComplete}{Arbitrary-Complete}
 \NewAlgorithm{ModularArbitraryBasicMin}{Arbitrary-Basic-min}
 \NewAlgorithm{ModularArbitraryExtendedMin}{Arbitrary-Extended-min}
+% Distributed
+\NewAlgorithm{DistributedCegisMin}{Distributed-Cegis-min}
+
+
+%% Term Factory
+\newcommand{\NewTerm}[2]{% {<name>}{<text>}
+    \expandafter\newcommand\csname #1\endcsname{%
+        \texttt{#2}%
+    }
+}
+
+%% Terms
+\NewTerm{REQ}{REQ}
+\NewTerm{CNF}{CNF}
+\NewTerm{EventReq}{REQ}
+\NewTerm{EventCnf}{CNF}
+\NewTerm{EventR}{R}
+\NewTerm{EventA}{A}
+\NewTerm{EventB}{B}
+\NewTerm{EventC}{C}
+
+
+%% Extra shortcuts
+\newcommand{\Cmin}{C_{\text{min}}}
+\newcommand{\Tmin}{T_{\text{min}}}
+\newcommand{\Nmin}{N_{\text{min}}}
+\newcommand{\AutomatonBest}{\Automaton_{\text{best}}}
 
 
 %% LTL-properties
@@ -484,16 +622,16 @@
 }
 \newcommand{\LTLProp}[1]{% {<index>}
     \IfEqCase{#1}{%
-        {1}{\temp{G}(\neg(\texttt{c1Extend} \land \texttt{c1Retract}))}%
-        {2}{\temp{G}(\neg(\texttt{c2Extend} \land \texttt{c2Retract}))}%
-        {3}{\temp{G}(\neg(\texttt{vacuum\_on} \land \texttt{vacuum\_off}))}%
-        {4}{\temp{G}(\neg\texttt{vcHome} \land \neg\texttt{vcEnd} \implies \texttt{c1Home} \lor \texttt{c1End})}%
-        {5}{\temp{G}(\neg\texttt{c1Home} \land \neg\texttt{c1End} \implies \texttt{vcHome} \lor \texttt{vcEnd})}%
-        {6}{\temp{G}(\texttt{all\_home} \land \neg\texttt{pp1} \land \neg\texttt{pp2} \land \neg\texttt{pp3} \land \neg\texttt{lifted} \implies \temp{X}(\neg\texttt{c1Extend} \land \neg\texttt{c2Extend} \land \neg\texttt{vcExtend}))}%
-        {7}{\temp{G}(\texttt{lifted} \implies \temp{F}(\texttt{dropped}))}%
-        {8}{\temp{G}(\texttt{pp1} \implies \temp{F}(\texttt{vp1}))}%
-        {9}{\temp{G}(\texttt{pp2} \implies \temp{F}(\texttt{vp2}))}%
-        {10}{\temp{G}(\texttt{pp3} \implies \temp{F}(\texttt{vp3}))}%
+        {1}{\Temp{G}(\neg(\texttt{c1Extend} \land \texttt{c1Retract}))}%
+        {2}{\Temp{G}(\neg(\texttt{c2Extend} \land \texttt{c2Retract}))}%
+        {3}{\Temp{G}(\neg(\texttt{vacuum\_on} \land \texttt{vacuum\_off}))}%
+        {4}{\Temp{G}(\neg\texttt{vcHome} \land \neg\texttt{vcEnd} \implies \texttt{c1Home} \lor \texttt{c1End})}%
+        {5}{\Temp{G}(\neg\texttt{c1Home} \land \neg\texttt{c1End} \implies \texttt{vcHome} \lor \texttt{vcEnd})}%
+        {6}{\Temp{G}(\texttt{all\_home} \land \neg\texttt{pp1} \land \neg\texttt{pp2} \land \neg\texttt{pp3} \land \neg\texttt{lifted} \implies \Temp{X}(\neg\texttt{c1Extend} \land \neg\texttt{c2Extend} \land \neg\texttt{vcExtend}))}%
+        {7}{\Temp{G}(\texttt{lifted} \implies \Temp{F}(\texttt{dropped}))}%
+        {8}{\Temp{G}(\texttt{pp1} \implies \Temp{F}(\texttt{vp1}))}%
+        {9}{\Temp{G}(\texttt{pp2} \implies \Temp{F}(\texttt{vp2}))}%
+        {10}{\Temp{G}(\texttt{pp3} \implies \Temp{F}(\texttt{vp3}))}%
     }[\PackageError{LTLProp}{Undefined option to LTLProp: #1}{}]
 }
 \newcommand{\PropWP}[1]{% {<1-3>}
@@ -543,3 +681,30 @@
 \colorlet{myg}{green!12}
 \colorlet{myb}{blue!10}
 \colorlet{myy}{yellow!15}
+
+%% Guard
+\newcommand{\Guard}[2][\EventReq]{
+    #1 \mathbin{\&} #2}
+
+%% Some macros for Distributed-CEGIS-min algo
+\newcommand{\CommonArgs}{{*}\mkern-0.5mu{*}\mkern-0.5mu{*}}
+\newcommand{\ModularC}[1][m]{% [<module>]
+    C^{(#1)}}
+\newcommand{\CompoundNumberOfStates}{D}
+\newcommand{\StatesUsed}{C^{\textnormal{used}}}
+\newcommand{\StatesUsedMin}{\StatesUsed_{\min}}
+\newcommand{\NodesUsed}{N^{\textnormal{used}}}
+\newcommand{\NodesUsedMin}{\NodesUsed_{\min}}
+\newcommand{\SetNegativeCompoundScenariosNew}{\SetNegativeCompoundScenarios_{\text{new}}}
+
+%% Some macros for Distributed-CEGIS experiments
+% \newcommand{\SetScenariosCustom}[2]{% {<number>}{<length>}
+%     \SetScenarios_{#1 \times #2}}
+% \newcommand{\LTLSpecSafety}{\LTLSpec_{\textit{safe}}}
+% \newcommand{\LTLSpecLiveness}{\LTLSpec_{\textit{live}}}
+% \newcommand{\LTLSpecSafetyLiveness}{\LTLSpecSafety + \LTLSpecLiveness}
+% \newcommand{\LTLSpecAll}{\LTLSpec_{\text{\itshape all}}}
+
+\newcommand{\eg}{\textit{e.g.},\ }
+\newcommand{\ie}{\textit{i.e.}\ }
+\newcommand{\etc}{\textit{etc}.\@\spacefactor=\the\sfcode`\c}
