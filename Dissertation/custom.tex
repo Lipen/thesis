@@ -54,9 +54,11 @@
     \addcontentsline{toc}{section}{Выводы по главе~\thechapter}%
 }
 
-%% Hyphenation penalty
+%% Hyphenation setup
 \hyphenpenalty=500 % Default is 50
-\tolerance=200 % Default is 200
+\tolerance=1000 % Default is 200
+\lefthyphenmin=3
+\righthyphenmin=3
 
 %% makecell setup
 \renewcommand\theadfont{\bfseries\normalsize}
