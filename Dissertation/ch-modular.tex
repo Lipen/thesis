@@ -299,10 +299,13 @@ $u = \tin{v}$.
 Дополнительно, обозначим множества контактов для внешнего (модульного) автомата следующим образом: $\SetExternalInboundVarPins$, $\SetExternalOutboundVarPins$, $\SetExternalInboundEventPins$,~$\SetExternalOutboundEventPins$.
 Отметим, что, например, множество~$\SetExternalInboundVarPins$ внешних входных контактов для переменных соответствует выходным переменным~$\SetOutputVariables$, так как эти контакты являются входами для входящих в них связей из выходных контактов.
 При этом нумерация внешних контактов продолжает нумерацию модульных того же типа, например, $\SetExternalInboundVarPins = \{ {M \cdot \card{\SetInputVariables} + 1}, \dots, {M \cdot \card{\SetInputVariables} + \card{\SetOutputVariables}} \}$.
-Для упрощения используемой нотации обозначим множества \emph{всех} входных/выходных контактов для переменных/событий $\SetInboundVarPins$, $\SetOutboundVarPins$, $\SetInboundEventPins$,~$\SetOutboundEventPins$, где, например, $\SetInboundVarPins = \bigunionnolim_{m \in \Modules} \ModularSetInboundVarPins \union \SetExternalInboundVarPins$.
+Для упрощения используемой нотации обозначим множества \emph{всех} входных/выходных контактов для переменных/событий $\SetInboundVarPins$, $\SetOutboundVarPins$, $\SetInboundEventPins$,~$\SetOutboundEventPins$, где, например:
+\[
+    \SetInboundVarPins = \SetExternalInboundVarPins \union \bigunion_{\mathclap{m \in \Modules}} \ModularSetInboundVarPins %.
+\]
 
 Следующий шаг \--- определение графа соединений контактов модулей.
-Введём переменные $\VarPinParent_{p} \in \SetOutboundVarPins$ и $\EventPinParent_{p} \in \SetOutboundEventPins$, обозначающие родителя входного контакта~$p$ для переменных/событий.
+Введём переменные $\VarPinParent_{p} \in \SetOutboundVarPins$ и~$\EventPinParent_{p} \in \SetOutboundEventPins$, обозначающие родителя входного контакта~$p$ для переменных/событий.
 Можно заметить, что родителем входного контакта может быть только выходной контакт.
 Если контакт является родителем другого, то они соединены \textit{связью}, и обновление значения родителя приводит к обновлению значения ребенка.
 Пользуясь допущением об ацикличности графа соединений модулей, определим, что родителем входного контакта~$p$ может быть выходной контакт из модуля с меньшим номером, либо внешний выходной контакт, например, для некоторого контакта~$p \in \SetInboundVarPins$ из модуля~$m$:
