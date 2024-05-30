@@ -919,7 +919,7 @@ $u = \tin{v}$.
 %% Алгоритм: Distributed-CEGIS-min
 \subfile{tex/algo-cegis-min}
 
-Основная процедура, реализующая алгоритм $\AlgoCegisMin$, представлена на Листинге~\cref{alg:distributed-cegis-min}.
+Основная процедура, реализующая алгоритм $\AlgoCegisMin$, представлена на Листинге~\ref{alg:distributed-cegis-min}.
 Сначала оценивается параметр~$D$: \emph{общее} верхнее значение для числа состояний в каждом модуле.
 Оценка выполняется с помощью простого линейного восходящего поиска.
 На каждой итерации вызывается функция $\texttt{infer}(\CommonArgs)$, где $\CommonArgs$~обозначает общие аргументы $\Tuple{ \Set{\ModularSetPositiveScenarios}, \SetNegativeCompoundScenarios, \allowbreak \Set{{\ModularC = \CompoundNumberOfStates}}, P }$.
