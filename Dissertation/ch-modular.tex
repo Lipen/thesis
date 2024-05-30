@@ -851,7 +851,7 @@ $u = \tin{v}$.
 % Here, we call $\texttt{infer}$ with an extra predicate\-/argument \enquote{$\StatesUsed < \texttt{UB}$}, where $\texttt{UB}$ denotes the upper bound for a total number of used (reachable) states in all synthesized automata.
 % This predicate represents a \emph{cardinality constraint} which is encoded using a \emph{totalizer} technique~\cite{sat-cardinality}.
 % Next, we minimize $\NodesUsed$ using the same approach.
-% After that, we perform model checking of the synthesized distributed controller represented by automata~$\Set{\ModularAutomaton}$ for compliance with the given LTL\-/specification~$\LTLSpec$ using NuSMV~\cite{NuSMV} model checker, and obtain a set of negative compound scenarios $\SetNegativeCompoundScenariosNew$ \--- if there are any, they will be taken into account on the next iteration, else the CEGIS is done and $\Set{\ModularAutomaton}$ is the satisfying solution.
+% After that, we perform model checking of the synthesized distributed controller represented by automata~$\Set{\ModularAutomaton}$ for compliance with the given LTL\-/specification~$\LTLSpec$ using NuSMV~\cite{nusmv} model checker, and obtain a set of negative compound scenarios $\SetNegativeCompoundScenariosNew$ \--- if there are any, they will be taken into account on the next iteration, else the CEGIS is done and $\Set{\ModularAutomaton}$ is the satisfying solution.
 
 
 \subsection{Нахождение минимального распределённого контроллера}%
@@ -938,7 +938,7 @@ $u = \tin{v}$.
 Здесь вызывается $\texttt{infer}$ с дополнительным аргументом-предикатом \enquote{$\StatesUsed < \texttt{UB}$}, где $\texttt{UB}$ обозначает верхнюю границу для общего числа использованных (достижимых) состояний во всех синтезированных автоматах.
 Этот предикат представляет собой \textit{ограничение на кардинальность}, которое кодируется с использованием техники \textit{totalizer}~\cite{sat-cardinality}, описанной в разделе~\ref{sec:cardinality}.
 Затем минимизируется~$\NodesUsed$ с использованием того же подхода.
-После этого проводится проверка модели синтезированного распределённого контроллера, представленного автоматами~$\Set{\ModularAutomaton}$, на соответствие заданной LTL\-/спецификации~$\LTLSpec$ с использованием проверщика моделей NuSMV~\cite{NuSMV}, и получается набор составных негативных сценариев $\SetNegativeCompoundScenariosNew$ \--- если такие есть, они будут учтены на следующей итерации, иначе CEGIS завершается, и $\Set{\ModularAutomaton}$ является искомым решением \--- системой из $M$ автоматов, удовлетворяющей заданным примерам поведения и LTL\-/спецификации.
+После этого проводится проверка модели синтезированного распределённого контроллера, представленного автоматами~$\Set{\ModularAutomaton}$, на соответствие заданной LTL\-/спецификации~$\LTLSpec$ с использованием проверщика моделей NuSMV~\cite{nusmv}, и получается набор составных негативных сценариев $\SetNegativeCompoundScenariosNew$ \--- если такие есть, они будут учтены на следующей итерации, иначе CEGIS завершается, и $\Set{\ModularAutomaton}$ является искомым решением \--- системой из $M$ автоматов, удовлетворяющей заданным примерам поведения и LTL\-/спецификации.
 
 
 
