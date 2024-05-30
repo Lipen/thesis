@@ -1,0 +1,112 @@
+\documentclass[../main.tex]{subfiles}%
+\enabletikzpreview%
+\begin{document}%
+\begin{tikzpicture}[
+    % scale=0.5, transform shape,
+    % framed,
+    auto,
+    on grid,
+    every state/.style={inner sep=0pt},
+    every label/.style={inner sep=2pt},
+]
+    \def\VGapOne{1.5cm}
+    \def\VGapTwo{1cm}
+    \def\HGap{3cm}
+    \def\BendAngle{20} % Default is 30 (?)
+    \def\LineGapScenarioTreeLabel{0pt}
+    
+    \node[state,label={above:$v_{1}$},fill=gray!15]
+        (v1) at (0,0)
+        {\ActionMT{\varepsilon}{0}};
+    \node[state,label={above:$v_{2}$},fill=myr]
+        (v2) [above right=\VGapOne and \HGap of v1]
+        {\ActionMT{\varepsilon}{0}};
+    \node[state,label={above:$v_{3}$},fill=myb]
+        (v3) [right=\HGap of v2]
+        {\ActionTT{B}{1}};
+    \node[state,label={above:$v_{4}$},fill=myb]
+        (v4) [right=\HGap of v3]
+        {\ActionTT{A}{0}};
+    \node[state,label={above:$v_{5}$},fill=myb]
+        (v5) [right=\HGap of v4]
+        {\ActionTT{A}{1}};
+    \node[state,label={above:$v_{6}$},fill=myg]
+        (v6) [below right=\VGapOne and \HGap of v1]
+        {\ActionTT{B}{1}};
+    \node[state,label={above:$v_{7}$},fill=myr]
+        (v7) [right=\HGap of v6]
+        {\ActionMT{\varepsilon}{1}};
+    \node[state,label={above:$v_{8}$},fill=myb]
+        (v8) [above right=\VGapTwo and \HGap of v7]
+        {\ActionTT{A}{0}};
+    \node[state,label={above:$v_{9}$},fill=myb]
+        (v9) [right=\HGap of v8]
+        {\ActionTT{B}{0}};
+    \node[state,label={above:$v_{10}$},fill=myr]
+        (v10) [below right=\VGapTwo and \HGap of v7]
+        {\ActionMT{\varepsilon}{1}};
+    \node[state,label={above:$v_{11}$},fill=myb]
+        (v11) [right=\HGap of v10]
+        {\ActionTT{A}{1}};
+        
+    \path[-{Stealth[]}, shorten >=1pt]
+        (v1)
+            edge [bend left=\BendAngle]
+            node [sloped,above]
+            {\ActionTT{R}{10}}
+            (v2)
+        (v2)
+            edge node
+            {\ActionTT{R}{01}}
+            (v3)
+        (v3)
+            edge node 
+            {\ActionTT{R}{11}}
+            (v4)
+        (v4)
+            edge node
+            {\ActionTT{R}{11}}
+            (v5)
+        (v1)
+            edge [bend right=\BendAngle]
+            node [sloped,above]
+            {\ActionTT{R}{01}}
+            (v6)
+        (v6)
+            edge node
+            {\ActionTT{R}{01}}
+            (v7)
+        (v7)
+            edge [bend left=\BendAngle]
+            node [sloped,above]
+            {\ActionTT{R}{11}}
+            (v8)
+        (v8)
+            edge node
+            {\ActionTT{R}{00}}
+            (v9)
+        (v7)
+            edge [bend right=\BendAngle]
+            node [sloped,above]
+            {\ActionTT{R}{00}}
+            (v10)
+        (v10)
+            edge node
+            {\ActionTT{R}{01}}
+            (v11)
+    ;
+
+    \node at (v1.south)[xshift=-5mm,yshift=-1mm] [below, inner sep=0pt]
+    {\(\begin{aligned}
+        & \card{\SetTreeNodes} = 11,~ \rho = v_1, \\[\LineGapScenarioTreeLabel]
+        & \SetInputEvents = \Set{\texttt{R}},~ \SetOutputEvents = \Set{\texttt{A}, \texttt{B}}, \\[\LineGapScenarioTreeLabel]
+        & \card{\SetInputVariables} = 2,~ \card{\SetOutputVariables} = 1, \\[\LineGapScenarioTreeLabel]
+        & \SetTreeInputs = \Set{
+            \Vector{\texttt{00}},
+            \Vector{\texttt{01}},
+            \Vector{\texttt{10}},
+            \Vector{\texttt{11}}
+        }
+    \end{aligned}\)};
+\end{tikzpicture}%
+\end{document}
