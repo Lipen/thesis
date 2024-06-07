@@ -715,3 +715,13 @@
 \newcommand{\eg}{\textit{e.g.},\ }
 \newcommand{\ie}{\textit{i.e.}\ }
 \newcommand{\etc}{\textit{etc}.\@\spacefactor=\the\sfcode`\c}
+
+%% Paragraph style
+\AtBeginDocument{
+    % beforeskip = vertical skip before \paragraph
+    \setbeforeparaskip{1ex plus 1ex minus 0.2ex}
+    % indent = horizontal indent of \paragraph
+    \setparaindent{2.5em}
+    % afterskip = horizontal skip after \paragraph
+    \setafterparaskip{-1em}
+}
