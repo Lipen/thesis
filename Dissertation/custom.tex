@@ -182,12 +182,10 @@
 %% Fix small caps when babel is loaded with russian language
 %% Note: font must support english small caps!
 \newcommand{\smallcaps}[1]{% {<text>}
-    \texorpdfstring{%
-        \begingroup%
-            \selectlanguage{english}%
-            \textsc{#1}%
-        \endgroup%
-    }{#1}}
+    \texorpdfstring{{%
+        \selectlanguage{english}%
+        \textsc{#1}%
+    }}{#1}}
 
 % %% Maximum height of float (on 'p' page)
 \newcommand{\maxheight}[1]{% {<lines>}
