@@ -1605,7 +1605,7 @@ $u = \tin{v}$.
 
 
 \subsection{Составное негативное дерево сценариев}
-\label{sec:distributed-synthesis-compound}
+\label{sub:distributed-synthesis-compound}
 
 \textit{Составной негативный сценарий} представляет собой последовательность \textit{составных элементов сценария}.
 Каждый составной элемент~$c_i$ является $M$-кортежем элементов сценария для каждого синтезированного модуля: $c_i = (s_i^{(m)})_{m \in \Modules}$, где каждый $s_i^{(m)} = \Pair{ i[\bar{x}], o[\bar{z}] }$.
@@ -1669,7 +1669,7 @@ $u = \tin{v}$.
 
 
 \subsection{Отображение составного негативного дерева сценариев}
-\label{sub:synth-distributed-compound-mapping}
+\label{sub:distributed-synthesis-compound-mapping}
 
 Переменная~$\ModularNegativeMapping_{\negv}$ обозначает удовлетворяющее состояние в автомате $\ModularAutomaton$ для вершины~$\negv \in \SetNegativeCompoundTreeNodes$, при этом $\ModularNegativeMapping_{\negv} = q_0$ в то случае, когда автомат не проявляет данного поведения, и, следовательно, не существует удовлетворяющего состояния для~$\negv$ (\enquote{фиктивное} состояние~$q_0$ является общим для всех модулей).
 Для каждого модуля корневая вершина составного негативного дерева отображается на начальное состояние соответствующего автомата:
