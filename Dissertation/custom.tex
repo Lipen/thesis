@@ -21,11 +21,16 @@
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 \SetAlgoInsideSkip{smallskip}
 \SetAlgorithmName{Алгоритм}{algorithm}{Список алгоритмов}
+\SetKwInput{Input}{Вход}
+\SetKwInput{Output}{Результат}
 \SetKw{Break}{break}
 \SetKw{Let}{let}
 \SetKw{Label}{label}
 \SetKw{Goto}{goto}
 \SetKwBlock{Loop}{loop}{end loop}
+\SetKwProg{Fn}{function}{}{end function}
+\SetProgSty{textnormal}
+\patchcmd{\SetProgSty}{ArgSty}{ProgSty}{}{}
 
 \makeatletter
 \newcommand{\onlyinpreamble}[1]{% {<text>}
@@ -547,9 +552,9 @@
 %% Algorithms
 \newcommand{\NewAlgorithm}[2]{% {<command>}{<name>}
     \expandafter\newcommand\csname Algo#1\endcsname{%
-        \smallcaps{#2}}
+        \textnormal{\smallcaps{#2}}}
     \expandafter\newcommand\csname Algo#1Full\endcsname{%
-        \texorpdfstring{\ensuremath{\smallcaps{#2}^{*}}}{#2*}}
+        \texorpdfstring{\textnormal{\ensuremath{\smallcaps{#2}^{*}}}}{#2*}}
 }
 \NewAlgorithm{Basic}{Basic}
 \NewAlgorithm{Extended}{Extended}

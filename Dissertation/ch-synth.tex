@@ -718,10 +718,10 @@ $b' = \negtov{\negv,z}$.
 
 Для быстрой оценки минимального числа состояний автомата, удовлетворяющего заданным сценариям выполнения $\SetPositiveScenarios$, используется алгоритм $\AlgoBasic(\SetPositiveScenarios, C)$ с итеративным перебором параметра~$C$ \enquote{снизу вверх}.
 После нахождения минимального числа состояний~$\Cmin$ производится минимизация числа переходов в автомате с использованием алгоритма $\AlgoBasic^{*}(\SetPositiveScenarios, \Cmin, T)$ с итеративным перебором параметра~$T$ \enquote{сверху вниз}, начиная с синтеза неограниченной модели: ${T = \infty}$.
-Псевдокод полученного алгоритма $\AlgoBasicMin(\SetPositiveScenarios)$ представлен в листинге~\ref{alg:basic-min} вместе со вспомогательными функциями $\AlgoBasicMinC$ и $\AlgoBasicMinT$, которые непосредственно выполняют минимизацию каждого параметра: $C$ и~$T$.
+Псевдокод полученного алгоритма $\AlgoBasicMin(\SetPositiveScenarios)$ представлен в листинге~\ref{alg:basic-min} вместе со вспомогательными функциями $\AlgoBasicMinC$ и $\AlgoBasicMinT$, которые непосредственно выполняют минимизацию каждого параметра: $C$~и~$T$.
 
 %% Algorithm: Basic-min
-% TODO: \subfile{tex/algo-basic-min}
+\subfile{tex/algo-basic-min}
 
 
 \subsection{Алгоритмы \AlgoExtendedMin\ и \AlgoCompleteMin}%
@@ -737,10 +737,10 @@ $P$ \=== максимальный размер охранного условия
 внутри используется алгоритм $\AlgoCompleteFull$.
 
 %% Algorithm: Extended-min
-% TODO: \subfile{tex/algo-extended-min}
+\subfile{tex/algo-extended-min}
 
 %% Algorithm: Extended-min-UB
-% TODO: \subfile{tex/algo-extended-min-ub}
+\subfile{tex/algo-extended-min-ub}
 
 
 \subsection{Алгоритм \AlgoExtendedMinUB}%
