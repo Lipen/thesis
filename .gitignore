@@ -1,6 +1,7 @@
 main.pdf
 synopsis.pdf
 /stuff
+/tex/*.pdf
 
 ## MacOS specific
 .DS_Store
