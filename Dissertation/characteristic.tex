@@ -207,6 +207,9 @@
 Из них четыре изданы в изданиях, индексируемых в базе цитирования Scopus, и одна в журнале, рекомендованном ВАК.
 
 
+\ifsynopsis
+% In the synopsis-only document, the number of pages, figures, tables, etc is counted incorrectly.
+\else
 %% Структура и объем диссертации.
 \pdfbookmark[1]{Структура и объём работы}{structure}%
 %
@@ -226,3 +229,4 @@
 Диссертация состоит из введения, трёх глав и заключения.
 Полный объём диссертации составляет \formbytotal{TotPages}{страниц}{у}{ы}{}, включая \formbytotal{totalcount@figure}{рисун}{ок}{ка}{ков} и \formbytotal{totalcount@table}{таблиц}{у}{ы}{}.
 Список литературы содержит \formbytotal{citenum}{наименован}{ие}{ия}{ий}.
+\fi
