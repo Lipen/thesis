@@ -20,11 +20,12 @@
     \multicolumn{4}{c}{\AlgoCegisMin} &
     \multicolumn{3}{c}{\AlgoCegis} &
     \multicolumn{3}{c}{\smallcaps{fbCSP+LTL}~\cite{chivilikhin-18}}
-\\ & & % LTL, S, N_init
+\\\cmidrule(lr){4-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+    & & % LTL, S, N_init
     & Время,\,с. & \#iter & $P$ & $\Nmin$ % cegis-min
     & Время,\,с. & \#iter & $N$           % cegis
     & Время,\,с. & \#iter & $N$           % fbCSP+LTL
-\\\cmidrule(lr){1-3} \cmidrule(lr){4-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+\\\midrule
     \multirowcell{3}{$\LTLPropWP{1}$}
     & $\SetScenarios^{(1)}$ & 14
     & 55 & 273 & 3 & 16  % cegis-min
@@ -39,7 +40,7 @@
     & $\SetScenarios^{(39)}$ & 25
     & 425 & 70 & 5 & 28  % cegis-min
     & 142 & 20 & 128     % cegis
-    & 1019 & 2 & 41      % fbCSP+LTL  
+    & 1019 & 2 & 41      % fbCSP+LTL
 %\\
 %    & $\SetScenarios^{(49)}$ & 39 &
 %    1412 & 4 & 6 & 40 &   % cegis-min
