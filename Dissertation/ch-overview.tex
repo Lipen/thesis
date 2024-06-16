@@ -488,10 +488,10 @@ LTL-синтез и проверка моделей являются мощны�
 \end{equation}
 где $C_{f \glue h}$ \--- шаблонная CNF для функции~\eqref{eq:f-glue-h}, а $C(\mathcal{M})$ выглядит следующим образом:
 \begin{align*}
-    C(\mathcal{M}) = & C(w_1 \equiv (y_1^f \xor y_1^h)) \land \\
-    \land & \ldots \land \\
-    \land & C(w_m \equiv (y_m^f \xor y_m^h)) \land \\
-    \land & (w_1 \lor \ldots \lor w_m) ,
+    C(\mathcal{M}) &= C(w_1 \equiv (y_1^f \xor y_1^h)) \land{} \\
+    & {}\land \ldots \land \\
+    & {}\land C(w_m \equiv (y_m^f \xor y_m^h)) \land \\
+    & {}\land (w_1 \lor \ldots \lor w_m) ,
 \end{align*}
 % где $C(w_j \equiv (y_j^f \xor y_j^h))$, $j\in \{1,\dots,m\}$ \--- CNF-представление булевой функции, заданной формулой $w_j \equiv (y_j^f \xor y_j^h)$.
 где $C(f)$ \--- CNF-представление булевой функции, заданной формулой~$f$.
