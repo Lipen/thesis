@@ -67,3 +67,13 @@
     \usebibmacro{postnote}%
 }
 \fi
+
+%% Set 'langid=english' where it is missing
+% https://tex.stackexchange.com/a/279302
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{
+      \step[fieldset=langid, fieldvalue={english}]
+    }
+  }
+}
