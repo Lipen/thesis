@@ -61,9 +61,6 @@
     #1%
     \EndAccSupp{}%
 }
-\makeatletter
-\patchcmd{\lsthk@SelectCharTable}{`)}{``}{}{}
-\makeatother
 
 \colorlet{json-comment}{black!50}
 \colorlet{json-string}{green!50!black}
@@ -78,6 +75,7 @@
     numberstyle=\scriptsize\noncopynumber,
     stepnumber=1,
     numbersep=10pt,
+    columns=fullflexible,
     showstringspaces=false,
     breaklines=true,
     % frame=lines,
@@ -119,6 +117,7 @@
     numberstyle=\scriptsize\noncopynumber,
     stepnumber=1,
     numbersep=10pt,
+    columns=fullflexible,
     showstringspaces=false,
     breaklines=true,
     morekeywords={*,MODULE,VAR,ASSIGN,DEFINE,LTLSPEC,SPEC},
