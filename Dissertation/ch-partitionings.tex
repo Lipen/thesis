@@ -80,7 +80,7 @@
         \sum_{i=1}^{s} t_A(G_i \land C)
             = \sum_{k=1}^{r} \#\xi_k \cdot \xi_k
             = s \cdot \sum_{k=1}^{r} \frac{\#\xi_k}{s} \cdot \xi_k
-            = s \cdot \E[\xi_{\Pi}]
+            = s \cdot \E[\xi_{\Pi}] .
         \qedhere
     \]
 \end{proof}
@@ -97,7 +97,7 @@
             \mu_{A,\Pi}(C) - \widetilde{\mu}_{A,\Pi}(C)
         \bigr|
         \leq \varepsilon \cdot \mu_{A,\Pi}(C)
-    \Bigr\} \geq 1 - \delta %.
+    \Bigr\} \geq (1 - \delta) .
 \end{equation}
 Как следует из неравенства Чебышёва, неравенство \eqref{eq:cheb2} выполняется для всех
 \[
@@ -128,7 +128,6 @@
 Рассмотрим произвольную булеву функцию $\lambda \colon \{0,1\}^l \to \{0,1\}$, где~$l \in \Natural^{+}$, и предположим, что $\lambda$~не зафиксирована.
 Пусть~$\neg\lambda \colon \{0,1\}^l \to \{0,1\}$ обозначает отрицание~$\lambda$.
 С каждым~$X^j$, $j \in \{1, \dots, q\}$, свяжем две КНФ $\phi_1^j$~и~$\phi_2^j$, которые определяют функции $\lambda^j \colon \{0,1\}^{|X^j|} \to \{0,1\}$ и $\neg\lambda^j \colon \{0,1\}^{|X^j|} \to \{0,1\}$ соответственно.
-% Следующий факт справедлив.
 
 \begin{theorem}\label{thm:partitioning-input-decomposition}
     Пусть $\phi^j$ обозначает обе формулы $\phi^j_1$~и~$\phi^j_2$.
