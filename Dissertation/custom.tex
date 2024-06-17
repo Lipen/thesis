@@ -53,6 +53,93 @@
         \PreviewEnvironment{forest}
     }}
 
+%% Listings setup
+\RequirePackage{listings}
+\RequirePackage{accsupp}
+\newcommand{\noncopynumber}[1]{%
+    \BeginAccSupp{method=escape,ActualText={}}%
+    #1%
+    \EndAccSupp{}%
+}
+\makeatletter
+\patchcmd{\lsthk@SelectCharTable}{`)}{``}{}{}
+\makeatother
+
+\colorlet{json-comment}{black!50}
+\colorlet{json-string}{green!50!black}
+\colorlet{json-numb}{magenta!50!black}
+\colorlet{json-punct}{red!50!black}
+\colorlet{json-delim}{blue!50!black}
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    commentstyle=\color{json-comment},
+    stringstyle=\color{json-string},
+    numbers=left,
+    numberstyle=\scriptsize\noncopynumber,
+    stepnumber=1,
+    numbersep=10pt,
+    showstringspaces=false,
+    breaklines=true,
+    % frame=lines,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]",
+    morestring=[d]’,
+    literate=
+        *{0}{{{\color{json-numb}0}}}{1}
+        {1}{{{\color{json-numb}1}}}{1}
+        {2}{{{\color{json-numb}2}}}{1}
+        {3}{{{\color{json-numb}3}}}{1}
+        {4}{{{\color{json-numb}4}}}{1}
+        {5}{{{\color{json-numb}5}}}{1}
+        {6}{{{\color{json-numb}6}}}{1}
+        {7}{{{\color{json-numb}7}}}{1}
+        {8}{{{\color{json-numb}8}}}{1}
+        {9}{{{\color{json-numb}9}}}{1}
+        {:}{{{\color{json-punct}{:}}}}{1}
+        {,}{{{\color{json-punct}{,}}}}{1}
+        {\{}{{{\color{json-delim}{\{}}}}{1}
+        {\}}{{{\color{json-delim}{\}}}}}{1}
+        {[}{{{\color{json-delim}{[}}}}{1}
+        {]}{{{\color{json-delim}{]}}}}{1},
+}
+
+\colorlet{nusmv-comment}{black!50}
+\colorlet{nusmv-string}{green!50!black}
+\colorlet{nusmv-keyword}{blue!70!black}
+\colorlet{nusmv-numb}{magenta!50!black}
+\colorlet{nusmv-punct}{red!50!black}
+\colorlet{nusmv-delim}{blue!50!black}
+\lstdefinelanguage{nusmv}{
+    basicstyle=\normalfont\ttfamily,
+    commentstyle=\color{nusmv-comment},
+    stringstyle=\color{nusmv-string},
+    keywordstyle=\color{nusmv-keyword},
+    numbers=left,
+    numberstyle=\scriptsize\noncopynumber,
+    stepnumber=1,
+    numbersep=10pt,
+    showstringspaces=false,
+    breaklines=true,
+    morekeywords={*,MODULE,VAR,ASSIGN,DEFINE,LTLSPEC,SPEC},
+    morecomment=[l]{//},
+    morestring=[b]",
+    literate=
+        *{:}{{{\color{nusmv-punct}{:}}}}{1}
+        {=}{{{\color{nusmv-punct}{=}}}}{1}
+        {,}{{{\color{nusmv-punct}{,}}}}{1}
+        {)}{{{\color{nusmv-punct}{)}}}}{1}
+        {(}{{{\color{nusmv-punct}{(}}}}{1}
+        {|}{{{\color{nusmv-punct}{|}}}}{1}
+        {\&}{{{\color{nusmv-punct}{\&}}}}{1}
+        {>}{{{\color{nusmv-punct}{>}}}}{1}
+        {<}{{{\color{nusmv-punct}{<}}}}{1}
+        {\{}{{{\color{nusmv-delim}{\{}}}}{1}
+        {\}}{{{\color{nusmv-delim}{\}}}}}{1}
+        {[}{{{\color{nusmv-delim}{[}}}}{1}
+        {]}{{{\color{nusmv-delim}{]}}}}{1},
+}
+
 % Выводы по главе
 \newcommand{\chapterconclusion}{%
     \section*{Выводы по главе~\thechapter}%

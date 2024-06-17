@@ -1,0 +1,16 @@
+MODULE main
+VAR
+    state: {s0, s1};
+    ec : boolean;
+    ets : boolean;
+ASSIGN
+    init(state) := s0;
+    next(state) := case
+        state = s0 & !ets : s0;
+        state = s0 & ets : s1;
+        state = s1 & ets : s0;
+        state = s1 & !ets : s1;
+    esac;
+DEFINE
+    fl := (state = s1 & TRUE);
+    hl := (state = s0 & TRUE);
