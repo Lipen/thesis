@@ -756,9 +756,6 @@ $P$ \=== максимальный размер охранного условия
 %% Algorithm: Extended-min
 \subfile{tex/algo-extended-min}
 
-%% Algorithm: Extended-min-UB
-\subfile{tex/algo-extended-min-ub}
-
 
 \subsection{Алгоритм \AlgoExtendedMinUB}%
 \label{sub:algorithm-extended-min-ub}
@@ -788,6 +785,9 @@ $P$ \=== максимальный размер охранного условия
 
 Обозначим $\AlgoExtendedMinUB(\SetPositiveScenarios,\nobreak w)$ процесс синтеза минимальной модели, удовлетворяющей заданным сценариям выполнения $\SetPositiveScenarios$, с автоматическим перебором параметра~$P$ с учетом значения критической ширины плато~$w$: если ${w = 0}$, то первое найденное решение считается оптимальным; если ${w > 0}$, то используется описанная выше эвристика; если ${w = \infty}$, то перебор производится до теоретической верхней границы, также описанной выше.
 Псевдокод алгоритма $\AlgoExtendedMinUB(\SetPositiveScenarios, w)$ приведен в листинге~\ref{alg:extended-min-ub}.
+
+%% Algorithm: Extended-min-UB
+\subfile{tex/algo-extended-min-ub}
 
 
 \section{Индуктивный синтез, основанный на контрпримерах}
